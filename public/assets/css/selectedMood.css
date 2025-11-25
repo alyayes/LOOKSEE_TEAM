@@ -1,0 +1,668 @@
+/* Universal Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  font-family: 'Jost', sans-serif;
+  list-style: none;
+  text-decoration: none;
+}
+
+/* Header */
+header {
+  position: sticky;
+  z-index: 1000;
+  top: 0;
+  background-color: white;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  z-index: 50;
+}
+
+.logo {
+  /* Menambahkan properti logo dari home.css jika ada kebutuhan khusus */
+  margin-left: 5%;
+  margin-bottom: -3%;
+  margin-top: -15px;
+}
+
+nav {
+  flex: 1;
+  text-align: right;
+}
+
+nav ul {
+  display: inline-block;
+  list-style-type: none;
+}
+
+nav ul li {
+  display: inline-block;
+  margin-right: 25px;
+}
+
+nav ul li a {
+  color: black;
+}
+
+nav ul li a:hover,
+nav ul li a.active {
+  color: rgb(250, 156, 211);
+}
+
+.nav-icon {
+  display: flex;
+  align-items: center;
+}
+
+.nav-icon i {
+  margin-right: 20px;
+  color: #2c2c2c;
+  font-size: 25px;
+  font-weight: 400;
+  transition: all .42s ease;
+}
+
+.nav-icon i:hover {
+  transform: scale(1.1);
+  color: rgb(250, 156, 211);
+}
+
+/* Dropdown Navigation */
+.dropdown {
+  position: relative;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-content .submenu-title {
+  color: black;
+  font-size: 15px;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  text-align: center;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Perbaikan: gray (0,0,0,0.2) menjadi rgba() */
+  z-index: 100;
+}
+
+.dropdown-profile {
+  display: none;
+  position: absolute;
+  /* top: 10px;  Perbaikan: Sesuaikan posisi dengan kebutuhan. Jika relatif terhadap parent dropdown, gunakan top: 100% */
+  top: 100%; /* Umumnya dropdown muncul di bawah, mirip dengan dropdown-content */
+  left: 0;
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Perbaikan: gray (0,0,0,0.2) menjadi rgba() */
+}
+
+.dropdown-content .dropdown-profile-submenu {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Perbaikan: submenu-title sudah ada di .dropdown-content */
+/* .dropdown-content .submenu-title {
+  color: black;
+  font-size: 15px;
+} */
+
+.dropdown-product-submenu {
+  color: black;
+  font-size: 15px;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 5px 0;
+  transition: 0.3s;
+}
+
+.dropdown-profile a {
+  color: black;
+  padding: 5px;
+  /* margin-between-text: 0;  Perbaikan: Properti CSS ini tidak valid */
+  transition: 0.3s;
+  font-size: 15px;
+}
+
+.dropdown-content a:hover {
+  color: rgb(250, 156, 211);
+}
+
+.dropdown-profile a:hover {
+  color: rgb(250, 156, 211);
+}
+
+.dropdown:hover .dropdown-profile {
+  display: block;
+}
+
+/* Page Buttons (Pagination) */
+.page-btn {
+  margin: 0 auto 80px;
+  text-align: center; /* Tambahkan agar span berada di tengah */
+}
+
+.page-btn span {
+  margin-top: 50px;
+  display: inline-block;
+  border: 1px solid rgb(250, 156, 211); /* Menyelaraskan dengan home.css */
+  margin-left: 10px;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+}
+
+.page-btn span:hover {
+  background: rgb(250, 156, 211); /* Menyelaraskan dengan home.css */
+  color: #fff;
+}
+
+/* Banner / Hero Section */
+.container {
+  max-width: 1300px;
+  margin: auto;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.col-2 {
+  flex-basis: 100%; /* Bisa diubah sesuai layout yang diinginkan, home.css memiliki col-2 yang berbeda */
+  min-width: 300px;
+  text-align: center;
+  margin: 25px;
+  margin-top: auto;
+}
+
+.col-2 img {
+  max-width: 75%;
+  padding-top: 50px;
+}
+
+.col-2 h2 {
+  text-align: left;
+}
+
+.col-2 p {
+  margin: 50px 100px;
+  line-height: 27px;
+  text-align: left;
+  padding-left: 50px;
+}
+
+.btn {
+  display: inline-block;
+  background: rgb(250, 156, 211); /* Menyelaraskan dengan home.css (main-btn) */
+  color: #fff;
+  padding: 8px 30px;
+  margin: 30px 0;
+  border-radius: 30px;
+  transition: all .42s ease; /* Tambahkan transisi untuk hover */
+}
+
+.btn:hover {
+  background: rgb(248, 99, 186); /* Menyelaraskan dengan home.css */
+  color: white; /* Pastikan teks tetap putih saat hover */
+}
+
+.trends {
+  background: radial-gradient(#fff, #fcd5d5); /* Menyelaraskan dengan warna latar belakang footer */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Featured Categories */
+.categories {
+  margin: 70px 0;
+}
+
+.col-3 {
+  flex-basis: 30%;
+  min-width: 250px;
+  margin-bottom: 30px;
+}
+
+.col-3 img {
+  width: 100%;
+  padding-bottom: 5px;
+}
+
+.small-container {
+  max-width: 1080px;
+  margin: auto; /* Perbaikan: margin: left; seharusnya auto */
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+/* Featured Product */
+.col-4 {
+  flex-basis: 25%;
+  padding: 10px;
+  min-width: 200px;
+  margin-bottom: 40px;
+  transition: transform 0.5s;
+}
+
+.col-4 img {
+  width: 100%;
+}
+
+.tittle {
+  padding-top: 0px;
+  text-align: center;
+  position: relative;
+  line-height: 60px;
+  color: #555;
+}
+
+.text {
+  text-align: center;
+  margin: 0 auto 40px; /* Perbaikan: margin-bottom 4 auto jadi 40px */
+  position: relative;
+  line-height: 60px;
+  color: #555;
+}
+
+.tittle::after {
+  content: '';
+  background: rgb(250, 156, 211); /* Menyelaraskan dengan warna pink utama */
+  width: 80px;
+  height: 5px;
+  border-radius: 5px;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.text-img a:visited,
+.text-img a:hover,
+.text-img a:active {
+  color: #3f3e3e;
+  text-decoration: none;
+}
+
+.text-img:hover a {
+  text-decoration: underline;
+}
+
+.text-img {
+  color: #3f3e3e;
+}
+
+.text-img a {
+  display: inline-block;
+  margin: 0;
+  font-size: 14px;
+  color: #3f3e3e;
+}
+
+.col-4 a {
+  color: #000;
+  font-weight: normal;
+}
+
+/* Perbaikan: Ukuran font seharusnya dalam satuan, bukan angka saja */
+/* .col-4 {
+  font-size: 14;
+} */
+.col-4 p { /* Asumsi ini untuk paragraf di dalam col-4 */
+  font-size: 14px;
+}
+
+
+.rating .fa {
+  color: rgb(238, 54, 100);
+}
+
+.col-4:hover {
+  transform: translateY(-5px);
+}
+
+/* Offer Section */
+.offer {
+  background: radial-gradient(#fff, #fcd5d5); /* Menambahkan warna kedua untuk gradient */
+}
+
+small {
+  color: #555;
+}
+
+.col-2 .offer-img {
+  max-width: 100%; /* Mengubah dari 1000px agar responsif */
+}
+
+.offer-textt {
+  text-align: left;
+}
+
+/* Testimonial */
+.testimonial {
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+
+.testimonial .col-3 {
+  text-align: center;
+  padding: 40px 20px;
+  box-shadow: 0 0 20px 0px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.5s;
+}
+
+.testimonial .col-3 img {
+  width: 10px; /* Ini mungkin terlalu kecil, perlu disesuaikan */
+  margin-top: 20px;
+  border-radius: 50%;
+  /* text-align: right;  Ini tidak berlaku untuk img, mungkin maksudnya div container */
+}
+
+.testimonial .col-3:hover {
+  transform: translateY(-10px);
+}
+
+.fa.fa-quote-left {
+  font-size: 34px;
+  color: rgb(238, 54, 100);
+}
+
+.col-3 p {
+  font-size: 12px;
+  margin: 12px 0;
+  color: #777;
+}
+
+.testimonial .col-3 h3 {
+  font-weight: 600;
+  color: #555;
+  font-size: 16px;
+}
+
+.col-3 img {
+  min-width: 15%; /* Sesuaikan ini jika 10px terlalu kecil */
+}
+
+/* Footer */
+.garis {
+  background-color: rgb(163, 41, 94);
+  padding: 3px;
+}
+
+.footer {
+  background: #fcd5d5;
+  color: #555;
+  font-size: 14px;
+  padding: 5px 0 20px;
+}
+
+.footer p {
+  color: #555;
+}
+
+.footer h3 {
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.footer-col-1,
+.footer-col-2,
+.footer-col-3,
+.footer-col-4 {
+  min-width: 250px;
+  margin-bottom: 20px;
+}
+
+.footer-col-1 {
+  flex-basis: 30%;
+  margin-left: 4%; /* Menyelaraskan dengan home.css */
+}
+
+.footer-col-2 {
+  flex: 1;
+  text-align: center;
+}
+
+.footer-col-2 img {
+  width: 180px;
+  margin-bottom: 0px;
+}
+
+.footer-col-3,
+.footer-col-4 {
+  flex-basis: 12%;
+  text-align: center;
+}
+
+.footer ul {
+  list-style-type: none; /* Pastikan ini spesifik untuk footer jika ada ul lain */
+}
+
+.footer ul li a {
+  color: #555;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer ul li a:hover {
+  color: rgb(250, 156, 211); /* Ubah ke warna hover utama */
+}
+
+.footer hr {
+  border: none;
+  background: #555;
+  height: 1px;
+  margin: 20px 0;
+}
+
+.Copyright {
+  text-align: center;
+}
+
+.menu-icon {
+  width: 28px;
+  margin-left: 20px;
+  display: none;
+}
+
+/* Media Query for Menu (less than 800px) */
+@media only screen and (max-width: 800px) {
+  nav ul {
+      position: absolute;
+      top: 70px;
+      left: 0;
+      background: #333;
+      width: 100%;
+      overflow: hidden;
+      max-height: 0; /* Awalnya tersembunyi */
+      transition: max-height 0.5s; /* Perbaikan: "max-height 0.5" menjadi "max-height 0.5s" */
+  }
+
+  nav ul.show-menu { /* Kelas untuk menampilkan menu */
+      max-height: 200px; /* Sesuaikan tinggi maksimum yang diperlukan */
+  }
+
+  nav ul li {
+      display: block;
+      margin-right: 50px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+  }
+
+  nav ul li a {
+      color: #fff;
+  }
+
+  .menu-icon {
+      display: block;
+      cursor: pointer;
+  }
+}
+
+/* Media Query for less than 800px screen size (General Layout) */
+@media only screen and (max-width: 800px) {
+  .row {
+      text-align: center;
+  }
+
+  .col-2,
+  .col-3,
+  .col-4 {
+      flex-basis: 100%;
+  }
+
+  .single-product .row {
+      text-align: left;
+  }
+
+  .single-product .col-2 {
+      padding: 20px 0;
+  }
+
+  .single-product h1 {
+      font-size: 26px;
+      line-height: 32px;
+  }
+}
+
+/*--------------------------PRODUCT MOOD Specific Styles---------------------------*/
+.body-mood {
+  display: flex;
+  flex-direction: column;
+  padding-left: 50px;
+  padding-right: 50px;
+}
+
+.container-mood {
+  display: flex;
+  margin-top: 20px;
+}
+
+.container-mood .offer {
+  margin-top: 20px;
+  max-width: 100%;
+}
+
+.sidebar {
+  width: 20%;
+  padding: 20px;
+  padding-left: 50px;
+  border-right: 1px solid #ddd;
+}
+
+.sidebar h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
+}
+
+.sidebar label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.main-content {
+  width: 80%;
+  padding: 20px;
+  text-align: center;
+}
+
+.main-content h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.product-card { 
+    /* Gunakan product-card (bukan .product) karena ini adalah kelas yang kita target */
+    border: 1px solid #ddd;
+    border-radius: 8px; 
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
+    overflow: hidden;
+    text-align: center;
+    background-color: #fff;
+    transition: transform 0.5s;
+    cursor: pointer;
+    /* Tambahkan min-height agar card lebih seragam dan punya ruang di bawah gambar */
+    min-height: 350px; 
+}
+
+.product:hover {
+  transform: translateY(-5px);
+  cursor: pointer;
+}
+
+.product-card .product-image {
+    width: 100%;
+    /* Tentukan tinggi yang konsisten untuk semua kontainer gambar */
+    height: 250px; /* Nilai yang ideal agar tidak terlalu besar */
+    overflow: hidden; /* KRUSIAL: Menyembunyikan bagian gambar yang berlebih */
+    
+    /* Gunakan Flexbox untuk menengahkan gambar di dalam ruang 250px */
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px; /* Tambahkan sedikit ruang di bawah gambar */
+}
+
+.product h3 {
+  font-size: 16px;
+  margin: 10px 0;
+}
+
+.product p {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+h2 span {
+  color: rgb(250, 156, 211); /* Menyelaraskan dengan warna pink utama */
+}
+
+.product-card .product-image img {
+    /* KRUSIAL: Memastikan gambar tidak melebihi dimensi kontainer */
+    max-width: 100%; 
+    max-height: 100%; 
+    
+    /* object-fit: contain; memaksa gambar untuk menyesuaikan, tetapi seluruh gambar tetap terlihat */
+    object-fit: contain; 
+    
+    height: auto; /* Biarkan tinggi menyesuaikan secara proporsional */
+}
+

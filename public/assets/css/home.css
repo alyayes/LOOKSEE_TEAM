@@ -1,0 +1,681 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    font-family: 'Jost', sans-serif;
+    list-style:none;
+    text-decoration: none;
+}
+
+
+header {
+    position: sticky;
+    z-index: 1000;
+    top: 0;
+    background-color: white;
+}
+.navbar {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    z-index: 50;
+}
+.logo {
+    margin-left: 5%;
+    margin-bottom: -3%;
+    margin-top: -15px;
+}
+nav {
+    flex: 1;
+    text-align: right;
+}
+nav ul {
+    display: inline-block;
+    list-style-type: none;
+}
+nav ul li {
+    display: inline-block;
+    margin-right: 25px;
+}
+nav ul li a {
+    color: black;
+}
+nav ul li a:hover, nav ul li a.active {
+    color: rgb(250, 156, 211);
+} 
+
+.nav-icon{
+    display: flex;
+    align-items: center;
+}
+.nav-icon i{
+    margin-right: 20px;
+    color: #2c2c2c;
+    font-size: 25px;
+    font-weight:400;
+    transition: all .42s ease;
+}
+.nav-icon i:hover{
+    transform: scale(1.1);
+    color: rgb(250, 156, 211);
+}
+.dropdown {
+    position: relative;
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+.dropdown-content .submenu-title {
+    color: black;
+    font-size: 15px;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    text-align: center;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px gray (0, 0, 0, 0.2);
+    z-index: 100;
+}
+.dropdown-profile {
+    display: none;
+    position: absolute;
+    top: 10px;
+    left: 0;
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px gray(0, 0, 0, 0.2);
+}
+.dropdown-content .dropdown-profile-submenu {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; 
+}
+.dropdown-content .submenu-title {
+    color: black;
+    font-size: 15px;
+}
+.dropdown-product-submenu {
+    color: black;
+    font-size: 15px;
+}
+.dropdown-content a {
+    color: black;
+    padding: 5px 0;
+    transition: 0.3s;
+}
+.dropdown-profile a {
+    color: black;
+    padding: 5px;
+    margin-between-text: 0;
+    transition: 0.3s;
+    font-size: 15px;
+}
+.dropdown-content a:hover {
+    color: rgb(250, 156, 211);
+}
+.dropdown-profile a:hover {
+    color: rgb(250, 156, 211);
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+.dropdown:hover .dropdown-profile {
+    display: block;
+}
+
+
+/* page-btn 1234-> */
+.page-btn {
+    margin: 0 auto 80px;    
+}
+.page-btn span{
+    display: inline-block;
+    border: 1px solid rgb(250, 156, 211);
+    margin-left: 10px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    cursor: pointer;
+}
+.page-btn span:hover {
+    background: rgb(250, 156, 211);
+    color: #fff;
+}
+
+/*body*/
+section{
+    padding: 3% 10%;
+}
+
+/* slide */
+.main-home{
+    width: 100%;
+    height: 100vh;
+    background-image: url(../images/ban1.png);
+    background-position: center;
+    background-size: cover;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    align-items:center;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    
+}
+
+.main-text {
+    margin left: ;
+}
+
+.main-text h5{
+    color: rgb(250, 156, 211);
+    font-size: 30px;
+    text-transform: capitalize;
+    font-weight: 500;
+}
+.main-text h1{
+    color: black;
+    font-size: 65px;
+    text-transform: capitalize;
+    line-height: 1.1;
+    font-weight: 600;
+    margin: 6px 0 10px;
+}
+.main-text p{
+    color: #333c56;
+    font-size:20px;
+    font-style: italic;
+    margin-bottom:20px;
+}
+.main-btn{
+    display: inline-block;
+    color: #111;
+    font-size:16px;
+    font-weight: 500;
+    text-transform: capitalize;
+    border: 1px solid #111;
+    border-radius: 50px;
+    padding: 12px 25px;
+    transition: all .42s ease;
+}
+.main-btn:hover{
+    background-color: rgb(250, 156, 211);
+    color:white;
+    border-radius: 50px;
+    border: 1px solid #ffffff;
+
+}
+.main-btn i{
+    vertical-align: middle;
+}
+.down-arrow{
+    position:absolute;
+    top:85%;
+    right: 11%;
+}
+.down i{
+    font-size: 30px;
+    color: rgb(250, 156, 211);
+    border: 2px solid rgb(250, 156, 211);
+    border-radius: 50px;
+    padding: 12px 12px;
+}
+.down i:hover{
+    background-color: rgb(250, 156, 211);
+    color: #fff;
+    transition: all .42s ease;
+}
+
+/* Why Choose Us */
+.main-about {
+    width: 100%;
+    height: 100vh;
+    background-image: url(../images/ban2.png);
+    background-position: center;
+    background-size: cover;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    align-items:center;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.main-about .main-about-us h2 {
+    margin-left: 40%;
+
+}
+.main-about .main-about-us p {
+    margin-left: 40%;
+}
+.main-about .main-about-us d {
+    color: rgb(250, 156, 211);
+    font-size: 18px;
+}
+.main-about .main-about-us a {
+    color: rgb(250, 156, 211);
+}
+.main-about .main-about-us .about-icon p {
+    margin-left: 40%;
+}
+.main-about .main-about-us .about-icon .i t {
+    margin-left: 40%;
+    font-size: 20px;
+
+}
+.main-about .main-about-us .about-icon i {
+    margin-left: 40%;
+    color: rgb(250, 156, 211);
+    font-size: 20px;
+
+}
+.main-about .main-about-us .about-icon h5 {
+    color: rgb(250, 156, 211);
+    display:  flex;
+}
+
+/*3 Brand/Toko */
+-text {
+    display: flex;
+    justify-content: center; 
+    margin-right: 0; 
+    margin-bottom: 20px;
+}
+.baru {
+    display: flex;
+    justify-content: center;
+    align-items: .centerflex-start;
+    max-width: 1200px;
+    margin: 0 auto 50px;
+    
+    /* Tambahkan padding agar logo tidak menempel ke tepi */
+    padding: 0 10%;
+}
+.center-text h3 {
+    margin-right: 10%; 
+    margin-left: 10%; 
+    width: 40%; 
+    text-align: center;
+}
+.brand{
+/* Bagian Shopee & Tokped */
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 30px;
+    flex-grow: 1;
+    /* Hapus margin-left negatif yang mungkin menarik logo */
+    margin-left: 0;
+}
+.brand img{
+    width: 100px;
+    height: 100px;
+    padding: 12px;
+    background: #fff;
+    transition: transform 0.3s;
+}
+.brand a {
+    
+}
+.brand img:hover{
+    transform: translateY(-5px);
+}
+/* Perbaikan Posisi Logo SBJ */
+sbj {
+    /* Berikan lebar yang sesuai */
+    width: 25%; 
+    text-align: center;
+}
+
+sbj img {
+    /* Hapus margin yang tidak perlu */
+    margin-left: 0; 
+    margin-right: 0; 
+}
+sbj a {
+    margin-left: 35%;
+}
+sbj img:hover {
+    transform: translateY(-5px);
+}
+
+
+/* Grid Layout */
+.center-class {
+    background-color: black;
+}
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+}
+
+  /* Product Card */
+.product-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s;
+    text-align: center;
+}
+  
+.product-card:hover {
+    transform: translateY(-5px);
+}
+  
+/* Product Image */
+.product-image img {
+    width: 100%;
+    height: auto;
+}
+  
+  /* Product Details */
+.product-details {
+    padding: 15px;
+}
+.product-details h3 {
+    font-size: 1.2rem;
+    color: black;
+}
+.product-details h4 {
+    font-size: 1.2rem;
+    color: black;
+}
+.product-details p {
+    font-size: 1rem;
+    color: black;
+}
+
+
+/* Buttons */
+  .actions .btn {
+    display: inline-block;
+    margin: 5px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s, transform 0.2s;
+    color: white;
+  }
+  
+  .favorite-btn {
+    background-color: rgb(250, 156, 211);;
+    color: white;
+  }
+  
+  .buy-now-btn {
+    background-color: #66ccff;
+    color: white;
+  }
+  .buy-now-btn a {
+    color: black;
+  }
+  
+  .favorite-btn:hover {
+    background-color:rgb(248, 99, 186);
+  }
+  
+  .buy-now-btn:hover {
+    background-color: #2980b9;
+  }
+  
+  .btn:active {
+    transform: scale(0.95);
+  }
+
+
+
+/* MOOD */
+.mood-slider-section {
+    /* Pastikan tidak ada margin-left yang tidak seimbang di sini */
+    max-width: 700px; 
+    margin: -50px auto 50px auto;
+    padding: 20px;
+}
+.mood-slider-container {
+    text-align: center;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px; 
+    margin: 0 auto; 
+}
+
+.slider {
+    position: relative;
+    width: 400px;
+    margin: 0 auto;
+}
+
+.slider-input {
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 10px;
+    border-radius: 5px;
+    background: #ddd;
+    outline: none;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.slider-input:hover {
+    opacity: 1;
+}
+
+.slider-input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ff69b4;
+    cursor: pointer;
+}
+
+.slider-input::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ff69b4;
+    cursor: pointer;
+}
+
+.mood-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.mood {
+    font-size: 1.5rem;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color:rgb(250, 156, 211);
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color:rgb(248, 99, 186);
+}
+
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .product-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .product-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+/* Footer */
+.row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.garis {
+    background-color:rgb(163, 41, 94);
+    padding: 3px;
+}
+.footer {
+    background: #fcd5d5;
+    color: #555;
+    font-size: 14px;
+    padding: 5px 0 20px;
+}
+.footer p{
+    color: #555;
+}
+.footer h3{
+    color: #555;
+    margin-bottom: 20px;
+}
+.footer-col-1, .footer-col-2, .footer-col-3, .footer-col-4 {
+    min-width: 250px;
+    margin-bottom: 20px;
+}
+.footer-col-1{
+    flex-basis: 30%;
+    margin-left: 4%;
+}
+.footer-col-2{
+    flex: 1;
+    text-align: center;
+}
+.footer-col-2 img{
+    width: 180px;
+    margin-bottom: 0px;
+}
+.footer-col-3, .footer-col-4{
+    flex-basis: 12%;
+    text-align: center;
+}
+ul {
+    list-style-type: none;
+}
+ul li a {
+    color: #555;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+ul li a:hover {
+    color: #555;
+}
+.footer hr{
+    border: none;
+    background: #555;
+    height: 1px;
+    margin: 20px 0;
+}
+.Copyright{
+    text-align: center;
+}
+
+.menu-icon {
+    width: 28px;
+    margin-left: 20px;
+    display: none;
+}
+
+/----Media Query for Menu----/
+@media only screen and (max-width: 800px) {   
+    
+    nav ul{
+        position: absolute;
+        top: 70px;
+        left: 0;
+        background: #333;
+        width: 100%;
+        overflow: hidden;
+        transition: max-height 0.5;
+    }
+    nav ul li {
+        display: block;
+        margin-right: 50px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    nav ul li a{
+        color: #fff;
+    }
+    .menu-icon {
+        display: block;
+        cursor: pointer;
+    }
+}
+
+/* Kontainer Utama yang membungkus kedua grup */
+.partner-platform-wrapper {
+    display: flex;
+    justify-content: space-around; /* Menyebar kedua grup */
+    align-items: flex-start; /* Sejajarkan di bagian atas */
+    max-width: 1200px;
+    margin: 50px auto; /* Centering wrapper */
+    padding: 0 20px;
+}
+
+/* Styling untuk setiap Grup (Partner dan Platform) */
+.partner-group, .platform-group {
+    /* KRUSIAL: Atur konten di dalam grup menjadi vertikal */
+    display: flex;
+    flex-direction: column; 
+    align-items: center; /* Rata tengah Judul dan Logo di dalam grup */
+    text-align: center;
+    padding: 10px;
+    /* Beri lebar yang spesifik agar logo Shopee/Tokped tidak terlalu jauh */
+    width: 45%; 
+}
+
+/* Styling Judul */
+.partner-title, .platform-title {
+    /* UBAH FONT SIZE */
+    font-size: 1.4rem; /* Mengubah dari 1.5rem (atau lebih besar) menjadi 1.2rem */
+    font-weight: bold;
+    margin-bottom: 15px; /* Kurangi margin bawah agar lebih rapat */
+}
+
+/* Styling Kontainer Logo */
+.partner-logos, .platform-logos {
+    display: flex; /* Gunakan Flexbox untuk menata logo secara horizontal */
+    gap: 20px; /* Jarak antar logo */
+    justify-content: center; /* Rata tengah logo */
+}
+
+/* Styling Gambar Logo */
+.brand-toko img {
+width: 70px; 
+    height: 70px;
+    object-fit: contain;
+    padding: 8px; /* Kurangi padding di dalam box logo */
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.brand-toko img:hover {
+    transform: translateY(-5px);
+}

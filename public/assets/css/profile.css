@@ -1,0 +1,506 @@
+
+/* Profile Header */
+.profile-header {
+    text-align: center;
+    background-color: #ffd3e0;
+    padding: 40px 20px;
+    margin-top: 0; 
+}
+
+.profile-header img { /* Changed from .profile-picture to img directly */
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    object-fit: cover;
+    margin: 0 auto;
+    margin-top: 15%; /* Adjust as needed */
+}
+
+.profile-header h1 {
+    font-size: 24px;
+    color: #333;
+    margin: 10px 0 5px;
+}
+
+.profile-header p {
+    font-size: 14px;
+    color: #777;
+}
+
+.edit-profile {
+    margin-top: 10px;
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 14px;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.edit-profile a {
+    color: black;
+    text-decoration: none;
+}
+
+/* Tabs Navigation */
+.tabs {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px; /* Adjusted margin-top */
+    background-color: #fff; /* Ensure tabs background is white */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add shadow for separation */
+    width: 80%; /* Match content width */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tabs .tab {
+    flex: 1;
+    text-align: center;
+    padding: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.tabs .tab.active {
+    border-bottom: 3px solid rgb(250, 156, 211);
+    color: rgb(250, 156, 211);
+}
+
+/* Content Sections */
+.content {
+    margin: 20px auto;
+    width: 80%;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.content .about-item {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #333;
+}
+
+.content .about-item strong {
+    color: #000;
+}
+
+/* My Style - Individual Posting */
+.posting {
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.post-header a {
+    display: flex; /* Make the whole link clickable and align items */
+    align-items: center;
+    color: black;
+    text-decoration: none;
+    font-family: 'Arial', sans-serif;
+}
+
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+}
+
+.username {
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+}
+
+.timestamp {
+    font-size: 12px;
+    color: #aaa;
+    margin-left: auto;
+}
+
+.capt {
+    margin-bottom: 10px;
+}
+
+.post-caption {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.5;
+    margin-left: 0; /* Removed fixed margin-left */
+    margin-top: 5px; /* Adjusted margin-top for caption */
+}
+
+.post-tags {
+    color: #0095f6;
+    cursor: pointer;
+}
+
+.poster {
+    text-align: center; /* Center the image */
+    margin-bottom: 15px;
+    /* Add a max-width to the poster container itself for better control */
+    max-width: 60%; /* Example: limit poster container width */
+    margin-left: auto; /* Center the container */
+    margin-right: auto; /* Center the container */
+}
+
+.poster img {
+    max-width: 100%; /* Image will now fill 100% of its (smaller) parent .poster */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 7px;
+    display: block; /* Remove extra space below image */
+    /* margin: 0 auto; <-- Not needed here if parent is centered and img is 100% width */
+}
+
+.post-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-left: 0; /* Removed fixed margin-left */
+    margin-top: 10px;
+}
+
+.likes-comments {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+}
+
+.likes-comments span {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #333;
+}
+
+.likes-comments i {
+    font-size: 18px; /* Adjust icon size */
+    margin-right: 5px;
+}
+
+/* My Gallery - Grid Layout */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid */
+    gap: 20px; /* Adjusted gap for better spacing */
+}
+
+.image-placeholder {
+    margin: 0; /* Remove extra margin */
+    overflow: hidden; /* Ensure image doesn't overflow */
+    border-radius: 3px;
+}
+
+.image-placeholder img {
+    width: 100%; /* Make image fill its container */
+    height: 200px; /* Fixed height for consistency, adjust as needed */
+    object-fit: cover; /* Crop image to fit */
+    border-radius: 3px;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.image-placeholder img:hover {
+    transform: scale(1.05); /* Subtle zoom effect on hover */
+}
+
+/* Tags Styling */
+.tag {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: black;
+    text-align: right;
+    margin-left: auto; /* Push tag to the right */
+}
+
+.tag.happy { background-color: rgb(244, 196, 212); }
+.tag.very-happy { background-color: rgb(243, 147, 182); }
+.tag.very-sad { background-color: rgb(191, 218, 240); }
+.tag.neutral { background-color: rgb(237, 209, 138); }
+.tag.sad { background-color: rgb(114, 184, 237); }
+
+/* Upload Button */
+.post-style-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #e97da3;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.post-style-button:hover {
+    background-color: #d4668e;
+}
+
+.post-style-button:hover::after {
+    content: "Upload Style";
+    position: absolute;
+    bottom: 80px;
+    background-color: #e97da3;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+    z-index: 1000;
+}
+
+/* Product Card (from fav.css, if also used here) */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.product-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s;
+    text-align: center;
+}
+ 
+.product-card:hover {
+    transform: translateY(-5px);
+}
+ 
+.product-image img {
+    width: 100%;
+    height: 200px; /* Fixed height for product images */
+    object-fit: cover;
+}
+ 
+.product-details {
+    padding: 15px;
+}
+.product-details h3,
+.product-details h4 {
+    font-size: 1.2rem;
+    color: black;
+    margin-bottom: 5px;
+}
+.product-details p {
+    font-size: 1rem;
+    color: black;
+    margin-bottom: 15px;
+}
+
+.product-details .actions {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+}
+
+.product-details .btn {
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.product-details .favorite-btn {
+    background-color: #e97da3;
+    color: white;
+    border: none;
+}
+
+.product-details .favorite-btn:hover {
+    background-color: #d4668e;
+}
+
+.product-details .buy-now-btn {
+    background-color: #6c757d; /* A neutral color */
+    color: white;
+    border: none;
+}
+
+.product-details .buy-now-btn:hover {
+    background-color: #5a6268;
+}
+
+.product-details .buy-now-btn.disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .content, .tabs {
+        width: 90%;
+    }
+}
+
+@media (max-width: 768px) {
+    .content, .tabs {
+        width: 95%;
+    }
+    .gallery {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+    .product-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+    .profile-header img {
+        margin-top: 5%; /* Adjust for smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .content, .tabs {
+        width: 100%;
+        padding: 10px;
+    }
+    .profile-header {
+        padding: 20px 10px;
+    }
+    .profile-header img {
+        width: 100px;
+        height: 100px;
+    }
+    .gallery, .product-grid {
+        grid-template-columns: 1fr; /* Single column on very small screens */
+    }
+    .posting {
+        padding: 10px;
+    }
+    .poster img {
+        max-width: 95%;
+    }
+    .post-actions {
+        justify-content: center;
+    }
+}
+
+/* Footer */
+.row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.garis {
+    background-color:rgb(163, 41, 94);
+    padding: 3px;
+}
+.footer {
+    background: #fcd5d5;
+    color: #555;
+    font-size: 14px;
+    padding: 5px 0 20px;
+}
+.footer p{
+    color: #555;
+}
+.footer h3{
+    color: #555;
+    margin-bottom: 20px;
+}
+.footer-col-1, .footer-col-2, .footer-col-3, .footer-col-4 {
+    min-width: 250px;
+    margin-bottom: 20px;
+}
+.footer-col-1{
+    flex-basis: 30%;
+    margin-left: 4%;
+}
+.footer-col-2{
+    flex: 1;
+    text-align: center;
+}
+.footer-col-2 img{
+    width: 180px;
+    margin-bottom: 0px;
+}
+.footer-col-3, .footer-col-4{
+    flex-basis: 12%;
+    text-align: center;
+}
+ul {
+    list-style-type: none;
+}
+ul li a {
+    color: #555;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+ul li a:hover {
+    color: #555;
+}
+.footer hr{
+    border: none;
+    background: #555;
+    height: 1px;
+    margin: 20px 0;
+}
+.Copyright{
+    text-align: center;
+}
+
+.menu-icon {
+    width: 28px;
+    margin-left: 20px;
+    display: none;
+}
+
+/----Media Query for Menu----/
+@media only screen and (max-width: 800px) {   
+    
+    nav ul{
+        position: absolute;
+        top: 70px;
+        left: 0;
+        background: #333;
+        width: 100%;
+        overflow: hidden;
+        transition: max-height 0.5;
+    }
+    nav ul li {
+        display: block;
+        margin-right: 50px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    nav ul li a{
+        color: #fff;
+    }
+    .menu-icon {
+        display: block;
+        cursor: pointer;
+    }
+}

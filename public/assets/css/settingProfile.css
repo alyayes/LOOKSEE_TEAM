@@ -1,0 +1,357 @@
+body {
+    background: #f5f5f5;
+    margin-top: 20px;
+}
+
+.ui-w-80 {
+    width : 80px !important;
+    height: auto;
+}
+
+.btn-default {
+    border-color: rgba(24, 28, 33, 0.1);
+    background  : rgba(0, 0, 0, 0);
+    color       : #4E5155;
+}
+
+label.btn {
+    margin-bottom: 0;
+}
+
+.btn-outline-primary {
+    border-color: #26B4FF;
+    background  : transparent;
+    color       : #26B4FF;
+}
+
+.btn {
+    cursor: pointer;
+}
+
+.text-light {
+    color: #babbbc !important;
+}
+
+.btn-facebook {
+    border-color: rgba(0, 0, 0, 0);
+    background  : #3B5998;
+    color       : #fff;
+}
+
+.btn-instagram {
+    border-color: rgba(0, 0, 0, 0);
+    background  : #000;
+    color       : #fff;
+}
+
+.card {
+    background-clip: padding-box;
+    box-shadow     : 0 1px 4px rgba(24, 28, 33, 0.012);
+}
+
+.row-bordered {
+    overflow: hidden;
+}
+
+.account-settings-fileinput {
+    position  : absolute;
+    visibility: hidden;
+    width     : 1px;
+    height    : 1px;
+    opacity   : 0;
+}
+
+.account-settings-links .list-group-item.active {
+    font-weight: bold !important;
+}
+
+html:not(.dark-style) .account-settings-links .list-group-item.active {
+    background: transparent !important;
+}
+
+.account-settings-multiselect~.select2-container {
+    width: 100% !important;
+}
+
+.light-style .account-settings-links .list-group-item {
+    padding     : 0.85rem 1.5rem;
+    border-color: rgba(24, 28, 33, 0.03) !important;
+}
+
+.light-style .account-settings-links .list-group-item.active {
+    color: #4e5155 !important;
+}
+
+.material-style .account-settings-links .list-group-item {
+    padding     : 0.85rem 1.5rem;
+    border-color: rgba(24, 28, 33, 0.03) !important;
+}
+
+.material-style .account-settings-links .list-group-item.active {
+    color: #4e5155 !important;
+}
+
+.dark-style .account-settings-links .list-group-item {
+    padding     : 0.85rem 1.5rem;
+    border-color: rgba(255, 255, 255, 0.03) !important;
+}
+
+.dark-style .account-settings-links .list-group-item.active {
+    color: #fff !important;
+}
+
+.light-style .account-settings-links .list-group-item.active {
+    color: #4E5155 !important;
+}
+
+.light-style .account-settings-links .list-group-item {
+    padding     : 0.85rem 1.5rem;
+    border-color: rgba(24, 28, 33, 0.03) !important;
+}
+
+.text-light small mt-1 {
+    
+}
+
+
+/*-----------------------------HEADER FOOTER ---------------------------------*/
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    font-family: 'Jost', sans-serif;
+    list-style:none;
+    text-decoration: none;
+}
+header {
+    position: sticky;
+    z-index: 1000;
+    top: 0;
+    background-color: white;
+    padding: 20px;
+    margin-right: 20px;
+    margin-left: 25px;
+}
+.navbar {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    z-index: 50;
+}
+nav {
+    flex: 1;
+    text-align: right;
+}
+nav ul {
+    display: inline-block;
+    list-style-type: none;
+}
+nav ul li {
+    display: inline-block;
+    margin-right: 25px;
+}
+nav ul li a {
+    color: black;
+}
+nav ul li a:hover {
+    color: rgb(250, 156, 211);
+} 
+.nav-icon{
+    display: flex;
+    align-items: center;
+}
+.nav-icon i{
+    margin-right: 20px;
+    color: #2c2c2c;
+    font-size: 25px;
+    font-weight:400;
+    transition: all .42s ease;
+}
+.nav-icon i:hover{
+    transform: scale(1.1);
+    color: rgb(250, 156, 211);
+}
+.dropdown {
+    position: relative;
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+.dropdown-content .submenu-title {
+    color: black;
+    font-size: 15px;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    text-align: center;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px gray (0, 0, 0, 0.2);
+    z-index: 100;
+}
+.dropdown-profile {
+    display: none;
+    position: absolute;
+    top: 10px;
+    left: 0;
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px gray(0, 0, 0, 0.2);
+}
+.dropdown-content .dropdown-profile-submenu {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; 
+}
+.dropdown-content .submenu-title {
+    color: black;
+    font-size: 15px;
+}
+.dropdown-product-submenu {
+    color: black;
+    font-size: 15px;
+}
+.dropdown-content a {
+    color: black;
+    padding: 5px 0;
+    transition: 0.3s;
+}
+.dropdown-profile a {
+    color: black;
+    padding: 5px;
+    margin-between-text: 0;
+    transition: 0.3s;
+    font-size: 15px;
+}
+.dropdown-content a:hover {
+    color: rgb(250, 156, 211);
+}
+.dropdown-profile a:hover {
+    color: rgb(250, 156, 211);
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+.dropdown:hover .dropdown-profile {
+    display: block;
+}
+
+/* Banner */
+.container {
+    max-width: 1300px;
+    margin: auto;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+.row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+/* Footer */
+.garis {
+    background-color:rgb(163, 41, 94);
+    padding: 3px;
+}
+.footer {
+    background: #fcd5d5;
+    color: #555;
+    font-size: 14px;
+    padding: 5px 0 20px;
+}
+.footer p{
+    color: #555;
+}
+.footer h3{
+    color: #555;
+    margin-bottom: 20px;
+}
+.footer-col-1, .footer-col-2, .footer-col-3, .footer-col-4 {
+    min-width: 250px;
+    margin-bottom: 20px;
+}
+.footer-col-1{
+    flex-basis: 30%;
+}
+.footer-col-2{
+    flex: 1;
+    text-align: center;
+}
+.footer-col-2 img{
+    width: 180px;
+    margin-bottom: 0px;
+}
+.footer-col-3, .footer-col-4{
+    flex-basis: 12%;
+    text-align: center;
+}
+ul {
+    list-style-type: none;
+}
+ul li a {
+    color: #555;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+ul li a:hover {
+    color: #555;
+}
+.footer hr{
+    border: none;
+    background: #555;
+    height: 1px;
+    margin: 20px 0;
+}
+.Copyright{
+    text-align: center;
+}
+
+.menu-icon {
+    width: 28px;
+    margin-left: 20px;
+    display: none;
+}
+
+/*----Media Query for Menu----*/
+@media only screen and (max-width: 800px) {   
+    
+    nav ul{
+        position: absolute;
+        top: 70px;
+        left: 0;
+        background: #333;
+        width: 100%;
+        overflow: hidden;
+        transition: max-height 0.5;
+    }
+    nav ul li {
+        display: block;
+        margin-right: 50px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    nav ul li a{
+        color: #fff;
+    }
+    .menu-icon {
+        display: block;
+        cursor: pointer;
+    }
+}
+
+
+.row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+

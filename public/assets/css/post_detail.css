@@ -1,0 +1,909 @@
+/* Styling Universal */
+
+
+/* Banner */
+.container {
+    max-width: 1300px;
+    margin: auto;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+.row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.small-container.single-product .product-grid .detailsss > .row {
+    align-items: flex-start;
+}
+
+.col-2 {
+    flex-basis: 50%;
+    min-width: 300px;
+}
+.col-2 img {
+    max-width: 100%; /* Ubah 'auto' menjadi '100%' */
+    height: auto; /* Penting untuk menjaga rasio aspek */
+}
+
+/* Pastikan tag-tag non-standar ini tidak digunakan di HTML, ganti dengan class pada p/span/div */
+.col-2 p {
+    margin-bottom: 10px;
+    line-height: 25px;
+    text-align: left;
+    font-weight: 450;
+    font-size: small;
+    margin-right: 160px; /* Pertimbangkan apakah margin-right ini perlu */
+    margin-top: 10px;
+}
+.col-2 ab { /* Harusnya pakai class, misal .post-caption-title */
+    margin-bottom: 10px;
+    line-height: 25px;
+    text-align: left;
+    font-weight: 500;
+    font-size: large;
+    margin-right: 178px; /* Pertimbangkan apakah margin-right ini perlu */
+}
+.col-2 ac { /* Harusnya pakai class, misal .post-hashtags-text */
+    margin-bottom: 10px;
+    line-height: 25px;
+    text-align: left;
+    font-weight: 399; /* Font-weight biasanya kelipatan 100 */
+    font-size: smaller;
+    margin-right: 210px; /* Pertimbangkan apakah margin-right ini perlu */
+}
+.btn {
+    display: inline-block;
+    background: rgb(245, 101, 137);
+    color: #fff;
+    padding: 8px 30px;
+    margin: 30px 0;
+    border-radius: 30px;
+}
+.trends {
+    background: radial-gradient(#fff,#ffd6d6);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* Featured Categories */
+.categories {
+    margin: 70px 0;
+}
+.col-3 {
+    flex-basis: 30%;
+    min-width: 250px;
+    margin-bottom: 30px;
+}
+.col-3 img {
+    width: 100%;
+}
+.small-container {
+    max-width: 1080px;
+    margin: auto;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+/* Featured Product */
+.col-4 {
+    flex-basis: 25%;
+    padding: 10px;
+    min-width: 200px;
+    margin-bottom: 40px;
+    transition: transform 0.5s;
+}
+.col-4 img {
+    width: 100%;
+}
+.tittle {
+    padding-top: 0px;
+    text-align: center;
+    position: relative;
+    line-height: 60px;
+    color: #555;
+}
+.text {
+    text-align: center;
+    margin: 0 auto 40px auto; /* Perbaikan komentar */
+    position: relative;
+    line-height: 60px;
+    color: #555;
+}
+.tittle::after {
+    content: '';
+    background: rgb(245, 101, 137);
+    width: 80px;
+    height: 5px;
+    border-radius: 5px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.text-img a:visited,
+.text-img a:hover,
+.text-img a:active {
+    color: #3f3e3e;
+    text-decoration: none;
+}
+.text-img:hover a {
+    text-decoration: underline;
+}
+.text-img {
+    color: #3f3e3e;
+}
+.text-img a {
+    display: inline-block;
+    margin: 0;
+    font-size: 14px;
+    color: #3f3e3e;
+}
+
+.col-4 a {
+    color: #000;
+    font-weight: normal;
+}
+.col-4 {
+    font-size: 14px;
+}
+.rating .fa {
+    color: rgb(238, 54, 100);
+}
+
+.col-4:hover {
+    transform: translateY(-5px);
+}
+
+/* Offer */
+.offer {
+    background: radial-gradient(#fff,#ffd6d6);
+}
+small {
+    color: #555;
+}
+
+/* Testimonial */
+.testimonial {
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+.testimonial .col-3 {
+    text-align: center;
+    padding: 40px 20px;
+    box-shadow: 0 0 20px 0px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: transform 0.5s;
+}
+.testimonial .col-3 img {
+    width: 50px;
+    margin-top: 20px;
+    border-radius: 50%;
+}
+.testimonial .col-3:hover {
+    transform: translateY(-10px);
+}
+.fa.fa-quote-left {
+    font-size: 34px;
+    color: rgb(238, 54, 100);
+}
+.col-3 p {
+    font-size: 12px;
+    margin: 12px 0;
+    color: #777;
+}
+
+.testimonial .col-3 h3 {
+    font-weight: 600;
+    color: #555;
+    font-size: 16px;
+}
+
+/* page-btn 1234-> */
+.page-btn {
+    margin: 0 auto 80px;
+}
+.page-btn span {
+    display: inline-block;
+    border: 1px solid rgb(238, 54, 100);
+    margin-left: 10px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    cursor: pointer;
+}
+.page-btn span:hover {
+    background: rgb(238, 54, 100);
+    color: #fff;
+}
+
+/* Footer */
+.garis {
+    background-color: rgb(163, 41, 94);
+    padding: 3px;
+}
+.footer {
+    background: #fcd5d5;
+    color: #555;
+    font-size: 14px;
+    padding: 5px 0 20px;
+}
+.footer p {
+    color: #555;
+}
+.footer h3 {
+    color: #555;
+    margin-bottom: 20px;
+}
+.footer-col-1, .footer-col-2, .footer-col-3, .footer-col-4 {
+    min-width: 250px;
+    margin-bottom: 20px;
+}
+.footer-col-1 {
+    flex-basis: 30%;
+}
+.footer-col-2 {
+    flex: 1;
+    text-align: center;
+}
+.footer-col-2 img {
+    width: 180px;
+    margin-bottom: 0px;
+}
+.footer-col-3, .footer-col-4 {
+    flex-basis: 12%;
+    text-align: center;
+}
+ul {
+    list-style-type: none;
+}
+ul li a {
+    color: #555;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+ul li a:hover {
+    color: #555;
+}
+.footer hr {
+    border: none;
+    background: #555;
+    height: 1px;
+    margin: 20px 0;
+}
+.Copyright {
+    text-align: center;
+}
+
+.menu-icon {
+    width: 28px;
+    margin-left: 20px;
+    display: none;
+}
+
+/*----Media Query for Menu----*/
+@media only screen and (max-width: 800px) {
+    nav ul {
+        position: absolute;
+        top: 70px;
+        left: 0;
+        background: #333;
+        width: 100%;
+        overflow: hidden;
+        transition: max-height 0.5s;
+    }
+    nav ul li {
+        display: block;
+        margin-right: 50px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    nav ul li a {
+        color: #fff;
+    }
+    .menu-icon {
+        display: block;
+        cursor: pointer;
+    }
+}
+
+/*----Media Query for less than 600 screen size----*/
+@media only screen and (max-width: 800px) {
+    .row {
+        text-align: center;
+    }
+    .col-2, .col-3, .col-4 {
+        flex-basis: 100%;
+    }
+    .single-product .row {
+        text-align: left;
+    }
+    .single-product .col-2 {
+        padding: 20px 0;
+    }
+    .single-product h1 {
+        font-size: 26px;
+        line-height: 32px;
+    }
+}
+
+/* halaman 2 */
+/* Single Product */
+.single-product .col-2 img {
+    padding: 0;
+}
+.single-product .col-2 {
+    padding: 20px;
+}
+.single-product h4 {
+    margin: 20px 0;
+    font-size: 22px;
+    font-weight: bold;
+}
+.small-img.row {
+    display: flex;
+    justify-content: space-between;
+}
+.small-img-col {
+    flex-basis: 40%;
+    cursor: pointer;
+    /* Menambahkan styling untuk small-img-col agar menjadi kontainer flex */
+    display: flex;
+    flex-direction: column; /* Mengatur item di dalamnya secara vertikal */
+    justify-content: space-between; /* Untuk mendorong harga ke bawah */
+    height: 100%; /* Pastikan mengisi tinggi yang tersedia */
+    padding: 10px; /* Padding di dalam card untuk konten */
+}
+.small-img-col h5 {
+    cursor: pointer;
+}
+
+/* Tittle */
+.row-2-3 {
+    text-align: right;
+}
+.small-container .row-2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.row-2 .col-2-3 {
+    flex: 1;
+}
+.view-more {
+    text-align: right;
+}
+.view-more a {
+    text-decoration: none;
+    color: #000;
+}
+.cardd {
+    background: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px; /* Ditingkatkan dari 0px */
+    overflow: hidden;
+    width: 40%;
+    min-width: 180px; /* Tambahkan min-width agar tidak terlalu kecil */
+    max-width: 250px; /* Tambahkan max-width untuk kontrol ukuran */
+    margin-bottom: 20px;
+    transition: transform 0.5s;
+    display: flex; /* Aktifkan flexbox untuk cardd */
+    flex-direction: column; /* Konten di dalam cardd disusun vertikal */
+    text-align: left; /* Teks di dalam cardd rata kiri */
+}
+.cardd:hover {
+    transform: translateY(-5px);
+}
+
+.capt {
+    display: flex;
+    flex-direction: column; /* Nama produk di atas ikon */
+    justify-content: space-between;
+    align-items: flex-start; /* Konten rata kiri */
+    padding: 8px 10px 0; /* Memberi sedikit padding di atas, samping, dan 0 di bawah */
+    min-height: 40px; /* Memberi tinggi minimum agar rapi */
+    flex-grow: 1; /* Biarkan captions mengisi ruang vertikal */
+}
+
+/* Styling untuk nama produk */
+.product-name {
+    font-size: small;
+    font-weight: 600;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%; /* Agar ellipsis bekerja */
+    margin-bottom: 5px; /* Jarak antara nama produk dan ikon */
+    display: block; /* Penting agar margin bottom bekerja */
+}
+
+/* Wadah untuk kedua ikon (keranjang dan hati) */
+.card-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Memberi jarak antar ikon */
+    flex-shrink: 0; /* Mencegah ikon menyusut */
+    margin-top: 5px; /* Jarak dari nama produk */
+    margin-bottom: 10px; /* Jarak dari harga */
+}
+
+/* Styling untuk setiap ikon agar bisa diklik */
+.action-icon i {
+    font-size: 22px;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+/* Efek hover pada ikon */
+.action-icon:hover i {
+    color: rgb(250, 156, 211);
+}
+
+/* Styling untuk harga */
+.product-price {
+    display: block;
+    text-align: left;
+    margin: 0 10px 10px 10px; /* Rapikan margin harga, padding bawah untuk cardd */
+    font-size: smaller;
+    font-weight: 500;
+    color: #333;
+    margin-top: auto; /* Mendorong harga ke bagian bawah kontainer small-img-col */
+}
+
+.col-2 h3 {
+    padding-bottom: 20px;
+}
+
+
+.product-grid { /* Ini untuk halaman /fav.php, bukan product_detail.php */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 1000px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    margin-bottom: 50px;
+    text-align: center;
+}
+.col-2 img {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+.small-img.row {
+    text-align: center;
+    /* Penting: Untuk tampilan 2 kolom di detailTrends.php */
+    display: flex;
+    flex-wrap: wrap; /* Izinkan item untuk wrap ke baris baru */
+    justify-content: space-around; /* Atau space-between, center */
+    align-items: flex-start; /* Agar baris produk rata atas */
+    gap: 20px; /* Jarak antar card produk */
+}
+.abcd {
+    flex-basis: 50%;
+    min-width: 300px;
+}
+e { /* Harusnya pakai class, misal .product-mood-tag */
+    margin-left: 10px;
+    font-size: smaller;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.page-btn {
+    margin: 0 auto 80px;
+}
+.page-btn span {
+    display: inline-block;
+    border: 1px solid rgb(238, 54, 100);
+    margin-left: 10px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    cursor: pointer;
+}
+.page-btn span:hover {
+    background: rgb(238, 54, 100);
+    color: #fff;
+}
+
+/* CSS untuk tombol back */
+.back-button {
+    position: absolute; /* Ubah ke relative jika ingin di dalam alur dokumen */
+    top: 20px;
+    left: 70px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.back-button a {
+    text-decoration: none;
+}
+
+.back-button .arrow {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-left: 2px solid black;
+    border-bottom: 2px solid black;
+    transform: rotate(45deg);
+    margin-left: -3px;
+}
+
+/* CSS FOR HOVER FAV */
+/* Perlu tinjau ulang apakah ini digunakan di halaman ini atau halaman lain */
+.product-card {
+    width: 300px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+}
+
+.product-image {
+    position: relative;
+    padding: 20px;
+}
+
+.product-image img {
+    width: 100%;
+    height: auto;
+}
+
+.product-image:hover .product-icons {
+    opacity: 1;
+    visibility: visible;
+}
+
+.product-icons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.icon-button {
+    background: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-button i {
+    color: black;
+    font-size: large;
+}
+
+.icon-button:hover {
+    background: #f0f0f0;
+}
+
+.eye-button svg {
+    width: 20px;
+    height: 20px;
+    stroke: black;
+}
+
+.product-info {
+    padding: 20px;
+}
+
+.product-info p {
+    margin: 0;
+    color: #777;
+}
+
+.product-info h2 {
+    margin: 10px 0 0;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Styling untuk Komponen Feed Item (Social Post) */
+.social-feed-item-looksee {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+    font-family: 'Jost', sans-serif;
+    margin-top: 25px;
+}
+
+.feed-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.date-and-mood-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.date-and-mood-wrapper .feed-item-date {
+    margin-bottom: 6px;
+}
+
+.date-and-mood-wrapper .mood-tag { /* Menggunakan .mood-tag bukan .neutral-tag */
+    padding: 4px 8px;
+    font-size: 0.75rem;
+}
+
+.feed-item-author {
+    display: flex;
+    align-items: center;
+}
+
+.author-avatar {
+    width: 36px;
+    height: 36px;
+    margin-right: 10px;
+    object-fit: cover;
+    border: 1px solid #eee;
+    border-radius: 50%; /* Memastikan avatar bulat */
+}
+
+.author-name {
+    font-weight: 500;
+    font-size: 1rem;
+    color: #2c2c2c;
+}
+
+.feed-item-date {
+    font-size: 0.8rem;
+    color: #888888;
+}
+
+.feed-item-content .caption-text {
+    font-size: 0.95rem;
+    color: #333333;
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.feed-item-content .hashtags-text {
+    font-size: 0.9rem;
+    margin-bottom: 18px;
+}
+
+.feed-item-content .hashtags-text a {
+    color: #555555;
+    text-decoration: none;
+    margin-right: 8px;
+}
+
+.feed-item-content .hashtags-text a:hover {
+    text-decoration: underline;
+    color: #007bff;
+}
+
+.post-comment-button {
+    background-color: #007bff;
+    color: white;
+    padding: 9px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.post-comment-button:hover {
+    background-color: #0056b3;
+}
+
+.mood-tag { /* Style general untuk .mood-tag (sebelumnya .neutral-tag) */
+    background-color: #FFF3CD;
+    color: #665120;
+    padding: 9px 16px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+}
+
+.mood-tag i {
+    margin-right: 6px;
+    font-size: 1.1em;
+}
+
+.feed-item-stats {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eeeeee;
+    margin-top: 18px;
+}
+
+.feed-item-stats .stat-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #555555;
+}
+
+.feed-item-stats .stat-item i {
+    font-size: 1.3em;
+    margin-right: 6px;
+    color: #777777;
+}
+
+.feed-item-stats .stat-item .bxs-heart {
+    color: #ff4363 !important;
+}
+
+.feed-item-comments-section .comments-list {
+    margin-bottom: 12px;
+}
+
+/* Wadah utama untuk daftar komentar */
+.comments-list {
+    margin-top: 20px;
+}
+
+/* Setiap item komentar individual */
+.comment-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.comment-item .comment-avatar,
+.comment-form .comment-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+    flex-shrink: 0;
+    border: 1px solid #eee;
+}
+
+/* Konten komentar (username, teks, timestamp) */
+.comment-content {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Nama autor komentar */
+.comment-author {
+    font-weight: 600;
+    font-size: 0.95em;
+    margin-bottom: 4px;
+}
+
+/* Teks isi komentar */
+.comment-body {
+    margin: 0;
+    font-size: 0.9em;
+    line-height: 1.5;
+    color: #333;
+    white-space: pre-wrap; /* Menjaga format baris baru dari nl2br() */
+}
+
+/* Timestamp komentar */
+.comment-timestamp {
+    font-size: 0.75em;
+    color: #999;
+    margin-top: 6px;
+}
+
+/* Area input komentar yang lebih baik */
+.comment-input-area {
+    margin-top: 25px;
+}
+
+.comment-form {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    padding: 5px 5px 5px 15px;
+}
+
+.comment-input-field {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    padding: 10px 5px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.9em;
+}
+
+.post-comment-button {
+    border: none;
+    background-color: #007bff;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.post-comment-button:hover {
+    background-color: #0056b3;
+}
+
+.feed-item-comment img {
+    border-radius: 50%;
+}
+
+.small-container.single-product > .row {
+    align-items: flex-start;
+}
+
+/* Styling untuk .small-img.row yang menampung kartu produk */
+.small-img.row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around; /* Atau space-between untuk jarak merata */
+    gap: 20px; /* Jarak antar kartu */
+    margin-top: 20px; /* Jarak dari "Outfit Details" */
+}
+
+/* Styling untuk .abcd yang menampung gambar utama */
+.abcd {
+    flex-basis: 48%; /* Sedikit kurang dari 50% untuk memberi ruang gap */
+    min-width: 300px;
+    /* max-width: 500px; /* Opsional: batasi ukuran maksimal */
+}
+
+/* Styling untuk e (ganti dengan class yang sesuai) */
+e {
+    margin-left: 10px;
+    font-size: smaller;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

@@ -1,0 +1,646 @@
+/* General Styling */
+.contain {
+    background-color: #f8f8f8; /* Warna abu muda agar card lebih menonjol */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 75vh;
+    margin: 0;
+}
+
+.my-orders-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    width: 100%;
+    max-width: 900px;
+    box-sizing: border-box;
+    margin-top: 20px; /* Sedikit margin atas */
+}
+
+.orders-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    position: relative; /* Untuk memposisikan back-arrow secara absolut */
+}
+
+.orders-header .back-arrow {
+    font-size: 1.8em;
+    color: #333;
+    margin-right: 15px;
+    text-decoration: none;
+    position: absolute; /* Posisikan panah di kiri */
+    left: 0;
+}
+
+.orders-header .back-arrow:hover {
+    color: #FF69B4; /* Pink */
+}
+
+.orders-header h2 {
+    flex-grow: 1; /* Ambil sisa ruang */
+    text-align: center; /* Pusatkan judul */
+    color: #333;
+    font-weight: 700;
+    font-size: 2em;
+    margin: 0; /* Timpa margin default h2 */
+}
+
+/* Order Status Navigation */
+.order-status-nav {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 25px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 8px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.order-status-nav a {
+    text-decoration: none;
+    color: #555;
+    font-weight: 600;
+    padding: 10px 15px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    flex-grow: 1;
+    text-align: center;
+    white-space: nowrap; /* Mencegah teks melipat */
+}
+
+.order-status-nav a:hover {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.order-status-nav a.active {
+    background-color: #FF69B4; /* Pink aktif */
+    color: white;
+    box-shadow: 0 2px 8px rgba(255, 105, 180, 0.3);
+}
+
+/* Count Badge for specific statuses */
+.order-status-nav a .count-badge {
+    background-color: #ff523b; /* Warna badge */
+    color: white;
+    font-size: 0.7em;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-left: 5px; /* Jarak dari teks */
+    display: inline-block; /* Agar bisa diatur padding dan radius */
+}
+
+/* Empty Orders Message */
+.empty-orders-message {
+    text-align: center;
+    padding: 50px 20px;
+    color: #666;
+    font-size: 1.1em;
+    background-color: #fcfcfc;
+    border-radius: 10px;
+    border: 1px dashed #ddd;
+    margin-top: 20px;
+}
+
+.empty-orders-message p {
+    margin-bottom: 15px;
+}
+
+.empty-orders-message a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #FF69B4;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.empty-orders-message a:hover {
+    background-color: #e04a9e;
+}
+
+/* Order Card */
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Jarak antar kartu pesanan */
+}
+
+.order-card {
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #eee;
+    font-size: 0.9em;
+    color: #777;
+    font-weight: 500;
+    flex-wrap: wrap; /* Untuk responsif */
+    gap: 10px; /* Jarak antar elemen di header */
+}
+
+.order-header .order-id {
+    font-weight: 700;
+    color: #333;
+    flex-basis: auto; /* Otomatis */
+}
+
+.order-header .order-date {
+    flex-basis: auto; /* Otomatis */
+}
+
+.order-header .order-status-badge {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 0.85em;
+    color: white;
+    margin-left: auto; /* Dorong ke kanan */
+}
+
+/* Status badge colors */
+.order-status-badge.status-pending { background-color: #FFC107; color: #333;} /* Kuning */
+.order-status-badge.status-prepared { background-color: #17A2B8; } /* Biru Info */
+.order-status-badge.status-shipped { background-color: #007BFF; } /* Biru Primer */
+.order-status-badge.status-completed { background-color: #28A745; } /* Hijau */
+.order-status-badge.status-cancelled { background-color: #DC3545; } /* Merah */
+
+.order-items-summary {
+    padding: 15px 20px;
+}
+
+.order-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0; /* Tidak ada margin bawah karena hanya 1 item */
+}
+
+.item-thumb {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-right: 15px;
+    border: 1px solid #eee;
+    flex-shrink: 0; /* Mencegah gambar menyusut */
+}
+
+.item-details {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.item-name {
+    font-weight: 600;
+    color: #333;
+    font-size: 1em;
+}
+
+.item-quantity,
+.more-items-text {
+    font-size: 0.9em;
+    color: #777;
+    margin-top: 2px;
+}
+
+.more-items-text {
+    font-style: italic;
+    color: #888;
+}
+
+.item-price {
+    font-weight: 700;
+    color: #FF69B4;
+    font-size: 1em;
+    margin-left: auto; /* Dorong ke kanan */
+    flex-shrink: 0; /* Mencegah harga menyusut */
+}
+
+.order-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-top: 1px solid #eee;
+    background-color: #f9f9f9;
+}
+
+.order-total {
+    font-weight: 700;
+    color: #333;
+    font-size: 1.1em;
+}
+
+.view-details-btn {
+    background-color: #FF69B4;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 15px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.view-details-btn:hover {
+    background-color: #e04a9e;
+}
+
+/* --- Custom Alert Styling (from my_orders.php) --- */
+.custom-alert {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    animation: fadeIn 0.3s ease-out;
+}
+.custom-alert-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 450px;
+    width: 90%;
+    font-family: 'Inter', sans-serif;
+    color: #333;
+    position: relative;
+}
+.custom-alert-content p {
+    margin-bottom: 25px;
+    font-size: 1.15em;
+    line-height: 1.5;
+    color: #444;
+}
+.custom-alert-content button {
+    padding: 12px 25px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    background-color: #ff523b;
+    color: white;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+.custom-alert-content button:hover {
+    background-color: #e04a32;
+    transform: translateY(-1px);
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+
+/* --- Modal Styling --- */
+.modal {
+    display: none; /* Sembunyi secara default */
+    position: fixed; /* Tetap di tempat */
+    z-index: 1000; /* Di atas elemen lain */
+    left: 0;
+    top: 0;
+    width: 100%; /* Lebar penuh */
+    height: 100%; /* Tinggi penuh */
+    overflow: auto; /* Aktifkan scroll jika konten lebih panjang */
+    background-color: rgba(0,0,0,0.4); /* Overlay gelap */
+    justify-content: center; /* Pusatkan horizontal */
+    align-items: center; /* Pusatkan vertikal */
+    padding: 20px; /* Padding agar modal tidak terlalu mepet tepi di mobile */
+    box-sizing: border-box;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    width: 90%;
+    max-width: 600px; /* Lebar maksimum untuk detail pesanan */
+    position: relative;
+    box-sizing: border-box;
+    max-height: 90vh; /* Batasi tinggi modal */
+    overflow-y: auto; /* Aktifkan scroll di dalam modal */
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 1.3em;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-content h3 span {
+    font-size: 0.9em;
+    color: #777;
+    font-weight: 500;
+}
+
+.modal .close-btn {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.modal .close-btn:hover,
+.modal .close-btn:focus {
+    color: #333;
+    text-decoration: none;
+}
+
+/* Styling for modal order details content (from get_order_details.php output) */
+.modal-order-details {
+    padding: 10px 0;
+}
+
+.modal-order-details p {
+    margin-bottom: 8px;
+    color: #555;
+    font-size: 0.95em;
+    line-height: 1.4;
+}
+
+.modal-order-details strong {
+    color: #333;
+    font-weight: 600;
+}
+
+.modal-order-details .total-price-modal {
+    font-weight: 700;
+    color: #FF69B4;
+    font-size: 1.1em;
+}
+
+.modal-order-details h4 {
+    margin-top: 20px;
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 1.1em;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+}
+
+.modal-order-items-list {
+    /* max-height: 300px; */ /* Dihapus karena modal-content sudah ada overflow-y */
+    /* overflow-y: auto; */
+    padding-right: 5px; /* Ruang untuk scrollbar */
+}
+
+.modal-order-item {
+    display: flex;
+    align-items: flex-start; /* Sejajarkan item ke atas */
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #eee;
+}
+
+.modal-order-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.modal-order-item .item-thumb {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-right: 15px;
+    border: 1px solid #eee;
+    flex-shrink: 0;
+}
+
+.modal-order-item .item-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-order-item .item-info .name {
+    font-weight: 600;
+    color: #333;
+    font-size: 1em;
+    margin-bottom: 2px;
+}
+
+.modal-order-item .item-info .qty-price {
+    font-size: 0.85em;
+    color: #777;
+}
+
+.modal-order-item .item-total {
+    font-weight: 700;
+    color: #FF69B4;
+    font-size: 1em;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+/* Status badge in modal (agar konsisten) */
+.modal-order-details .order-status-badge {
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 0.8em;
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .my-orders-container {
+        padding: 20px;
+        margin-top: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    }
+
+    .orders-header {
+        flex-direction: column;
+        text-align: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+    }
+
+    .orders-header .back-arrow {
+        position: static; /* Kembali ke posisi normal */
+        margin-bottom: 10px;
+        font-size: 1.5em;
+    }
+
+    .orders-header h2 {
+        font-size: 1.6em;
+    }
+
+    .order-status-nav {
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 6px;
+    }
+
+    .order-status-nav a {
+        flex-basis: calc(50% - 4px); /* Dua item per baris */
+        font-size: 0.85em;
+        padding: 8px 10px;
+    }
+
+    .order-card {
+        padding: 0; /* Padding di dalam card akan diatur oleh elemen dalamnya */
+        border-radius: 8px;
+    }
+
+    .order-header {
+        flex-wrap: wrap;
+        gap: 5px;
+        font-size: 0.8em;
+        padding: 12px 15px;
+    }
+
+    .order-header .order-id,
+    .order-header .order-date {
+        flex-basis: 100%; /* Setiap elemen di baris baru */
+        text-align: center;
+    }
+
+    .order-header .order-status-badge {
+        margin-top: 5px;
+        margin-left: 0; /* Hapus dorongan ke kanan */
+        flex-basis: 100%; /* Setiap elemen di baris baru */
+        text-align: center;
+    }
+
+    .order-items-summary {
+        padding: 12px 15px;
+    }
+
+    .order-item {
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+
+    .item-thumb {
+        width: 50px;
+        height: 50px;
+        margin-right: 10px;
+    }
+
+    .item-details {
+        flex-basis: calc(100% - 65px); /* Sesuaikan lebar */
+    }
+
+    .item-name {
+        font-size: 0.95em;
+    }
+
+    .item-quantity,
+    .more-items-text {
+        font-size: 0.8em;
+    }
+
+    .item-price {
+        flex-basis: 100%;
+        text-align: right;
+        margin-left: 0;
+        margin-top: 5px;
+        font-size: 0.95em;
+    }
+
+    .order-footer {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 10px;
+        padding: 12px 15px;
+    }
+
+    .order-total {
+        font-size: 1em;
+    }
+
+    .view-details-btn {
+        width: 100%;
+        padding: 10px;
+        font-size: 0.9em;
+    }
+
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .modal-order-item .item-thumb {
+        width: 50px;
+        height: 50px;
+    }
+
+    .modal-order-item .item-info .name {
+        font-size: 0.95em;
+    }
+}
+
+@media (max-width: 480px) {
+    .my-orders-container {
+        padding: 15px;
+    }
+
+    .orders-header h2 {
+        font-size: 1.4em;
+    }
+
+    .order-status-nav a {
+        flex-basis: 100%; /* Satu item per baris */
+        padding: 10px;
+    }
+
+    .order-header {
+        font-size: 0.75em;
+    }
+
+    .item-details {
+        flex-basis: calc(100% - 65px); /* Sesuaikan lebar */
+    }
+
+    .item-thumb {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+    }
+}

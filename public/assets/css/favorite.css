@@ -1,0 +1,146 @@
+    /* TIDAK ADA 'body' ATAU '*' DI SINI */
+
+    .fav-container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    /* Tabs Navigation */
+    .tabs {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+        border-radius: 8px;
+        overflow: hidden;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .tabs .tab {
+        flex: 1;
+        text-align: center;
+        padding: 15px 20px;
+        font-weight: 600;
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        color: #555;
+        transition: all 0.3s ease;
+    }
+
+    .tabs .tab:hover {
+        background-color: #f9f9f9;
+        color: #000;
+    }
+
+    .tabs .tab.active {
+        border-bottom-color: rgb(250, 156, 211);
+        color: rgb(250, 156, 211);
+    }
+
+    /* Content Sections */
+    .content {
+        background-color: #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        padding: 25px;
+        border-radius: 8px;
+    }
+
+    /* Style Gallery (Liked Posts) */
+    .gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 25px;
+    }
+
+    .card {
+        border: 1px solid #eee;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+    .card-link-wrapper {
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    .card .image-placeholder {
+        position: relative;
+        padding-top: 100%; /* Square */
+        background-color: #f5f5f5;
+    }
+    .card .image-placeholder img {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;
+    }
+    .card .image-placeholder p {
+        position: absolute; top: 8px; right: 8px;
+        background: rgba(0,0,0,0.5); color: white; padding: 3px 8px;
+        border-radius: 12px; font-size: 0.8em; display: flex; align-items: center;
+    }
+    .card .image-placeholder p i { margin-right: 4px; }
+    .card .card-body { padding: 15px; flex-grow: 1; display: flex; flex-direction: column;}
+    .card .post-caption { font-weight: 600; color: #333; margin-bottom: 10px; font-size: 0.95em; }
+    .card .user-info { display: flex; align-items: center; margin-top: auto; border-top: 1px solid #f0f0f0; padding-top: 10px; }
+    .card .user-info img { width: 30px; height: 30px; border-radius: 50%; margin-right: 8px; object-fit: cover; }
+    .card .user-info .username-text { font-size: 0.9em; color: #555; }
+    .card .user-info .tag { margin-left: auto; font-size: 0.7em; padding: 3px 8px; border-radius: 12px; }
+
+    /* Tag Colors */
+    .tag.mood-happy { background-color: #DCEDC8; color: #33691E; }
+    .tag.mood-very-happy { background-color: #C8E6C9; color: #2E7D32; }
+    .tag.mood-neutral { background-color: #FFF9E0; color: #795548; }
+    .tag.mood-sad { background-color: #E3F2FD; color: #0D47A1; }
+    .tag.mood-very-sad { background-color: #D1C4E9; color: #311B92; }
+
+
+    /* Product Grid (Favorited Products) */
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 25px;
+    }
+
+    .product-card {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        text-align: center;
+        display: flex; flex-direction: column;
+    }
+    .product-card:hover { transform: translateY(-5px); box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); }
+    .product-image img { width: 100%; height: 200px; object-fit: cover; }
+    .product-details { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; text-align: left;}
+    .product-details h4 { font-size: 1.1rem; color: black; margin-bottom: 5px; }
+    .product-details p { font-size: 1rem; color: #333; margin-bottom: 15px; font-weight: 600; }
+    .product-details .actions { display: flex; gap: 10px; margin-top: auto; }
+    .actions .btn { padding: 8px 15px; border-radius: 6px; text-decoration: none; font-size: 0.9em; font-weight: 500; cursor: pointer; transition: background-color 0.3s ease; width: 100%; border: none;}
+    .favorite-btn { background-color: #ffdde5; color: #c82333; }
+    .favorite-btn:hover { background-color: #f7cac9; }
+    .buy-now-btn { background-color: rgb(250, 156, 211); color: white; }
+    .buy-now-btn:hover { background-color: rgb(248, 99, 186); }
+    
+    /* Pesan Kosong */
+    .empty-message { text-align: center; padding: 50px 20px; color: #777; font-size: 1.1em; grid-column: 1 / -1; }
+    
+    /* Custom Alert/Confirm */
+    .custom-alert, .custom-confirm { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1001;}
+    .custom-alert-content, .custom-confirm-content { background-color: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); text-align: center; max-width: 350px; width: 90%; }
+    .custom-alert-content p, .custom-confirm-content p { margin-bottom: 20px; font-size: 1.1em; color: #333; }
+    .custom-alert-content button, .custom-confirm-content button { background-color: var(--primary-pink); color: white; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer; font-size: 1em; margin: 0 5px; transition: background-color 0.3s ease;}
+    .custom-alert-content button:hover, .custom-confirm-content button:hover { background-color: var(--primary-pink-hover); }
+    .custom-confirm-content .confirm-no { background-color: #ccc; color: #333; }
+    .custom-confirm-content .confirm-no:hover { background-color: #bbb; }
+    

@@ -1,0 +1,597 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    font-family: 'Jost', sans-serif;
+    list-style:none;
+    text-decoration: none;
+}
+header {
+    position: sticky;
+    z-index: 1000;
+    top: 0;
+    background-color: white;
+}
+.navbar {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    z-index: 50;
+}
+nav {
+    flex: 1;
+    text-align: right;
+}
+nav ul {
+    display: inline-block;
+    list-style-type: none;
+}
+nav ul li {
+    display: inline-block;
+    margin-right: 25px;
+}
+nav ul li a {
+    color: black;
+}
+nav ul li a:hover {
+    color: rgb(250, 156, 211);
+} 
+.nav-icon{
+    display: flex;
+    align-items: center;
+}
+.nav-icon i{
+    margin-right: 20px;
+    color: #2c2c2c;
+    font-size: 25px;
+    font-weight:400;
+    transition: all .42s ease;
+}
+.nav-icon i:hover{
+    transform: scale(1.1);
+    color: rgb(250, 156, 211);
+}
+.dropdown {
+    position: relative;
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+.dropdown-content .submenu-title {
+    color: black;
+    font-size: 15px;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    text-align: center;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px gray (0, 0, 0, 0.2);
+    z-index: 100;
+}
+.dropdown-profile {
+    display: none;
+    position: absolute;
+    top: 10px;
+    left: 0;
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px gray(0, 0, 0, 0.2);
+}
+.dropdown-content .dropdown-profile-submenu {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; 
+}
+.dropdown-content .submenu-title {
+    color: black;
+    font-size: 15px;
+}
+.dropdown-product-submenu {
+    color: black;
+    font-size: 15px;
+}
+.dropdown-content a {
+    color: black;
+    padding: 5px 0;
+    transition: 0.3s;
+}
+.dropdown-profile a {
+    color: black;
+    padding: 5px;
+    margin-between-text: 0;
+    transition: 0.3s;
+    font-size: 15px;
+}
+.dropdown-content a:hover {
+    color: rgb(250, 156, 211);
+}
+.dropdown-profile a:hover {
+    color: rgb(250, 156, 211);
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+.dropdown:hover .dropdown-profile {
+    display: block;
+}
+
+.product-card-img {
+            width: 100%;
+            object-fit: cover; 
+        }
+        .text-img a {
+            margin-right: 5px;
+            margin-bottom: 5px;
+            display: inline-block;
+            font-size: 0.85em;
+        }
+    
+        .card { 
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            border: 1px solid #eee;
+            border-radius: 0.25rem; 
+        }
+
+        .card:hover {
+            transform: translateY(-8px); 
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 6px 6px rgba(0, 0, 0, 0.12); 
+        }
+        .card-body .card-title a {
+            color: #333;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .card-body .card-title a:hover {
+            color: rgb(250, 156, 211);
+        }
+        .card-body .text-img a {
+            color: #555;
+            text-decoration: none;
+            font-size: 0.8em;
+        }
+        .card-body .text-img a:hover {
+            color: rgb(250, 156, 211);
+            text-decoration: underline;
+        }
+
+        .mood-tag {
+            display: inline-flex; 
+            align-items: center;
+            padding: 5px 12px; 
+            border-radius: 20px; 
+            font-size: 0.8em;   
+            font-weight: 500;
+            color: #545454; 
+            background-color: #FFF9E0; 
+            border: 1px solid #FFECC1; 
+            margin-top: 8px; 
+            margin-bottom: 8px; 
+        }
+
+        .mood-tag .mood-emoji {
+            margin-right: 7px; 
+            font-size: 1.1em; 
+        }
+
+        .mood-tag.mood-very-happy { background-color: #C8E6C9; border-color: #A5D6A7; color: #2E7D32; }
+        .mood-tag.mood-happy { background-color: #DCEDC8; border-color: #C5E1A5; color: #33691E; }
+        .mood-tag.mood-neutral { background-color: #FFF9E0; border-color: #FFECC1; color: #795548; } /* Sesuai contoh */
+        .mood-tag.mood-sad { background-color: #E3F2FD; border-color: #BDE0FE; color: #0D47A1; }
+        .mood-tag.mood-very-sad { background-color: #D1C4E9; border-color: #B39DDB; color: #311B92; }
+
+/* Banner */
+.container {
+    max-width: 1300px;
+    margin: auto;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+.row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.col-2 {
+    flex-basis: 50%;
+    min-width: 300px;
+    text-align: center;
+}
+.col-2 img {
+    max-width: 75%;
+    padding-top: 50px;
+}
+.col-2 h1 {
+    font-size: 50px;
+    line-height: 60px;
+    padding-left: 150px;
+    text-align: left;
+    padding-top: 40px;
+}
+.col-2 p {
+    margin: 50px 100px;
+    line-height: 27px;
+    text-align: left;
+    padding-left: 50px;
+    margin-bottom: 30px;
+}
+.col-2 small .SJB{
+    font-size: 50px;
+    font-weight: bolder;
+    margin-top: 40px;
+}
+
+.btn{
+    display: inline-block;
+    background: rgb(240, 122, 151);
+    color: #fff;
+    padding: 8px 30px;
+    margin: 30px 0;
+    border-radius: 30px;
+}
+.btn:hover{
+    background: rgb(240, 94, 131);
+}
+.trends {
+    background: radial-gradient(#fff,#ffd6d6);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* Featured Categories */
+.categories {
+    margin: 70px 0;
+}
+.col-3 {
+    flex-basis: 30%;
+    min-width: 250px;
+    margin-bottom: 30px;
+}
+.col-3 img {
+    width: 100%;
+    padding-bottom: 5px;
+}
+.small-container {
+    max-width: 1080px;
+    margin: auto;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+/* Featured Product */
+.col-4 {
+    flex-basis: 25%;
+    padding: 10px;
+    min-width: 200px;
+    margin-bottom: 40px;
+    transition: transform 0.5s;
+}
+.col-4 img {
+    width: 100%;
+}
+.tittle {
+    padding-top: 0px;
+    text-align: center;
+    position: relative;
+    line-height: 60px;
+    color: #555;
+}
+.text {
+    text-align: center;
+    margin: 0 auto 4
+    /* Testimonial */auto;
+    position: relative;
+    line-height: 60px;
+    color: #555;
+}
+.tittle::after {
+    content: '';
+    background: rgb(245, 101, 137);
+    width: 80px;
+    height: 5px;
+    border-radius: 5px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.text-img a:visited,
+.text-img a:hover,
+.text-img a:active {
+    color: #3f3e3e; /* Pastikan warna tetap sama di semua status */
+    text-decoration: none; /* Hilangkan garis bawah jika diperlukan */
+}
+.text-img:hover a {
+    text-decoration: underline; /* Efek underline hanya pada elemen <a> */
+}
+.text-img {
+    color: #3f3e3e;
+}
+.text-img a {
+    display: inline-block; /* Memastikan setiap <a> berdiri sendiri */
+    margin: 0;
+    font-size: 14px; /* Sesuaikan ukuran teks */
+    color: #3f3e3e; /* Warna teks */
+}
+
+.col-4 a {
+    color: #000;
+    font-weight: normal;
+}
+.col-4 {
+    font-size: 14;
+}
+.rating .fa{
+    color: rgb(238, 54, 100);
+}
+
+.col-4:hover {
+    transform: translateY(-5px);
+}
+
+/* Offer */
+.offer {
+    background: radial-gradient(#fff,#ffd6d6);
+}
+small {
+    color: #555;
+}
+.col-2 .offer-img{
+    max-width: 1000px;
+}
+.offer-textt{
+    text-align: left;
+    margin-bottom: 40px;
+}
+
+/* Testimonial */
+.testimonial {
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+.testimonial .col-3 {
+    text-align: center;
+    padding: 40px 20px;
+    box-shadow: 0 0 20px 0px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: transform 0.5s;
+}
+.testimonial .col-3 img {
+    width: 10px;
+    margin-top: 20px;
+    border-radius: 50%;
+    text-align: right;
+}
+.testimonial .col-3:hover {
+    transform: translateY(-10px);
+}
+.fa.fa-quote-left {
+    font-size: 34px;
+    color: rgb(238, 54, 100);
+}
+.col-3 p {
+    font-size: 12px;
+    margin: 12px 0;
+    color: #777;
+}
+
+.testimonial .col-3 h3{
+    font-weight: 600;
+    color: #555;
+    font-size: 16px;
+}
+.col-3 img{
+    min-width: 15%;
+}
+
+/* page-btn 1234-> */
+.page-btn {
+    margin: 0 auto 80px;    
+}
+.page-btn span{
+    display: inline-block;
+    border: 1px solid rgb(240, 94, 131);
+    margin-left: 10px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    cursor: pointer;
+}
+.page-btn span:hover {
+    background: rgb(219, 81, 116);
+    color: #fff;
+}
+
+
+/* Footer */
+.garis {
+    background-color:rgb(163, 41, 94);
+    padding: 3px;
+}
+.footer {
+    background: #fcd5d5;
+    color: #555;
+    font-size: 14px;
+    padding: 5px 0 20px;
+}
+.footer p{
+    color: #555;
+}
+.footer h3{
+    color: #555;
+    margin-bottom: 20px;
+}
+.footer-col-1, .footer-col-2, .footer-col-3, .footer-col-4 {
+    min-width: 250px;
+    margin-bottom: 20px;
+}
+.footer-col-1{
+    flex-basis: 30%;
+}
+.footer-col-2{
+    flex: 1;
+    text-align: center;
+}
+.footer-col-2 img{
+    width: 180px;
+    margin-bottom: 0px;
+}
+.footer-col-3, .footer-col-4{
+    flex-basis: 12%;
+    text-align: center;
+}
+ul {
+    list-style-type: none;
+}
+ul li a {
+    color: #555;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+ul li a:hover {
+    color: #555;
+}
+.footer hr{
+    border: none;
+    background: #555;
+    height: 1px;
+    margin: 20px 0;
+}
+.Copyright{
+    text-align: center;
+}
+
+.menu-icon {
+    width: 28px;
+    margin-left: 20px;
+    display: none;
+}
+
+/*----Media Query for Menu----*/
+@media only screen and (max-width: 800px) {   
+    
+    nav ul{
+        position: absolute;
+        top: 70px;
+        left: 0;
+        background: #333;
+        width: 100%;
+        overflow: hidden;
+        transition: max-height 0.5;
+    }
+    nav ul li {
+        display: block;
+        margin-right: 50px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    nav ul li a{
+        color: #fff;
+    }
+    .menu-icon {
+        display: block;
+        cursor: pointer;
+    }
+}
+
+/*----Media Query for less than 600 screen size----*/
+@media only screen and (max-width: 800px) {   
+    .row {
+        text-align: center;
+    }
+    .col-2, .col-3, .col-4{
+        flex-basis: 100%;
+    }
+    .single-product .row {
+        text-align: left;
+    }
+    .single-product .col-2{
+        padding: 20px 0;
+    }
+    .single-product h1{
+        font-size: 26px;
+        line-height: 32px;
+    }
+} 
+
+/* btn buyyy */
+.btn-buyNow{
+    display: inline-block;
+    background: rgb(240, 122, 151);
+    color: #fff;
+    padding: 8px 30px;
+    margin: 30px 0;
+    border-radius: 30px;
+    font-size: 15px;
+}
+.btn-buyNow:hover{
+    background: rgb(240, 94, 131);
+}
+
+.btn-EN{
+    background: rgb(240, 122, 151);
+    color: #fff;
+    padding: 8px 30px;
+    margin: 10px 0;
+    border-radius: 30px;
+    font-size: 13px;
+    margin-right: 230px;
+    margin-top: 1px;
+}
+.btn-EN:hover{
+    background: rgb(240, 94, 131);
+}
+
+
+/* Tambahan style untuk memastikan gambar produk konsisten */
+        .product-card-img {
+            width: 100%;
+            height: 250px; /* Atur tinggi tetap atau gunakan aspect-ratio jika didukung */
+            object-fit: cover; /* Memastikan gambar menutupi area tanpa merusak rasio aspek */
+        }
+        .text-img a {
+            margin-right: 5px;
+            margin-bottom: 5px;
+            display: inline-block;
+            font-size: 0.85em;
+        }
+        .title-card .tag {
+            font-size: 0.8em;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 5px;
+        }
+        
+        /* CSS UNTUK EFEK HOVER PADA KARTU PRODUK */
+        .card { /* Targetkan .card yang digunakan oleh Bootstrap untuk produk dinamis */
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-8px); 
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 6px 6px rgba(0, 0, 0, 0.12); 
+        }
+        /* Untuk .col-4 kustom jika masih digunakan di bagian statis */
+        .col-4 { 
+             transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .col-4:hover { /* Ini dari product.css Anda, pastikan transisinya seragam jika mau */
+            transform: translateY(-5px); /* Efek dari product.css */
+            /* box-shadow: 0 8px 16px rgba(0,0,0,0.1); // Contoh shadow jika mau */
+        }
+
+        
+
+

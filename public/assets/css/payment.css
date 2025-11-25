@@ -1,0 +1,321 @@
+/* General Styling */
+.contain {
+    background-color: #f8f8f8; /* Warna abu muda agar card lebih menonjol */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 75vh;
+    margin: 0;
+}
+.payment-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); /* Adjusted shadow for depth */
+    width: 100%;
+    max-width: 700px;
+    padding: 30px;
+    box-sizing: border-box;
+    margin-top: 20px; /* Kept margin-top */
+}
+
+.payment-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px; /* Adjusted margin */
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    position: relative; /* For back-arrow positioning */
+}
+
+.payment-header .back-arrow {
+    font-size: 1.8em;
+    color: #555; /* Original color, will change on hover */
+    margin-right: 15px;
+    text-decoration: none;
+    position: absolute;
+    left: 0;
+    transition: color 0.2s ease;
+}
+
+.payment-header .back-arrow:hover {
+    color: #FF69B4; /* Pink */
+}
+
+.payment-header h2 {
+    flex-grow: 1; /* Allows h2 to take available space */
+    text-align: center; /* Centered title */
+    margin: 0;
+    font-size: 1.8em; /* Adjusted font size */
+    font-weight: 700;
+    color: #333;
+}
+
+/* Payment Summary Section */
+.payment-summary {
+    margin-bottom: 30px;
+    border: 1px solid #e0e0e0; /* Softer border */
+    border-radius: 10px;
+    padding: 20px 25px; /* Adjusted padding */
+    background-color: #fdfdff; /* Slightly off-white background */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03); /* Softer shadow */
+}
+
+.payment-summary .summary-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px dashed #f0f0f0; /* Dashed border */
+    font-size: 0.95em; /* Adjusted font size */
+}
+
+.payment-summary .summary-item:last-child {
+    border-bottom: none;
+}
+
+.payment-summary .summary-item span:first-child {
+    color: #555;
+}
+
+.payment-summary .summary-item .value {
+    font-weight: 600;
+    color: #333;
+}
+
+.payment-summary .total-amount {
+    padding-top: 15px;
+    margin-top: 15px;
+    border-top: 2px solid #eee; /* Thicker border top */
+    font-size: 1.1em;
+    font-weight: 700;
+    color: #FF69B4; /* Pink */
+}
+
+.payment-summary .total-amount .value {
+    font-size: 1.2em;
+    color: #FF69B4; /* Pink */
+}
+
+.payment-summary .expiration-info {
+    font-size: 0.85em;
+    color: #FF69B4; /* Pink for consistency with brand */
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.payment-summary .expiration-info .value {
+    color: #FF69B4; /* Pink */
+}
+
+.payment-summary .payment-code {
+    color: #FF69B4; /* Pink */
+    font-weight: 700;
+    font-size: 1.1em;
+}
+
+/* Payment Instructions Section */
+.payment-instructions {
+    background-color: #fdfdff; /* Slightly off-white background */
+    border: 1px solid #e0e0e0; /* Softer border */
+    border-radius: 10px;
+    padding: 20px 25px; /* Adjusted padding */
+    margin-bottom: 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03); /* Softer shadow */
+}
+
+.payment-instructions h3 {
+    font-size: 1.3em;
+    color: #444;
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 1px dashed #f0f0f0; /* Dashed border */
+    padding-bottom: 10px;
+}
+
+.payment-instructions ol {
+    padding-left: 25px; /* Adjusted padding */
+    margin-top: 0;
+}
+
+.payment-instructions li {
+    margin-bottom: 10px;
+    line-height: 1.5;
+    color: #555;
+    font-size: 0.95em;
+}
+
+.instruction-note {
+    font-size: 0.85em;
+    color: #888;
+    margin-top: 20px;
+    border-top: 1px dashed #f0f0f0; /* Dashed border */
+    padding-top: 15px;
+}
+
+.instruction-note a {
+    color: #FF69B4; /* Pink */
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.instruction-note a:hover {
+    text-decoration: underline;
+}
+
+/* Payment Actions Button */
+.payment-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap; /* Allow wrapping on small screens */
+}
+
+.payment-actions .btn-primary,
+.payment-actions .btn-secondary {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.payment-actions .btn-primary {
+    background-color: rgb(250, 156, 211); /* Pink */
+    color: white;
+    box-shadow: 0 4px 10px rgba(250, 156, 211, 0.3); /* Pink shadow */
+}
+
+.payment-actions .btn-primary:hover {
+    background-color: rgb(248, 99, 186); /* Darker pink for hover */
+    transform: translateY(-1px);
+}
+
+.payment-actions .btn-primary .bx {
+    margin-right: 8px;
+    font-size: 1.2em;
+}
+
+.payment-actions .btn-secondary {
+    background-color: #6c757d; /* Gray for secondary action */
+    color: white;
+}
+
+.payment-actions .btn-secondary:hover {
+    background-color: #5a6268;
+    transform: translateY(-1px);
+}
+
+/* Custom Alert Dialog Styles */
+.custom-alert {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    animation: fadeIn 0.3s ease-out;
+}
+.custom-alert-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 450px;
+    width: 90%;
+    font-family: 'Inter', sans-serif;
+    color: #333;
+    position: relative;
+}
+.custom-alert-content p {
+    margin-bottom: 25px;
+    font-size: 1.15em;
+    line-height: 1.5;
+    color: #444;
+}
+.custom-alert-content button {
+    padding: 12px 25px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    background-color: #ff523b; /* Kept original alert button color, but can be changed to pink if desired */
+    color: white;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+.custom-alert-content button:hover {
+    background-color: #e04a32;
+    transform: translateY(-1px);
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Responsive for small screens */
+@media (max-width: 480px) {
+    .payment-container {
+        padding: 20px;
+    }
+    .payment-summary .summary-item,
+    .payment-instructions li {
+        font-size: 0.9em;
+    }
+    .payment-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .payment-actions .btn-primary,
+    .payment-actions .btn-secondary {
+        width: 100%;
+    }
+}
+
+/* Existing cart.css content (not modified, just for reference) */
+/* This part should ideally be in a separate cart.css file */
+/*
+.cart-container { ... }
+h2 { ... }
+.empty-cart-message { ... }
+.cart-header { ... }
+.header-checkbox { ... }
+.header-price { ... }
+.header-quantity { ... }
+.header-total { ... }
+.checkbox-pink { ... }
+.checkbox-pink:checked { ... }
+.checkbox-pink:checked::after { ... }
+.checkbox-pink:hover { ... }
+.cart-item-card { ... }
+.item-selection { ... }
+.item-details { ... }
+.product-thumb { ... }
+.product-name { ... }
+.item-price { ... }
+.item-quantity-control { ... }
+.quantity-btn { ... }
+.quantity-btn:hover { ... }
+.quantity-value { ... }
+.stock-info { ... }
+.item-total-price { ... }
+.remove-item-btn { ... }
+.remove-item-btn:hover { ... }
+.cart-summary-footer { ... }
+.total-price-display { ... }
+#grandTotalPrice { ... }
+.checkout-button { ... }
+.checkout-button:hover { ... }
+@media (max-width: 768px) { ... }
+@media (max-width: 480px) { ... }
+*/

@@ -1,0 +1,67 @@
+/* detailJournal.css */
+
+body {
+    font-family: 'Jost', sans-serif;
+}
+
+/* Gaya tambahan untuk gambar agar tidak terlalu panjang */
+.article-image {
+    max-height: 400px; /* Atur tinggi maksimal gambar, bisa disesuaikan */
+    width: 100%;      /* Pastikan gambar mengisi lebar container */
+    object-fit: cover; /* Penting agar gambar tidak terdistorsi dan mengisi area */
+    border-radius: 0.75rem; /* rounded-xl Tailwind */
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); /* shadow-md Tailwind */
+    margin-left: auto; /* mx-auto Tailwind */
+    margin-right: auto; /* mx-auto Tailwind */
+    display: block; /* Agar mx-auto bekerja pada img */
+}
+
+/* Gaya dasar untuk konten artikel agar rapi, mirip dengan plugin @tailwindcss/typography */
+/* Ini adalah fallback jika plugin prose tidak diinstal/dicompile */
+.prose-fallback {
+    line-height: 1.75; /* line-height: 1.75rem; default for prose-base */
+    font-size: 1rem;   /* font-size: 1rem; default for prose-base */
+    color: #374151;    /* text-gray-700 */
+}
+
+.prose-fallback p {
+    margin-top: 1.25em; /* default margin-top for paragraphs in prose */
+    margin-bottom: 1.25em; /* default margin-bottom for paragraphs in prose */
+}
+
+.prose-fallback h1,
+.prose-fallback h2,
+.prose-fallback h3,
+.prose-fallback h4,
+.prose-fallback h5,
+.prose-fallback h6 {
+    color: #111827; /* text-gray-900 */
+    font-weight: 700; /* font-bold */
+    margin-top: 2em; /* Adjusted for better spacing */
+    margin-bottom: 0.8em; /* Adjusted for better spacing */
+    line-height: 1.2;
+}
+
+.prose-fallback ul,
+.prose-fallback ol {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+    padding-left: 1.5em; /* Indent lists */
+}
+
+.prose-fallback li {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.prose-fallback a {
+    color: #8B5CF6; /* example purple color */
+    text-decoration: underline;
+}
+
+/* Untuk penanganan kata sangat panjang agar tidak keluar container */
+.prose-fallback, .prose {
+    overflow-wrap: break-word; /* CSS3 standard */
+    word-wrap: break-word;     /* Old standard for IE */
+    hyphens: auto;             /* For soft hyphens if supported */
+}

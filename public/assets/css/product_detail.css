@@ -1,0 +1,157 @@
+/* TIDAK ADA 'body' atau '*' di sini */
+
+/* Main Container for Product Detail */
+.product-detail-container {
+    max-width: 1100px; /* Lebar container */
+    width: 100%;
+    margin: 0 auto; /* Pusatkan di dalam #app */
+    padding: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px; /* Jarak antara gambar dan info */
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Product Image Section */
+.product-image-section {
+    flex: 1 1 400px; /* Fleksibel dengan basis 400px */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-product-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Product Info Section */
+.product-info-section {
+    flex: 1.5 1 500px; /* Lebih fleksibel, basis 500px */
+    display: flex;
+    flex-direction: column;
+}
+
+.product-name {
+    font-size: 2.5em;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 10px;
+    line-height: 1.2;
+}
+
+.product-price {
+    font-size: 2em;
+    font-weight: 600;
+    color: #e74c3c; /* Warna merah untuk harga */
+    margin-bottom: 25px;
+}
+
+.product-description {
+    margin-bottom: 30px;
+    line-height: 1.7;
+}
+
+.product-description h3 {
+    font-size: 1.3em;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #444;
+}
+
+.product-description p {
+    font-size: 1em;
+    color: #666;
+}
+
+/* --- Tombol Aksi --- */
+.product-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: auto; /* Mendorong tombol ke bawah */
+}
+
+.action-btn { /* Class umum untuk kedua tombol */
+    padding: 14px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+.action-btn i {
+    margin-right: 8px;
+    font-size: 1.3em;
+}
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+
+/* --- Tombol Add to Cart (Pakai style .buy-now-btn) --- */
+.add-to-cart-btn {
+    background-color: #66ccff;
+    color: white;
+    flex-grow: 1; /* Ini properti penting dari CSS asli kamu, jadi dipertahankan */
+}
+
+.add-to-cart-btn:hover {
+    background-color: #2980b9;
+}
+
+/* Style untuk link di dalam tombol, jika ada */
+.add-to-cart-btn a {
+    color: black;
+}
+
+/* --- Tombol Favorite (Pakai style .favorite-btn) --- */
+.add-to-favorite-btn {
+    background-color: rgb(250, 156, 211);
+    color: white;
+}
+
+.add-to-favorite-btn:hover {
+    background-color: rgb(248, 99, 186);
+}
+
+/* --- State Favorited (Pakai style hover baru + icon logic lama) --- */
+.add-to-favorite-btn.favorited {
+    background-color: rgb(248, 99, 186); /* Menyamakan dgn warna hover */
+}
+
+.add-to-favorite-btn.favorited i {
+    font-family: 'Boxicons' !important;
+    content: "\eb5a"; /* Kode ikon bxs-heart (dipertahankan) */
+}
+
+/* --- State :active (Efek klik dari CSS baru) --- */
+/* Diterapkan ke kedua tombol */
+.add-to-cart-btn:active,
+.add-to-favorite-btn:active {
+    transform: scale(0.95);
+}
+/* Responsive */
+@media (max-width: 768px) {
+    .product-detail-container {
+        flex-direction: column;
+        padding: 20px;
+    }
+    .product-name {
+        font-size: 2em;
+    }
+    .product-price {
+        font-size: 1.6em;
+    }
+}
+
