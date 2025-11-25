@@ -11,7 +11,7 @@ class StyleJournalController extends Controller
         if (empty($date_string)) return '';
         $timestamp = strtotime($date_string);
         $bulan_indonesia = [
-            1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+            1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei',
             'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
         ];
         return date('d', $timestamp) . ' ' . $bulan_indonesia[(int)date('m', $timestamp)] . ' ' . date('Y', $timestamp);
