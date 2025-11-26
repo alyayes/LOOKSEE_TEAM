@@ -10,13 +10,6 @@
 
 @section('content')
 
-{{-- 
-    ============================================================
-    PERHATIKAN BAGIAN INI:
-    data-attributes ini adalah "jembatan" yang memberikan URL dan token
-    dari Laravel (PHP) ke file cart.js (JavaScript).
-    ============================================================
---}}
 <div class="contain">
     <div class="cart-container"
         data-update-url="{{ route('cart.update') }}"
