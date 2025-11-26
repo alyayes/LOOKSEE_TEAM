@@ -4,50 +4,85 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use App\Models\Cart;
+use App\Models\Product;
+use App\Models\UsersAdmin;
+use Illuminate\Support\Facades\Storage;
 
 class CartController extends Controller {
-    public function index() {
+    public function index() 
+    {
+        $userId = UsersAdmin::id();
 
-        $cart_items = [
-            1 => [
-                'nama_produk' => 'Virly Top',
-                'harga' => 56000,
-                'stock' => 20,
-                'quantity' => 2,
-                'gambar_produk' => '4.jpeg',
-            ],
-            2 => [
-                'nama_produk' => 'Oro Pants',
-                'harga' => 40000,
-                'stock' => 20,
-                'quantity' => 1,
-                'gambar_produk' => 'oro.png',
-            ],
-        ];
+        $cartData = Cart::where('user_id', $userId)
+                        ->with('produk')
+                        ->get();
+        $cart_items = [];
 
-        $total_selected_price = array_sum(array_map(function ($item) {
-            return $item['harga'] * $item['quantity'];
-        }, $cart_items));
+        foreach ($cartData as $item) {
+            if ($item->produk) {
+                $cart_items[$item->id_produk] = [
+                    'nama_produk'   => $item->produk->nama_produk,
+                    'harga'         => $item->produk->harga,
+                    'stock'         => $item->produk->stock,
+                    'quantity'      => $item->quantity,
+                    'gambar_produk' => $item->produk->gambar_produk
+                ];
+            }
+        }
 
-        $total_price = $total_selected_price;
-        $total_products = array_sum(array_column($cart_items, 'quantity'));
+        $total_selected_price = 0;
+        foreach ($cart_items as $product) {
+            $total_selected_price += $product['harga'] * $product['quantity'];
+        }
 
-        return view('cart.cart', compact('cart_items', 'total_price', 'total_products'));
+        $total_products = count($cart_items);
 
+        return view('cart.cart', compact('cart_items', 'total_selected_price', 'total_products'));
     }
 
-    public function update(Request $request) {
 
-        return response()->json(['status' => 'success', 'message' => 'Quantity updated (dummy).']);
+    public function update(Request $request) 
+    {
+        $request->validate([
+            'id_produk' => 'required',
+            'quantity'  => 'required|integer|min:1',
+        ]);
+
+        $cartItem = Cart::where('user_id', Auth::id())
+                        ->where('id_produk', $request->id_produk)
+                        ->first();
+
+        if ($cartItem) {
+            $cartItem->update([
+                'quantity' => $request->quantity
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Quantity updated successfully'
+        ]);
     }
 
-    public function delete(Request $request) {
+    public function delete(Request $request) 
+    {
+        $request->validate([
+            'id_produk' => 'required'
+        ]);
 
-        return response()->json(['status' => 'success', 'message' => 'Item deleted (dummy).']);
+        Cart::where('user_id', Auth::id())
+            ->where('id_produk', $request->id_produk)
+            ->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Item removed successfully'
+        ]);
     }
 
-    public function checkout(Request $request) {
-
-        return redirect()->route('cart')->with('success', 'Checkout berhasil (dummy)!');
+    public function checkout(Request $request) 
+    {
+        return redirect()->route('cart');
     }
 }

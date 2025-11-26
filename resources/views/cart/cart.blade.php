@@ -14,7 +14,7 @@
     <div class="cart-container"
         data-update-url="{{ route('cart.update') }}"
         data-delete-url="{{ route('cart.delete') }}"
-        data-checkout-url="{{ route('checkout.index') }}" {{-- Ini mengarah ke URL /checkout --}}
+        data-checkout-url="{{ route('checkout.index') }}" 
         data-csrf-token="{{ csrf_token() }}">
 
         <a href="{{ route('homepage') }}" class="back-arrow"><i class='bx bx-arrow-back'></i></a>
@@ -45,8 +45,6 @@
                             <input type="checkbox" class="item-checkbox checkbox-pink" checked>
                         </div>
                         <div class="item-details">
-                            {{-- Pastikan path gambar benar menuju public/assets/images/ --}}
-                            {{-- BENAR --}}
                             <img src="{{ asset('assets/images/produk-looksee/' . ($item['gambar_produk'] ?? 'placeholder.jpg')) }}"
                                 class="product-thumb">
                             <span class="product-name">{{ $item['nama_produk'] ?? 'Unknown' }}</span>
@@ -75,7 +73,7 @@
                         Total Products : <span id="totalProductCount">0</span>
                     </div>
                 </div>
-                {{-- Tombol ini sekarang hanya tombol biasa, tidak ada form --}}
+
                 <button type="button" class="checkout-button" id="checkoutBtn">Checkout</button>
             </div>
         @endif
@@ -84,6 +82,5 @@
 @endsection
 
 @section('footer_scripts')
-    {{-- Pastikan ini HANYA memanggil file cart.js --}}
     <script src="{{ asset('assets/js/cart.js') }}"></script>
 @endsection
