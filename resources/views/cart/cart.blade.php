@@ -41,25 +41,33 @@
                         data-id="{{ $id_produk }}" 
                         data-price="{{ $item['harga'] ?? 0 }}" 
                         data-stock="{{ $item['stock'] ?? 0 }}">
+
                         <div class="item-selection">
                             <input type="checkbox" class="item-checkbox checkbox-pink" checked>
                         </div>
+
                         <div class="item-details">
                             <img src="{{ asset('assets/images/produk-looksee/' . ($item['gambar_produk'] ?? 'placeholder.jpg')) }}"
                                 class="product-thumb">
                             <span class="product-name">{{ $item['nama_produk'] ?? 'Unknown' }}</span>
                         </div>
+
                         <div class="item-price">Rp {{ number_format($item['harga'] ?? 0, 0, ',', '.') }}</div>
+                        
                         <div class="item-quantity-control">
                             <button class="quantity-btn decrease-btn" data-action="decrease">-</button>
                             <span class="quantity-value">{{ $item['quantity'] ?? 1 }}</span>
                             <button class="quantity-btn increase-btn" data-action="increase">+</button>
                             <div class="stock-info">Stock: {{ $item['stock'] ?? 0 }}</div>
                         </div>
+
                         <div class="item-total-price">
                             Rp {{ number_format(($item['harga'] ?? 0) * ($item['quantity'] ?? 1), 0, ',', '.') }}
                         </div>
+
+                        
                         <button class="remove-item-btn"><i class='bx bx-trash'></i></button>
+
                     </div>
                 @endforeach
             </div>
@@ -69,6 +77,7 @@
                     <div class="total-price-display">
                         Total Price : <span id="grandTotalPrice">Rp {{ number_format($total_selected_price ?? 0, 0, ',', '.') }}</span>
                     </div>
+                    
                     <div class="total-product-count-display">
                         Total Products : <span id="totalProductCount">0</span>
                     </div>
