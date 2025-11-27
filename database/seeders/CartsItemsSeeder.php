@@ -15,6 +15,6 @@ class CartsItemsSeeder extends Seeder
     public function run(): void
     {
         //
-        CartsItems::factory()->count(5)->create();
+        CartsItems::factory()->count(15)->create();
     }
 }
