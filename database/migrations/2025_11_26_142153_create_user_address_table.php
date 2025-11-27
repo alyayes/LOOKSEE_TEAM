@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_address', function (Blueprint $table) {
             $table->id();            
-            $table->unsignedBigInteger('user_id');            
+            $table->integer('user_id');
             $table->string('receiver_name');
             $table->string('phone_number');
             $table->string('province');
@@ -23,7 +23,7 @@ return new class extends Migration
             $table->text('full_address');  
             $table->boolean('is_default')->default(false);
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
         });
     }
 
