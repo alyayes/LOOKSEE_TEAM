@@ -35,7 +35,7 @@ class UsersAdminController extends Controller
             ],
             [
                 'username' => 'livviy',
-                'name' => 'Livviy Tanaka', // Di screenshot baru 'Livviy Tanaka'
+                'name' => 'Livviy Tanaka', 
                 'email' => 'livviyy@gmail.com',
                 'profile_picture' => 'profile_24_1750036455.jpeg',
                 'password' => '$2y$10$MPQmF1eYIHG2mgcJWc.U...',
