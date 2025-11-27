@@ -3,23 +3,33 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth; // <--- WAJIB DITAMBAHKAN
 use Illuminate\Support\Facades\Session;
 use App\Models\Cart;
-use App\Models\Product;
-use App\Models\UsersAdmin;
+use App\Models\Product; // Pastikan nama model produkmu benar (Product atau Produk)
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 
 class CartController extends Controller {
+    
     public function index() 
     {
-        $userId = UsersAdmin::id();
+        // PERBAIKAN: Gunakan Auth::id() bukan User::id()
+        $userId = Auth::id();
+
+        // Jika user belum login, redirect ke login (opsional, untuk keamanan)
+        if (!$userId) {
+            return redirect()->route('login')->with('error', 'Please login first');
+        }
 
         $cartData = Cart::where('user_id', $userId)
-                        ->with('produk')
+                        ->with('produk') // Pastikan nama relasi di model Cart adalah 'produk'
                         ->get();
+                        
         $cart_items = [];
 
         foreach ($cartData as $item) {
+            // Cek apakah produknya masih ada (tidak terhapus)
             if ($item->produk) {
                 $cart_items[$item->id_produk] = [
                     'nama_produk'   => $item->produk->nama_produk,
@@ -49,6 +59,7 @@ class CartController extends Controller {
             'quantity'  => 'required|integer|min:1',
         ]);
 
+        // Disini kamu sudah benar pakai Auth::id(), tapi butuh import di atas
         $cartItem = Cart::where('user_id', Auth::id())
                         ->where('id_produk', $request->id_produk)
                         ->first();
