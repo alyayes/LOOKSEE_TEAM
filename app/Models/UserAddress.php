@@ -8,8 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class UserAddress extends Model
 {
     use HasFactory;
-
+    
     protected $table = 'user_address';
+    protected $primaryKey = 'id';
+    public $timestamps = false;
 
     protected $fillable = [
         'user_id',
@@ -31,4 +33,5 @@ class UserAddress extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
 }

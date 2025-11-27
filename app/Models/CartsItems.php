@@ -2,15 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Cart extends Model
+class CartsItems extends Model
 {
     // 
+    use HasFactory;
+    
     protected $table = 'carts_items';
     protected $primaryKey = 'cart_item_id';
     public $timestamps = false;
-    protected $filable = ['user_id', 'id_produk', 'quantity', 'added_at'];
+    protected $fillable = ['user_id', 'id_produk', 'quantity', 'added_at'];
 
     public function user()
     {
