@@ -10,13 +10,15 @@ class Produk extends Model
     use HasFactory;
     
     protected $table = 'produk_looksee';
+    protected $primaryKey = 'id_produk';
 
     protected $fillable = [
         'gambar_produk', 
         'nama_produk', 
         'deskripsi', 
         'harga', 
-        'kategori', 
+        'kategori',
+        'preferensi', 
         'mood',
         'stock',
     ];
