@@ -12,28 +12,41 @@
 
 @section('content')
 <div class="contain">
+    {{-- Tampilkan pesan sukses jika ada --}}
+    @if(session('success'))
+        <div style="background: #d4edda; color: #155724; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <div class="checkout-container">
         <header class="checkout-page-header">
             <a href="{{ route('cart') }}" class="back-arrow"><i class='bx bx-arrow-back'></i></a>
             <h2>Checkout</h2>
         </header>
 
-        <form method="POST" action="{{ route('checkout.process') }}" id="checkoutForm"> {{-- Beri ID pada form --}}
+        <form method="POST" action="{{ route('checkout.process') }}" id="checkoutForm"> 
             @csrf
             <div class="checkout-main-content">
-                {{-- === KOLOM KIRI === --}}
                 <div class="left-column">
-                    {{-- Alamat Pengiriman --}}
                     <div class="section-card delivery-address-section">
                         <h3>Delivery Address</h3>
                         <div class="address-details">
                             <p><strong>Name:</strong> <span id="deliveryNameDisplay">{{ $delivery_data['name'] }}</span></p>
                             <p><strong>Phone:</strong> <span id="deliveryPhoneDisplay">{{ $delivery_data['phone'] }}</span></p>
-                            <p><strong>Address:</strong> <span id="deliveryAddressDisplay">{{ $delivery_data['address'] }}, {{ $delivery_data['city'] }}, {{ $delivery_data['province'] }}, {{ $delivery_data['postal_code'] }}</span></p>
+                            <p><strong>Address:</strong> <span id="deliveryAddressDisplay">
+                                {{ $delivery_data['address'] }}, 
+                                {{ $delivery_data['district'] }},
+                                {{ $delivery_data['city'] }}, 
+                                {{ $delivery_data['province'] }}, 
+                                {{ $delivery_data['postal_code'] }}
+                            </span></p>
                         </div>
-                        <button type="button" class="edit-address-btn" onclick="openAddressModal()">Edit Address</button>
+                        
+                        {{-- Tombol Buka Modal --}}
+                        <button type="button" class="edit-address-btn" onclick="openAddressModal()">Change / Add Address</button>
 
-                        {{-- Input hidden untuk dikirim ke backend --}}
+                        {{-- Hidden inputs untuk data checkout final --}}
                         <input type="hidden" id="hiddenDeliveryName" name="delivery_name" value="{{ $delivery_data['name'] }}">
                         <input type="hidden" id="hiddenDeliveryPhone" name="delivery_phone" value="{{ $delivery_data['phone'] }}">
                         <input type="hidden" id="hiddenDeliveryAddress" name="delivery_address" value="{{ $delivery_data['address'] }}">
@@ -42,7 +55,6 @@
                         <input type="hidden" id="hiddenDeliveryPostalCode" name="delivery_postal_code" value="{{ $delivery_data['postal_code'] }}">
                     </div>
 
-                    {{-- Ringkasan Produk --}}
                     <div class="section-card product-summary-section">
                         <h3>Products</h3>
                         <div class="product-list-checkout">
@@ -56,7 +68,7 @@
                             @forelse ($cart_items as $id_produk => $item)
                                 <div class="product-item-checkout">
                                     <div class="col-product">
-                                        <img src="{{ asset('assets/images/produk-looksee/' . ($item['gambar_produk'] ?? 'placeholder.jpg')) }}" {{-- Gunakan placeholder jika gambar tidak ada --}}
+                                        <img src="{{ asset('assets/images/produk-looksee/' . ($item['gambar_produk'] ?? 'placeholder.jpg')) }}" 
                                               onerror="this.onerror=null;this.src='https://placehold.co/60x60/E0E0E0/ADADAD?text=No+Image';"
                                               alt="{{ $item['nama_produk'] ?? 'Product' }}" class="product-thumb-checkout">
                                         <span>{{ $item['nama_produk'] ?? 'Unknown Product' }}</span>
@@ -72,9 +84,7 @@
                     </div>
                 </div>
 
-                {{-- === KOLOM KANAN === --}}
                 <div class="right-column">
-                    {{-- Metode Pengiriman --}}
                     <div class="section-card shipping-method-section">
                         <h3>Shipping Method</h3>
                         <div class="shipping-option">
@@ -87,28 +97,26 @@
                         </div>
                     </div>
 
-                    {{-- Metode Pembayaran --}}
                     <div class="section-card payment-method-section">
                         <h3>Payment Method</h3>
                         <div class="payment-options">
                             @foreach ($main_payment_methods as $method)
                                 <div class="payment-type">
                                     <input type="radio" id="paymentMethod{{ $method['method_id'] }}" name="payment_method" value="{{ $method['method_name'] }}"
-                                        @if($loop->first || $method['method_name'] == 'Bank Transfer') checked @endif> {{-- Default Bank Transfer --}}
+                                        @if($loop->first || $method['method_name'] == 'Bank Transfer') checked @endif> 
                                     <label for="paymentMethod{{ $method['method_id'] }}">
                                         {{ $method['method_name'] }}
                                     </label>
                                 </div>
                             @endforeach
 
-                            {{-- Pilihan Bank (muncul jika Bank Transfer dipilih) --}}
                             <div class="bank-selection" id="bankSelectionDiv">
                                 <h4>Select Bank for Transfer</h4>
                                 <div class="bank-list">
                                     @forelse ($bank_options as $index => $bank)
                                         <div class="bank-option">
                                             <input type="radio" id="bankChoice{{ $bank['bank_payment_id'] }}" name="bank_choice" value="{{ $bank['bank_payment_id'] }}"
-                                                @if($loop->first) checked @endif> {{-- Default bank pertama --}}
+                                                @if($loop->first) checked @endif> 
                                             <label for="bankChoice{{ $bank['bank_payment_id'] }}">
                                                 {{ $bank['bank_name'] }}
                                             </label>
@@ -119,14 +127,13 @@
                                 </div>
                             </div>
 
-                            {{-- Pilihan E-Wallet (muncul jika E-Wallet dipilih) --}}
                             <div class="ewallet-selection" id="ewalletSelectionDiv" style="display: none;">
                                 <h4>Select E-Wallet Provider</h4>
                                 <div class="ewallet-list">
                                     @forelse ($e_wallet_options as $index => $ewallet)
                                         <div class="ewallet-option">
                                             <input type="radio" id="ewalletChoice{{ $ewallet['e_wallet_payment_id'] }}" name="ewallet_choice" value="{{ $ewallet['e_wallet_payment_id'] }}"
-                                                @if($loop->first) checked @endif> {{-- Default ewallet pertama --}}
+                                                @if($loop->first) checked @endif> 
                                             <label for="ewalletChoice{{ $ewallet['e_wallet_payment_id'] }}">
                                                 {{ $ewallet['ewallet_provider_name'] }}
                                             </label>
@@ -136,12 +143,11 @@
                                     @endforelse
                                 </div>
                             </div>
-                        </div> {{-- End payment options --}}
+                        </div>
                     </div>
                 </div>
-            </div> {{-- End checkout-main-content --}}
+            </div> 
 
-            {{-- Footer Ringkasan & Tombol Place Order --}}
             <div class="checkout-summary-footer">
                 <div class="summary-details">
                     <div class="total-price-display">
@@ -154,46 +160,108 @@
                 <button type="submit" class="place-order-button">Place Order</button>
             </div>
         </form>
-    </div> {{-- End checkout-container --}}
+    </div>
 
-    {{-- === MODAL EDIT ALAMAT === --}}
-    <div id="addressEditModal" class="modal">
-        <div class="modal-content">
+    <div id="addressManagerModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
             <span class="close-btn" onclick="closeAddressModal()">&times;</span>
-            <h3>Edit Delivery Address</h3>
-            <form id="editAddressForm">
-                <div class="form-group">
-                    <label for="modalName">Full Name:</label>
-                    <input type="text" id="modalName" value="{{ $delivery_data['name'] }}" required>
+            
+            <div id="addressListView">
+                <h3>Select Address</h3>
+                {{-- TOMBOL PINK ADA DISINI --}}
+                <button type="button" class="add-new-address-btn" onclick="showAddForm()">+ Add New Address</button>
+                
+                <div class="address-list-container">
+                    @forelse($all_addresses as $addr)
+                        <div class="address-card-item" onclick="selectAddress(this)"
+                             data-id="{{ $addr->id }}"
+                             data-name="{{ $addr->receiver_name }}"
+                             data-phone="{{ $addr->phone_number }}"
+                             data-address="{{ $addr->full_address }}"
+                             data-city="{{ $addr->city }}"
+                             data-district="{{ $addr->district }}"
+                             data-province="{{ $addr->province }}"
+                             data-postal="{{ $addr->postal_code }}">
+                             
+                            <div style="font-weight: bold; margin-bottom: 5px;">
+                                {{ $addr->receiver_name }} <span style="font-weight: normal; color: #666">| {{ $addr->phone_number }}</span>
+                                @if($addr->is_default) <span class="badge-default">Default</span> @endif
+                            </div>
+                            <div style="color: #444; font-size: 14px; line-height: 1.4;">
+                                {{ $addr->full_address }}<br>
+                                {{ $addr->district }}, {{ $addr->city }}, {{ $addr->province }}, {{ $addr->postal_code }}
+                            </div>
+                            
+                            <div class="address-actions">
+                                <button type="button" class="btn-action-sm btn-edit" 
+                                    onclick="event.stopPropagation(); showEditForm({{ json_encode($addr) }})">Edit</button>
+                                
+                                <form action="{{ route('checkout.address.delete', $addr->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this address?');" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn-action-sm btn-delete" onclick="event.stopPropagation()">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    @empty
+                        <p style="text-align: center; color: gray; padding: 20px;">You don't have any saved addresses. Click "Add New Address" above.</p>
+                    @endforelse
                 </div>
-                <div class="form-group">
-                    <label for="modalPhone">Phone Number:</label>
-                    <input type="tel" id="modalPhone" value="{{ $delivery_data['phone'] }}"> {{-- Hapus required jika boleh kosong --}}
+            </div>
+
+            <div id="addressFormView" style="display: none;">
+                <div class="modal-header-nav">
+                    <button type="button" class="back-to-list-btn" onclick="showListView()"><i class='bx bx-left-arrow-alt'></i> Back to List</button>
+                    <h3 id="formTitle" style="margin: 0;">Add New Address</h3>
                 </div>
-                <div class="form-group">
-                    <label for="modalAddress">Full Address:</label>
-                    <textarea id="modalAddress" rows="3" required>{{ $delivery_data['address'] }}</textarea>
-                </div>
-                <div class="form-group">
-                    <label for="modalCity">City:</label>
-                    <input type="text" id="modalCity" value="{{ $delivery_data['city'] }}" required>
-                </div>
-                <div class="form-group">
-                    <label for="modalProvince">Province:</label>
-                    <input type="text" id="modalProvince" value="{{ $delivery_data['province'] }}" required>
-                </div>
-                <div class="form-group">
-                    <label for="modalPostalCode">Postal Code:</label>
-                    <input type="text" id="modalPostalCode" value="{{ $delivery_data['postal_code'] }}" required>
-                </div>
-                <button type="button" class="save-address-btn" onclick="saveAddressChanges()">Save Changes</button>
-            </form>
+
+                <form id="addressFormInput" method="POST" action="{{ route('checkout.address.add') }}">
+                    @csrf
+                    <div id="methodField"></div> {{-- Tempat naruh @method('PUT') --}}
+                    
+                    <div class="form-group">
+                        <label>Receiver Name:</label>
+                        <input type="text" name="receiver_name" id="inputName" required placeholder="e.g. John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number:</label>
+                        <input type="text" name="phone_number" id="inputPhone" required placeholder="e.g. 08123456789">
+                    </div>
+                    <div class="form-group">
+                        <label>Full Address:</label>
+                        <textarea name="full_address" id="inputAddress" rows="2" required placeholder="Street name, Building, House No."></textarea>
+                    </div>
+                    <div class="form-group" style="display: flex; gap: 10px;">
+                        <div style="flex:1">
+                            <label>District (Kecamatan):</label>
+                            <input type="text" name="district" id="inputDistrict" placeholder="e.g. Tebet">
+                        </div>
+                        <div style="flex:1">
+                            <label>City:</label>
+                            <input type="text" name="city" id="inputCity" required placeholder="e.g. Jakarta Selatan">
+                        </div>
+                    </div>
+                    <div class="form-group" style="display: flex; gap: 10px;">
+                        <div style="flex:1">
+                            <label>Province:</label>
+                            <input type="text" name="province" id="inputProvince" required placeholder="e.g. DKI Jakarta">
+                        </div>
+                        <div style="flex:1">
+                            <label>Postal Code:</label>
+                            <input type="text" name="postal_code" id="inputPostal" required placeholder="e.g. 12810">
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="save-address-btn" style="width: 100%; margin-top: 10px;">Save Address</button>
+                </form>
+            </div>
+
         </div>
     </div>
 @endsection
 
+
 @section('footer_scripts')
-    {{-- Script Modal & Payment Toggle --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Modal Logic
@@ -215,12 +283,11 @@
                 document.getElementById('deliveryPhoneDisplay').textContent = newAddressData.phone;
                 document.getElementById('deliveryAddressDisplay').textContent = `${newAddressData.address}, ${newAddressData.city}, ${newAddressData.province}, ${newAddressData.postal_code}`;
                 document.getElementById('hiddenDeliveryName').value = newAddressData.name; document.getElementById('hiddenDeliveryPhone').value = newAddressData.phone; document.getElementById('hiddenDeliveryAddress').value = newAddressData.address; document.getElementById('hiddenDeliveryCity').value = newAddressData.city; document.getElementById('hiddenDeliveryProvince').value = newAddressData.province; document.getElementById('hiddenDeliveryPostalCode').value = newAddressData.postal_code;
-                // Optional Fetch to save temporary address via AJAX
+
                  fetch('{{ route("checkout.saveAddress") }}', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value }, body: JSON.stringify(newAddressData) }) .then(response => response.json()) .then(data => console.log('Temp address saved:', data)) .catch(error => console.error('Error saving temp address:', error));
                 closeAddressModal();
             };
 
-            // Payment Method Toggle Logic
             const paymentMethodRadios = document.querySelectorAll('input[name="payment_method"]');
             const bankSelectionDiv = document.getElementById('bankSelectionDiv');
             const ewalletSelectionDiv = document.getElementById('ewalletSelectionDiv');

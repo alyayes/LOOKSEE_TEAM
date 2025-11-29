@@ -21,12 +21,8 @@ use App\Http\Controllers\UsersAdminController;
 use App\Http\Controllers\TodaysOutfitAdminController; 
 use App\Http\Controllers\PersonalizationController;
 
-// login GET
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-// login POST
 Route::post('/login', [AuthController::class, 'login']);
-
-// register GET
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 // register POST
 Route::post('/register', [AuthController::class, 'register']);

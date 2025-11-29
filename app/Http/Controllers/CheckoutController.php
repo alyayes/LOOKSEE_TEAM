@@ -3,112 +3,129 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Str; 
+use App\Models\Cart;
+use App\Models\UserAddress;
+use App\Models\PaymentMethod;
+use App\Models\EwalletTransferDetail;
+use App\Models\BankTransferDetail;
+use App\Models\User;
 
 class CheckoutController extends Controller
 {
-    
     public function index()
     {
-        
-        $cart_items = session('cart', []);
-        if (empty($cart_items)) {
-            $cart_items = [
-                [
-                'nama_produk' => 'Virly Top',
-                'harga' => 56000,
-                'stock' => 20,
-                'quantity' => 2,
-                'gambar_produk' => '4.jpeg',
-                ],
-                [
-                    'nama_produk' => 'Oro Pants',
-                    'harga' => 40000,
-                    'stock' => 20,
-                    'quantity' => 1,
-                    'gambar_produk' => 'oro.png',
-                ],
-            ];
-            session(['cart' => $cart_items]);
+        $userId = 1;
+
+        // Ambil user berdasarkan 'user_id' bukan 'id'
+        $user = User::where('user_id', $userId)->first();
+
+        $cartData = Cart::where('user_id', $userId)
+                        ->with('produk')
+                        ->get();
+
+        $cart_items = [];
+        $total_selected_price = 0;
+
+        foreach ($cartData as $item) {
+            if ($item->produk) {
+                $subtotal = $item->produk->harga * $item->quantity;
+                $total_selected_price += $subtotal;
+
+                $cart_items[$item->id_produk] = [
+                    'nama_produk'   => $item->produk->nama_produk,
+                    'harga'         => $item->produk->harga,
+                    'gambar_produk' => $item->produk->gambar_produk,
+                    'quantity'      => $item->quantity,
+                    'stock'         => $item->produk->stock,
+                ];
+            }
         }
 
-        $delivery_data = session('temp_delivery_address', [
-            'name'        => 'Dior Majorie',
-            'phone'       => '0821234567', 
-            'address'     => 'Jl. Raya Panjang',
-            'city'        => 'Bandung',
-            'province'    => 'Jawa Barat',
-            'postal_code' => '40000',
-        ]);
+        $shipping_cost = 20000;
+        $grand_total = $total_selected_price + $shipping_cost;
 
-        $main_payment_methods = [
-            ['method_id' => 1, 'method_name' => 'Bank Transfer'],
-            ['method_id' => 2, 'method_name' => 'E-Wallet'],
-            ['method_id' => 3, 'method_name' => 'Cash on Delivery (COD)'],
-        ];
-        $bank_options = [
-             ['bank_payment_id' => 101, 'bank_name' => 'BCA'], ['bank_payment_id' => 102, 'bank_name' => 'BNI'],
-             ['bank_payment_id' => 103, 'bank_name' => 'BRI'], ['bank_payment_id' => 104, 'bank_name' => 'BSI'],
-             ['bank_payment_id' => 105, 'bank_name' => 'CIMB Niaga'], ['bank_payment_id' => 106, 'bank_name' => 'Danamon'],
-             ['bank_payment_id' => 107, 'bank_name' => 'Mandiri'], ['bank_payment_id' => 108, 'bank_name' => 'Permata'],
-             ['bank_payment_id' => 109, 'bank_name' => 'SeaBank'],
-        ];
-        $e_wallet_options = [
-            ['e_wallet_payment_id' => 201, 'ewallet_provider_name' => 'GoPay'],
-            ['e_wallet_payment_id' => 202, 'ewallet_provider_name' => 'OVO'],
-            ['e_wallet_payment_id' => 203, 'ewallet_provider_name' => 'Dana'],
+        $all_addresses = UserAddress::where('user_id', $userId)
+                                    ->orderBy('is_default', 'desc')
+                                    ->get();
+
+        $address = $all_addresses->first();
+
+        $delivery_data = [
+            'id'          => $address->id ?? null,
+            'name'        => $address->receiver_name ?? ($user->name ?? 'Guest'),
+            'phone'       => $address->phone_number ?? '-',
+            'address'     => $address->full_address ?? 'Belum ada alamat',
+            'city'        => $address->city ?? '-',
+            'district'    => $address->district ?? '-',
+            'province'    => $address->province ?? '-',
+            'postal_code' => $address->postal_code ?? '-',
         ];
 
-        $subtotal = 0;
-        foreach ($cart_items as $item) { $subtotal += ($item['harga'] ?? 0) * ($item['quantity'] ?? 1); }
-        $shipping_cost = 0; 
-        $grand_total = $subtotal + $shipping_cost;
+        $main_payment_methods = PaymentMethod::all();
+        $e_wallet_options     = EwalletTransferDetail::all();
+        $bank_options         = BankTransferDetail::all();
 
         return view('checkout.checkout', compact(
-            'cart_items', 'delivery_data', 'main_payment_methods',
-            'bank_options', 'e_wallet_options', 'shipping_cost', 'grand_total'
+            'cart_items',
+            'total_selected_price',
+            'shipping_cost',
+            'grand_total',
+            'delivery_data',
+            'all_addresses',
+            'main_payment_methods',
+            'e_wallet_options',
+            'bank_options'
         ));
     }
 
-    public function processCheckout(Request $request)
+    public function process(Request $request)
     {
-         $validatedData = $request->validate([
-             'delivery_name' => 'required|string|max:255', 'delivery_phone' => 'nullable|string|max:20', // Phone bisa kosong
-             'delivery_address' => 'required|string', 'delivery_city' => 'required|string|max:100',
-             'delivery_province' => 'required|string|max:100', 'delivery_postal_code' => 'required|string|max:10',
-             'shipping_method' => 'required|string', 'payment_method' => 'required|string',
-             'bank_choice' => 'required_if:payment_method,Bank Transfer|nullable|numeric',
-             'ewallet_choice' => 'required_if:payment_method,E-Wallet|nullable|numeric',
-         ]);
-
-
-        $order_id = rand(1000, 9999);
-        $latest_order = $validatedData;
-        $latest_order['order_id'] = $order_id;
-        $latest_order['cart_items'] = session('cart', []);
-        $subtotal = 0; foreach ($latest_order['cart_items'] as $item) { $subtotal += ($item['harga'] ?? 0) * ($item['quantity'] ?? 1); }
-        $shipping_cost = 0;
-        $latest_order['total_price'] = $subtotal + $shipping_cost;
-        $latest_order['order_date'] = now()->toDateTimeString();
-        $latest_order['status'] = ($validatedData['payment_method'] == 'COD') ? 'prepared' : 'pending';
-        $latest_order['transaction_code'] = 'TRX-' . Str::upper(Str::random(8)); 
-
-        session(['latest_order_details' => $latest_order]);
-        session()->forget(['cart', 'temp_delivery_address']);
-
-
-        return redirect()->route('payment.details')->with('success', 'Order berhasil dibuat! (Dummy)');
+        return redirect()->route('homepage')->with('success', 'Order berhasil dibuat!');
     }
 
+    public function addAddress(Request $request)
+    {
+        $request->validate([
+            'receiver_name' => 'required',
+            'phone_number'  => 'required',
+            'full_address'  => 'required',
+            'province'      => 'required',
+            'city'          => 'required',
+            'postal_code'   => 'required',
+        ]);
 
-     public function saveTemporaryAddress(Request $request)
-     {
-         $validated = $request->validate([
-             'name' => 'required|string|max:255', 'phone' => 'nullable|string|max:20',
-             'address' => 'required|string', 'city' => 'required|string|max:100',
-             'province' => 'required|string|max:100', 'postal_code' => 'required|string|max:10',
-         ]);
-         session(['temp_delivery_address' => $validated]);
-         return response()->json(['message' => 'Address updated temporarily.', 'address' => $validated]);
-     }
+        $userId = 1;
+
+        $isFirst = !UserAddress::where('user_id', $userId)->exists();
+
+        UserAddress::create([
+            'user_id'       => $userId,
+            'receiver_name' => $request->receiver_name,
+            'phone_number'  => $request->phone_number,
+            'full_address'  => $request->full_address,
+            'province'      => $request->province,
+            'city'          => $request->city,
+            'district'      => $request->district ?? '-',
+            'postal_code'   => $request->postal_code,
+            'is_default'    => $isFirst ? true : false,
+        ]);
+
+        return redirect()->back()->with('success', 'Alamat baru berhasil ditambahkan!');
+    }
+
+    public function updateAddress(Request $request, $id)
+    {
+        $address = UserAddress::findOrFail($id);
+        $address->update($request->all());
+
+        return redirect()->back()->with('success', 'Alamat berhasil diperbarui!');
+    }
+
+    public function deleteAddress($id)
+    {
+        $address = UserAddress::findOrFail($id);
+        $address->delete();
+
+        return redirect()->back()->with('success', 'Alamat berhasil dihapus!');
+    }
 }
