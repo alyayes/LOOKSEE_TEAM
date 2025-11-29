@@ -181,20 +181,6 @@
                 </tr>
 
                 <tr>
-                    <td>Platform</td>
-                    <td>
-                        <input type="text" name="platform" required value="{{ old('platform', $product->platform) }}">
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Link Produk</td>
-                    <td>
-                        <input type="url" name="link_produk" required value="{{ old('link_produk', $product->link_produk) }}">
-                    </td>
-                </tr>
-
-                <tr>
                     <td>Gambar Produk</td>
                     <td>
                         <input type="file" name="gambar_produk" accept="image/*">

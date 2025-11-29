@@ -11,12 +11,12 @@ class ProductsAdminController extends Controller
     public function index()
     {
         $products = Produk::all();
-        return view('admin.produk.index', compact('products'));
+        return view('admin.productsAdmin.index', compact('products'));
     }
 
     public function add()
     {
-        return view('admin.produk.add');
+        return view('admin.productsAdmin.add');
     }
 
     public function store(Request $request)
@@ -26,6 +26,11 @@ class ProductsAdminController extends Controller
             'kategori' => 'required',
             'harga' => 'required|numeric',
             'deskripsi' => 'nullable',
+            'mood' => 'nullable',
+            'preferensi' => 'nullable',
+            'stock' => 'nullable|integer',
+            'platform' => 'nullable',
+            'link_produk' => 'nullable|url',
             'gambar_produk' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
@@ -44,16 +49,21 @@ class ProductsAdminController extends Controller
             'kategori' => $request->kategori,
             'harga' => $request->harga,
             'deskripsi' => $request->deskripsi,
+            'mood' => $request->mood,
+            'preferensi' => $request->preferensi,
+            'stock' => $request->stock,
+            'platform' => $request->platform,
+            'link_produk' => $request->link_produk,
             'gambar_produk' => $namaFile,
         ]);
 
-        return redirect()->route('admin.produk.index')->with('success', 'Produk berhasil ditambahkan');
+        return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan');
     }
 
     public function edit($id)
     {
         $product = Produk::findOrFail($id);
-        return view('admin.produk.edit', compact('product'));
+        return view('admin.productsAdmin.edit', compact('product'));
     }
 
     public function update(Request $request, $id)
@@ -63,15 +73,18 @@ class ProductsAdminController extends Controller
             'kategori' => 'required',
             'harga' => 'required|numeric',
             'deskripsi' => 'nullable',
+            'mood' => 'nullable',
+            'preferensi' => 'nullable',
+            'stock' => 'nullable|integer',
+            'platform' => 'nullable',
+            'link_produk' => 'nullable|url',
             'gambar_produk' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $product = Produk::findOrFail($id);
 
-        // Jika upload gambar baru
         if ($request->hasFile('gambar_produk')) {
             $oldPath = public_path('assets/images/produk-looksee/' . $product->gambar_produk);
-
             if (File::exists($oldPath)) {
                 File::delete($oldPath);
             }
@@ -80,18 +93,22 @@ class ProductsAdminController extends Controller
             $namaFile = time() . '.' . $file->extension();
             $file->move(public_path('assets/images/produk-looksee'), $namaFile);
 
-            // Simpan nama file ke model
             $product->gambar_produk = $namaFile;
         }
 
-        // Update data lain
         $product->nama_produk = $request->nama_produk;
         $product->kategori = $request->kategori;
         $product->deskripsi = $request->deskripsi;
+        $product->mood = $request->mood;
+        $product->preferensi = $request->preferensi;
+        $product->stock = $request->stock;
+        $product->platform = $request->platform;
+        $product->link_produk = $request->link_produk;
         $product->harga = (float)$request->harga;
+
         $product->save();
 
-        return redirect()->route('admin.produk.index')->with('success', 'Produk berhasil diperbarui');
+        return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui');
     }
 
     public function destroy($id)
@@ -105,6 +122,6 @@ class ProductsAdminController extends Controller
 
         $product->delete();
 
-        return redirect()->route('admin.produk.index')->with('success', 'Produk berhasil dihapus');
+        return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus');
     }
 }

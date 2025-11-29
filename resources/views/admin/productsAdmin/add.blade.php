@@ -168,20 +168,6 @@
                 </tr>
 
                 <tr>
-                    <td>Platform</td>
-                    <td>
-                        <input name="platform" maxlength="100" required value="{{ old('platform') }}">
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Link Produk</td>
-                    <td>
-                        <input type="url" name="link_produk" maxlength="255" required value="{{ old('link_produk') }}">
-                    </td>
-                </tr>
-
-                <tr>
                     <td>Gambar Produk</td>
                     <td>
                         <input type="file" name="gambar_produk" accept="image/*" required>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LOOKSEE ADMIN | @yield('title', 'Dashboard')</title>
-        
+
     <link rel="icon" href="{{ asset('assets/images/favicon-32x32.png') }}" type="image/png"/>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
@@ -23,26 +23,27 @@
     <link rel="stylesheet" href="{{ asset('assets/css/semi-dark.css') }}"/>
     <link rel="stylesheet" href="{{ asset('assets/css/header-colors.css') }}"/>
 
-    {{-- Placeholder untuk CSS kustom halaman tertentu (misalnya, CSS tabel di index.blade.php) --}}
-    @yield('styles') 
+    @yield('styles')
 </head>
 <body>
-   
-    @include('layouts.headerAdmin')
 
-    {{-- 2. KONTEN UTAMA (Page Wrapper) --}}
-    <main class="page-wrapper">
-        <div class="page-content">
-            {{-- Ini adalah placeholder (@yield) tempat konten spesifik halaman (index/create) akan dimasukkan --}}
-            @yield('content')
-        </div>
-    </main>
-    
-    {{-- 3. FOOTER --}}
-    
-    @include('layouts.footerAdmin')
-    
-    {{-- Placeholder untuk JavaScript kustom --}}
+    <div class="wrapper">
+
+        {{-- SIDEBAR + TOPBAR --}}
+        @include('layouts.headerAdmin')
+
+        {{-- MAIN CONTENT --}}
+        <main class="page-wrapper">
+            <div class="page-content">
+                @yield('content')
+            </div>
+        </main>
+
+        {{-- FOOTER --}}
+        @include('layouts.footerAdmin')
+
+    </div> <!-- END WRAPPER -->
+
     @yield('scripts')
 
 </body>
