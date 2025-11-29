@@ -2,56 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    protected $table = 'users';
+    protected $primaryKey = 'user_id';
+    public $incrementing = true;
+    protected $keyType = 'int';
+
     protected $fillable = [
-    'username',
-    'name',
-    'email',
-    'profile_picture',
-    'password',
-    'role',
-    'bio',
-    'birthday',
-    'country',
-    'alamat',      // ➜ WAJIB TAMBAH
-    'phone',
-    'twitter',
-    'facebook',
-    'instagram',
-];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
+        'username', 'name', 'email', 'password', 'role'
     ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'password' => 'hashed',
-        'birthday' => 'date',
-    ];
-
-    // Jika tidak menggunakan created_at dan updated_at
-    // public $timestamps = false;
 }

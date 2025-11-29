@@ -31,6 +31,10 @@ Route::get('/register', [AuthController::class, 'showRegister'])->name('register
 // register POST
 Route::post('/register', [AuthController::class, 'register']);
 
+Route::get('/check-auth', function() {
+    dd(Auth::id());
+});
+
 // Home
 // 1. HOME PAGE 
 Route::get('/home', [HomeController::class, 'index'])->name('homepage');
