@@ -124,6 +124,8 @@ Route::prefix('favorites')->name('favorites.')->group(function () {
     // Endpoint AJAX untuk menambah produk ke keranjang dari halaman favorit
     Route::post('/add-to-cart', [FavoriteController::class, 'addToCart'])->name('addToCart');
 });
+Route::post('/cart/add/{id_produk}', [CartController::class, 'addToCart'])->name('cart.add');
+
 
 // --- HALAMAN PRODUK ---
 Route::prefix('products')->name('products.')->group(function () {
@@ -182,11 +184,14 @@ Route::resource('stylejournalAdmin', StyleJournalAdminController::class)->names(
 ]);
 Route::get('/dashboard', [DashboardAdminController::class, 'index'])->name('dashboard.dashboardAdmin');
 
-Route::prefix('admin')->middleware('auth')->group(function () {
+Route::prefix('admin')->group(function () {
     Route::get('/orders', [OrdersAdminController::class, 'index'])->name('admin.orders.index');
     Route::get('/orders/{order_id}', [OrdersAdminController::class, 'detail'])->name('admin.order.detail');
-    Route::post('/orders/update-status', [OrderController::class, 'updateStatus'])
-        ->name('orders.update_status');
+    Route::post('/orders/update-status', [OrdersAdminController::class, 'updateStatus'])
+        ->name('admin.order.updateStatus');
+    Route::get('/admin/orders/{order_id}', [OrdersAdminController::class, 'show'])
+    ->name('admin.order.detail');
+
 });
 
 

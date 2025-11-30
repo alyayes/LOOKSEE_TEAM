@@ -8,6 +8,7 @@ class Order extends Model
 {
     protected $table = 'orders';
     protected $primaryKey = 'order_id';
+    public $timestamps = true;
 
     protected $fillable = [
         'user_id',
@@ -20,6 +21,10 @@ class Order extends Model
         'shipping_method'
     ];
 
+    public function produk()
+    {
+        return $this->belongsTo(Produk::class, 'produk_id'); // FK sesuai tabel orders
+    }
     public function items()
     {
         return $this->hasMany(OrderItem::class, 'order_id', 'order_id');
@@ -39,4 +44,5 @@ class Order extends Model
     {
         return $this->belongsTo(UserAddress::class, 'address_id', 'id');
     }
+    
 }

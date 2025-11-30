@@ -89,27 +89,23 @@ class CartController extends Controller
     {
         $userId = auth()->id();
 
-        $existingCart = DB::table('cart')
-            ->where('user_id', $userId)
-            ->where('id_produk', $id_produk)
-            ->first();
+        $existingCart = CartsItems::where('user_id', $userId)
+                                ->where('id_produk', $id_produk)
+                                ->first();
 
         if ($existingCart) {
-            DB::table('cart')
-                ->where('id', $existingCart->id)
-                ->increment('quantity', 1);
+            $existingCart->increment('quantity');
         } else {
-            DB::table('cart')->insert([
+            CartsItems::create([
                 'user_id'   => $userId,
                 'id_produk' => $id_produk,
-                'quantity'  => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'quantity'  => 1
             ]);
         }
 
         return response()->json([
             'message' => 'Produk berhasil ditambahkan ke keranjang!'
         ]);
+
     }
 }

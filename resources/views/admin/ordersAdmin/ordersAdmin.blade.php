@@ -72,6 +72,7 @@
                 <a href="{{ route('admin.order.detail', ['order_id' => $row['order_id']]) }}">
                     <i class='bx bx-show-alt'></i>
                 </a>
+
             </td>
         </tr>
         @empty
