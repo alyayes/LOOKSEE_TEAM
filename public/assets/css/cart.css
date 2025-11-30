@@ -1,8 +1,7 @@
 /* General Styling */
 
-/* --- Tambahan agar cart di tengah layar --- */
 .contain {
-    background-color: #f8f8f8; /* Warna abu muda agar card lebih menonjol */
+    background-color: #f8f8f8;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -10,7 +9,6 @@
     margin: 0;
 }
 
-/* --- Pastikan container punya ukuran fix dan auto margin --- */
 .cart-container {
     background-color: #ffffff;
     border-radius: 12px;
@@ -19,9 +17,8 @@
     width: 100%;
     max-width: 900px;
     box-sizing: border-box;
-    margin: auto; /* tengah horizontal */
+    margin: auto;
 }
-
 
 h2 {
     text-align: center;
@@ -31,7 +28,6 @@ h2 {
     font-size: 2em;
 }
 
-/* Empty Cart Message */
 .empty-cart-message {
     text-align: center;
     padding: 50px 20px;
@@ -40,7 +36,7 @@ h2 {
 }
 
 .empty-cart-message a {
-    color: rgb(250, 156, 211); /* Menggunakan pink dari home.css */
+    color: rgb(250, 156, 211);
     text-decoration: none;
     font-weight: 600;
 }
@@ -49,7 +45,6 @@ h2 {
     text-decoration: underline;
 }
 
-/* Cart Header */
 .cart-header {
     display: flex;
     justify-content: space-between;
@@ -63,7 +58,7 @@ h2 {
 }
 
 .header-checkbox {
-    flex: 2; /* Adjust flex basis as needed */
+    flex: 2;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -82,33 +77,30 @@ h2 {
 .header-total {
     flex: 1.5;
     text-align: right;
-    padding-right: 40px; /* Space for remove button */
+    padding-right: 40px;
 }
 
-/* Custom Pink Checkbox */
 .checkbox-pink {
-    /* Hide default checkbox */
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    /* Style custom checkbox */
     width: 20px;
     height: 20px;
-    border: 2px solid rgb(250, 156, 211); /* Menggunakan pink dari home.css */
-    border-radius: 6px; /* Rounded corners */
+    border: 2px solid rgb(250, 156, 211);
+    border-radius: 6px;
     cursor: pointer;
     position: relative;
-    outline: none; /* Remove outline on focus */
+    outline: none;
     transition: all 0.2s ease-in-out;
 }
 
 .checkbox-pink:checked {
-    background-color: rgb(250, 156, 211); /* Menggunakan pink dari home.css */
-    border-color: rgb(250, 156, 211); /* Menggunakan pink dari home.css */
+    background-color: rgb(250, 156, 211);
+    border-color: rgb(250, 156, 211);
 }
 
 .checkbox-pink:checked::after {
-    content: '\2713'; /* Checkmark character */
+    content: '\2713';
     color: white;
     font-size: 14px;
     position: absolute;
@@ -118,11 +110,9 @@ h2 {
 }
 
 .checkbox-pink:hover {
-    /* Menyesuaikan rgba agar sesuai dengan pink baru */
     box-shadow: 0 0 0 3px rgba(250, 156, 211, 0.3);
 }
 
-/* Cart Item Card */
 .cart-item-card {
     display: flex;
     align-items: center;
@@ -130,7 +120,7 @@ h2 {
     padding: 15px 0;
     border-bottom: 1px dashed #eee;
     margin-bottom: 15px;
-    position: relative; /* For remove button positioning */
+    position: relative;
 }
 
 .cart-item-card:last-child {
@@ -139,7 +129,7 @@ h2 {
 }
 
 .item-selection {
-    flex: 0 0 30px; /* Fixed width for checkbox */
+    flex: 0 0 30px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -220,15 +210,15 @@ h2 {
     flex: 1.5;
     text-align: right;
     font-weight: 700;
-    color: rgb(250, 156, 211); /* Menggunakan pink dari home.css */
+    color: rgb(250, 156, 211);
     font-size: 1.1em;
-    padding-right: 40px; /* Space for remove button */
+    padding-right: 40px;
 }
 
 .remove-item-btn {
     background: none;
     border: none;
-    color: rgb(250, 156, 211); /* Menggunakan pink dari home.css */
+    color: rgb(250, 156, 211);
     font-size: 1.4em;
     cursor: pointer;
     position: absolute;
@@ -239,10 +229,9 @@ h2 {
 }
 
 .remove-item-btn:hover {
-    color: rgb(248, 99, 186); /* Menggunakan pink hover dari home.css */
+    color: rgb(248, 99, 186);
 }
 
-/* Cart Summary Footer */
 .cart-summary-footer {
     display: flex;
     justify-content: flex-end;
@@ -260,13 +249,13 @@ h2 {
 }
 
 #grandTotalPrice {
-    color: rgb(250, 156, 211); /* Menggunakan pink dari home.css */
+    color: rgb(250, 156, 211);
     font-size: 1.4em;
     font-weight: 700;
 }
 
 .checkout-button {
-    background-color: rgb(250, 156, 211); /* Menggunakan pink dari home.css */
+    background-color: rgb(250, 156, 211);
     color: white;
     border: none;
     border-radius: 8px;
@@ -275,16 +264,14 @@ h2 {
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    /* Menyesuaikan rgba agar sesuai dengan pink baru */
     box-shadow: 0 4px 10px rgba(250, 156, 211, 0.4);
 }
 
 .checkout-button:hover {
-    background-color: rgb(248, 99, 186); /* Menggunakan pink hover dari home.css */
+    background-color: rgb(248, 99, 186);
     transform: translateY(-2px);
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .cart-container {
         padding: 20px;
@@ -297,7 +284,7 @@ h2 {
     }
 
     .cart-header {
-        display: none; /* Hide header on small screens */
+        display: none;
     }
 
     .cart-item-card {
@@ -309,14 +296,14 @@ h2 {
     }
 
     .item-selection {
-        order: 1; /* Checkbox first */
+        order: 1;
         flex: 0 0 auto;
         margin-right: 10px;
     }
 
     .item-details {
         order: 2;
-        flex: 1 1 calc(100% - 60px); /* Take remaining width */
+        flex: 1 1 calc(100% - 60px);
         align-items: flex-start;
         gap: 10px;
     }
@@ -331,7 +318,7 @@ h2 {
     }
 
     .item-price {
-        order: 4; /* Move price below quantity */
+        order: 4;
         flex: 1 1 45%;
         text-align: left;
         font-size: 0.9em;
@@ -347,7 +334,7 @@ h2 {
 
     .item-total-price {
         order: 5;
-        flex: 1 1 100%; /* Take full width */
+        flex: 1 1 100%;
         text-align: right;
         font-size: 1em;
         padding-right: 40px;
@@ -356,9 +343,9 @@ h2 {
 
     .remove-item-btn {
         order: 6;
-        position: static; /* Remove absolute positioning */
+        position: static;
         transform: none;
-        margin-left: auto; /* Push to right */
+        margin-left: auto;
         font-size: 1.2em;
     }
 
@@ -377,7 +364,7 @@ h2 {
     }
 
     .checkout-button {
-        width: 100%; /* Make button full width */
+        width: 100%;
         padding: 10px 20px;
         font-size: 1em;
     }

@@ -3,33 +3,23 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; // <--- WAJIB DITAMBAHKAN
-use Illuminate\Support\Facades\Session;
-use App\Models\Cart;
-use App\Models\Product; // Pastikan nama model produkmu benar (Product atau Produk)
-use App\Models\User;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use App\Models\CartsItems;
+use App\Models\Produk;
 
-class CartController extends Controller {
-    
+class CartController extends Controller 
+{
     public function index() 
     {
-        // PERBAIKAN: Gunakan Auth::id() bukan User::id()
         $userId = Auth::id();
 
-        // Jika user belum login, redirect ke login (opsional, untuk keamanan)
-        if (!$userId) {
-            return redirect()->route('login')->with('error', 'Please login first');
-        }
+        $cartData = CartsItems::where('user_id', $userId)
+                              ->with('produk')
+                              ->get();
 
-        $cartData = Cart::where('user_id', $userId)
-                        ->with('produk') // Pastikan nama relasi di model Cart adalah 'produk'
-                        ->get();
-                        
         $cart_items = [];
 
         foreach ($cartData as $item) {
-            // Cek apakah produknya masih ada (tidak terhapus)
             if ($item->produk) {
                 $cart_items[$item->id_produk] = [
                     'nama_produk'   => $item->produk->nama_produk,
@@ -51,7 +41,6 @@ class CartController extends Controller {
         return view('cart.cart', compact('cart_items', 'total_selected_price', 'total_products'));
     }
 
-
     public function update(Request $request) 
     {
         $request->validate([
@@ -59,10 +48,9 @@ class CartController extends Controller {
             'quantity'  => 'required|integer|min:1',
         ]);
 
-        // Disini kamu sudah benar pakai Auth::id(), tapi butuh import di atas
-        $cartItem = Cart::where('user_id', Auth::id())
-                        ->where('id_produk', $request->id_produk)
-                        ->first();
+        $cartItem = CartsItems::where('user_id', Auth::id())
+                              ->where('id_produk', $request->id_produk)
+                              ->first();
 
         if ($cartItem) {
             $cartItem->update([
@@ -82,9 +70,9 @@ class CartController extends Controller {
             'id_produk' => 'required'
         ]);
 
-        Cart::where('user_id', Auth::id())
-            ->where('id_produk', $request->id_produk)
-            ->delete();
+        CartsItems::where('user_id', Auth::id())
+                  ->where('id_produk', $request->id_produk)
+                  ->delete();
 
         return response()->json([
             'status' => 'success',
@@ -96,5 +84,32 @@ class CartController extends Controller {
     {
         return redirect()->route('cart');
     }
-    
+
+    public function addToCart($id_produk)
+    {
+        $userId = auth()->id();
+
+        $existingCart = DB::table('cart')
+            ->where('user_id', $userId)
+            ->where('id_produk', $id_produk)
+            ->first();
+
+        if ($existingCart) {
+            DB::table('cart')
+                ->where('id', $existingCart->id)
+                ->increment('quantity', 1);
+        } else {
+            DB::table('cart')->insert([
+                'user_id'   => $userId,
+                'id_produk' => $id_produk,
+                'quantity'  => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Produk berhasil ditambahkan ke keranjang!'
+        ]);
+    }
 }
