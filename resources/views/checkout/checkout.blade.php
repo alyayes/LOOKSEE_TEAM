@@ -162,10 +162,12 @@
         </form>
     </div>
 
+    <!-- MODAL ADDRESS MANAGER -->
     <div id="addressManagerModal" class="modal">
         <div class="modal-content" style="max-width: 600px;">
             <span class="close-btn" onclick="closeAddressModal()">&times;</span>
             
+            <!-- VIEW 1: LIST ALAMAT -->
             <div id="addressListView">
                 <h3>Select Address</h3>
                 {{-- TOMBOL PINK ADA DISINI --}}
@@ -209,6 +211,7 @@
                 </div>
             </div>
 
+            <!-- VIEW 2: FORM INPUT/EDIT (Hidden by default) -->
             <div id="addressFormView" style="display: none;">
                 <div class="modal-header-nav">
                     <button type="button" class="back-to-list-btn" onclick="showListView()"><i class='bx bx-left-arrow-alt'></i> Back to List</button>
@@ -260,43 +263,22 @@
     </div>
 @endsection
 
-
 @section('footer_scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Modal Logic
-            const addressEditModal = document.getElementById('addressEditModal');
-            window.openAddressModal = function() {
-                document.getElementById('modalName').value = document.getElementById('hiddenDeliveryName').value;
-                document.getElementById('modalPhone').value = document.getElementById('hiddenDeliveryPhone').value;
-                document.getElementById('modalAddress').value = document.getElementById('hiddenDeliveryAddress').value;
-                document.getElementById('modalCity').value = document.getElementById('hiddenDeliveryCity').value;
-                document.getElementById('modalProvince').value = document.getElementById('hiddenDeliveryProvince').value;
-                document.getElementById('modalPostalCode').value = document.getElementById('hiddenDeliveryPostalCode').value;
-                if (addressEditModal) addressEditModal.style.display = 'flex';
-            };
-            window.closeAddressModal = function() { if (addressEditModal) addressEditModal.style.display = 'none'; };
-            window.onclick = function(event) { if (event.target === addressEditModal) closeAddressModal(); };
-            window.saveAddressChanges = function() {
-                const newAddressData = { name: document.getElementById('modalName').value, phone: document.getElementById('modalPhone').value, address: document.getElementById('modalAddress').value, city: document.getElementById('modalCity').value, province: document.getElementById('modalProvince').value, postal_code: document.getElementById('modalPostalCode').value };
-                document.getElementById('deliveryNameDisplay').textContent = newAddressData.name;
-                document.getElementById('deliveryPhoneDisplay').textContent = newAddressData.phone;
-                document.getElementById('deliveryAddressDisplay').textContent = `${newAddressData.address}, ${newAddressData.city}, ${newAddressData.province}, ${newAddressData.postal_code}`;
-                document.getElementById('hiddenDeliveryName').value = newAddressData.name; document.getElementById('hiddenDeliveryPhone').value = newAddressData.phone; document.getElementById('hiddenDeliveryAddress').value = newAddressData.address; document.getElementById('hiddenDeliveryCity').value = newAddressData.city; document.getElementById('hiddenDeliveryProvince').value = newAddressData.province; document.getElementById('hiddenDeliveryPostalCode').value = newAddressData.postal_code;
-
-                 fetch('{{ route("checkout.saveAddress") }}', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value }, body: JSON.stringify(newAddressData) }) .then(response => response.json()) .then(data => console.log('Temp address saved:', data)) .catch(error => console.error('Error saving temp address:', error));
-                closeAddressModal();
-            };
-
+            // --- Payment Logic ---
             const paymentMethodRadios = document.querySelectorAll('input[name="payment_method"]');
             const bankSelectionDiv = document.getElementById('bankSelectionDiv');
             const ewalletSelectionDiv = document.getElementById('ewalletSelectionDiv');
+            
             function togglePaymentDetails() {
                 const selectedElem = document.querySelector('input[name="payment_method"]:checked');
                 const selectedMethod = selectedElem ? selectedElem.value : '';
+                
                 if(bankSelectionDiv) bankSelectionDiv.style.display = 'none';
                 if(ewalletSelectionDiv) ewalletSelectionDiv.style.display = 'none';
                 document.querySelectorAll('input[name="bank_choice"], input[name="ewallet_choice"]').forEach(input => input.disabled = true);
+                
                 if (selectedMethod === 'Bank Transfer') {
                     if(bankSelectionDiv) bankSelectionDiv.style.display = 'block';
                     document.querySelectorAll('input[name="bank_choice"]').forEach(input => input.disabled = false);
@@ -310,14 +292,15 @@
                 }
             }
             paymentMethodRadios.forEach(radio => radio.addEventListener('change', togglePaymentDetails));
-            togglePaymentDetails(); // Initial call
+            togglePaymentDetails(); 
 
-            // Form Validation on Submit
+            // --- Form Checkout Validation ---
             const checkoutForm = document.getElementById('checkoutForm');
             if(checkoutForm) {
                 checkoutForm.addEventListener('submit', function(event) {
                     const selectedPayMethodElem = document.querySelector('input[name="payment_method"]:checked');
                     if (!selectedPayMethodElem) { event.preventDefault(); alert('Please select a payment method.'); return; }
+                    
                     const selectedPayMethod = selectedPayMethodElem.value;
                     if (selectedPayMethod === 'Bank Transfer') {
                         if (!document.querySelector('input[name="bank_choice"]:checked:not(:disabled)')) { event.preventDefault(); alert('Please select a bank.'); }
@@ -327,5 +310,85 @@
                 });
             }
         });
+
+        // --- NEW ADDRESS MODAL LOGIC ---
+        const addressModal = document.getElementById('addressManagerModal');
+        const viewList = document.getElementById('addressListView');
+        const viewForm = document.getElementById('addressFormView');
+        const formInput = document.getElementById('addressFormInput');
+
+        function openAddressModal() {
+            showListView();
+            addressModal.style.display = 'flex';
+        }
+
+        function closeAddressModal() {
+            addressModal.style.display = 'none';
+        }
+
+        function showListView() {
+            viewList.style.display = 'block';
+            viewForm.style.display = 'none';
+        }
+
+        function showAddForm() {
+            viewList.style.display = 'none';
+            viewForm.style.display = 'block';
+            document.getElementById('formTitle').innerText = 'Add New Address';
+            
+            formInput.action = "{{ route('checkout.address.add') }}";
+            document.getElementById('methodField').innerHTML = '';
+            
+            const csrfToken = document.querySelector('input[name="_token"]').value;
+            
+            formInput.reset();
+
+            document.querySelector('input[name="_token"]').value = csrfToken;
+        }
+
+        function showEditForm(data) {
+            viewList.style.display = 'none';
+            viewForm.style.display = 'block';
+            document.getElementById('formTitle').innerText = 'Edit Address';
+
+            formInput.action = "{{ url('/checkout/address/update') }}/" + data.id;
+            document.getElementById('methodField').innerHTML = '<input type="hidden" name="_method" value="PUT">';
+            
+            document.getElementById('inputName').value = data.receiver_name;
+            document.getElementById('inputPhone').value = data.phone_number;
+            document.getElementById('inputAddress').value = data.full_address;
+            document.getElementById('inputCity').value = data.city;
+            document.getElementById('inputDistrict').value = data.district;
+            document.getElementById('inputProvince').value = data.province;
+            document.getElementById('inputPostal').value = data.postal_code;
+        }
+
+        function selectAddress(element) {
+            // Update Tampilan Utama
+            document.getElementById('deliveryNameDisplay').innerText = element.getAttribute('data-name');
+            document.getElementById('deliveryPhoneDisplay').innerText = element.getAttribute('data-phone');
+            document.getElementById('deliveryAddressDisplay').innerText = 
+                `${element.getAttribute('data-address')}, ${element.getAttribute('data-district')}, ${element.getAttribute('data-city')}, ${element.getAttribute('data-province')}, ${element.getAttribute('data-postal')}`;
+
+            // Update Hidden Inputs
+            document.getElementById('hiddenDeliveryName').value = element.getAttribute('data-name');
+            document.getElementById('hiddenDeliveryPhone').value = element.getAttribute('data-phone');
+            document.getElementById('hiddenDeliveryAddress').value = element.getAttribute('data-address');
+            document.getElementById('hiddenDeliveryCity').value = element.getAttribute('data-city');
+            document.getElementById('hiddenDeliveryProvince').value = element.getAttribute('data-province');
+            document.getElementById('hiddenDeliveryPostalCode').value = element.getAttribute('data-postal');
+
+            // Visual feedback
+            document.querySelectorAll('.address-card-item').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+
+            closeAddressModal();
+        }
+
+        window.onclick = function(event) {
+            if (event.target === addressModal) {
+                closeAddressModal();
+            }
+        };
     </script>
 @endsection

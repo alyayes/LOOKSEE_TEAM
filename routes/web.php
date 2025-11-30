@@ -89,6 +89,13 @@ Route::get('/payment/details', [PaymentController::class, 'showPaymentDetails'])
 Route::get('/my-orders', [OrderController::class, 'listOrders'])->name('orders.list');
 Route::get('/orders/details/{order_id}', [OrderController::class, 'getOrderDetailsAjax'])->name('orders.details.ajax');
 
+Route::post('/checkout/address/add', [CheckoutController::class, 'addAddress'])
+    ->name('checkout.address.add');
+Route::put('/checkout/address/update/{id}', [CheckoutController::class, 'updateAddress'])
+    ->name('checkout.address.update');
+Route::delete('/checkout/address/delete/{id}', [CheckoutController::class, 'deleteAddress'])
+    ->name('checkout.address.delete');
+
 
 // --- ROUTE DUMMY LAIN & REDIRECT ---
 // Redirect URL lama dari header ke URL baru yang lebih rapi

@@ -1,6 +1,6 @@
 :root {
-            --primary-pink: rgb(250, 156, 211);
-            --primary-pink-hover: rgb(248, 99, 186);
+            --primary-pink: rgb(250, 156, 211); /* Pink utama */
+            --primary-pink-hover: rgb(248, 99, 186); /* Pink saat hover */
             --text-dark: #333;
             --text-medium: #555;
             --text-light: #777;
@@ -8,8 +8,6 @@
             --bg-white: #ffffff;
             --border-light: #eee;
             --border-medium: #ddd;
-            --success-green: #28a745;
-            --success-green-hover: #218838;
         }
 
         /* General Styling */
@@ -20,7 +18,7 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            margin-bottom: 20px;
+            padding-bottom: 20px;
         }
         .checkout-container {
             background-color: var(--bg-white);

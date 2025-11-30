@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Cart;
+use App\Models\CartsItems;
 use App\Models\UserAddress;
 use App\Models\PaymentMethod;
 use App\Models\EwalletTransferDetail;
@@ -15,13 +15,12 @@ class CheckoutController extends Controller
     public function index()
     {
         $userId = 1;
-
-        // Ambil user berdasarkan 'user_id' bukan 'id'
-        $user = User::where('user_id', $userId)->first();
-
-        $cartData = Cart::where('user_id', $userId)
-                        ->with('produk')
-                        ->get();
+        
+        $user = User::where('user_id', $userId)->first(); 
+        
+        $cartData = CartsItems::where('user_id', $userId)
+                      ->with('produk')
+                      ->get();
 
         $cart_items = [];
         $total_selected_price = 0;
@@ -45,14 +44,14 @@ class CheckoutController extends Controller
         $grand_total = $total_selected_price + $shipping_cost;
 
         $all_addresses = UserAddress::where('user_id', $userId)
-                                    ->orderBy('is_default', 'desc')
-                                    ->get();
+                        ->orderBy('is_default', 'desc')
+                        ->get();
 
         $address = $all_addresses->first();
 
         $delivery_data = [
             'id'          => $address->id ?? null,
-            'name'        => $address->receiver_name ?? ($user->name ?? 'Guest'),
+            'name'        => $address->receiver_name ?? ($user ? $user->name : 'Guest'),
             'phone'       => $address->phone_number ?? '-',
             'address'     => $address->full_address ?? 'Belum ada alamat',
             'city'        => $address->city ?? '-',
@@ -63,7 +62,7 @@ class CheckoutController extends Controller
 
         $main_payment_methods = PaymentMethod::all();
         $e_wallet_options     = EwalletTransferDetail::all();
-        $bank_options         = BankTransferDetail::all();
+        $bank_options         = BankTransferDetail::all(); 
 
         return view('checkout.checkout', compact(
             'cart_items',
@@ -116,6 +115,7 @@ class CheckoutController extends Controller
     public function updateAddress(Request $request, $id)
     {
         $address = UserAddress::findOrFail($id);
+        
         $address->update($request->all());
 
         return redirect()->back()->with('success', 'Alamat berhasil diperbarui!');
@@ -124,6 +124,7 @@ class CheckoutController extends Controller
     public function deleteAddress($id)
     {
         $address = UserAddress::findOrFail($id);
+        
         $address->delete();
 
         return redirect()->back()->with('success', 'Alamat berhasil dihapus!');
