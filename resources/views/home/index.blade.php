@@ -175,27 +175,29 @@
     }
 
     function addToCart(idProduk) {
-        fetch('add_to_cart.php', {
+        fetch(`/cart/add/${idProduk}`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
             },
-            body: 'id_produk=' + idProduk
+            body: JSON.stringify({})
         })
-        .then(response => response.json())
+        .then(response => response.json()) 
         .then(data => {
-            alert(data.message);
-            // Opsional: perbarui tampilan jumlah item di keranjang (misal di ikon keranjang navbar)
-            // if (data.cart_item_count) {
-            //     updateCartIcon(data.cart_item_count);
-            // }
+            if(data.status === 'error') {
+                alert(data.message); 
+            } else {
+                alert(data.message || 'Berhasil ditambahkan!');
+            }
         })
-        .catch(err => {
-            console.error('Error:', err);
-            alert('Terjadi kesalahan saat menambahkan ke keranjang.');
+        .catch(error => {
+            console.error("Detail Error:", error);
+            alert("Gagal koneksi. Cek Console (F12) untuk detail.");
         });
     }
-    
+
+
 </script>
 
 @endsection

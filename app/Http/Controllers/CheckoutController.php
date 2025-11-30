@@ -14,7 +14,6 @@ class CheckoutController extends Controller
 {
     public function index()
     {
-        $userId = 1;
         
         $user = User::where('user_id', $userId)->first(); 
         
