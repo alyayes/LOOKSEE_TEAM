@@ -90,28 +90,29 @@
             const modalContent = document.getElementById('modalOrderDetailsContent');
             const modalOrderIdSpan = document.getElementById('modalOrderId');
 
-            if (!modal || !modalContent || !modalOrderIdSpan) return; // Exit if elements not found
+            if (!modal || !modalContent || !modalOrderIdSpan) return;
 
-            modalOrderIdSpan.textContent = #${orderId};
+            modalOrderIdSpan.textContent = `#${orderId}`;
             modalContent.innerHTML = '<p style="text-align: center; color: var(--text-light);">Loading...</p>';
-            modal.style.display = 'flex'; // Tampilkan modal dengan loading
+            modal.style.display = 'flex';
 
-            // Buat URL Ajax ke route Laravel
-            const url = {{ route('orders.details.ajax', ['order_id' => ':id']) }}.replace(':id', orderId);
+            const url = "{{ route('orders.details.ajax', ['order_id' => ':id']) }}".replace(':id', orderId);
 
             fetch(url)
                 .then(response => {
                     if (!response.ok) {
-                        return response.text().then(text => { throw new Error(text || Network response was not ok (${response.status})); });
+                        return response.text().then(text => {
+                            throw new Error(text || `Network response was not ok (${response.status})`);
+                        });
                     }
-                    return response.text(); // Ambil HTML dari response
+                    return response.text();
                 })
                 .then(html => {
-                    modalContent.innerHTML = html; // Masukkan HTML ke dalam modal
+                    modalContent.innerHTML = html;
                 })
                 .catch(error => {
                     console.error('Error fetching order details:', error);
-                    modalContent.innerHTML = <p style="color: red; text-align: center;">Failed to load order details. ${error.message}</p>;
+                    modalContent.innerHTML = `<p style="color: red; text-align: center;">Failed to load order details. ${error.message}</p>`;
                 });
         }
 
@@ -120,12 +121,10 @@
             if (modal) modal.style.display = 'none';
         }
 
-        // Tutup modal jika klik di luar
         window.addEventListener('click', function(event) {
             const modal = document.getElementById('orderDetailsModal');
-            if (event.target === modal) {
-                closeOrderDetailsModal();
-            }
+            if (event.target === modal) closeOrderDetailsModal();
         });
     </script>
+
 @endsection

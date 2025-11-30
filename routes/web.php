@@ -86,7 +86,7 @@ Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.in
 Route::post('/checkout', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
 Route::post('/checkout/save-address', [CheckoutController::class, 'saveTemporaryAddress'])->name('checkout.saveAddress');
 Route::get('/payment/details', [PaymentController::class, 'showPaymentDetails'])->name('payment.details');
-Route::get('/my-orders', [OrderController::class, 'listOrders'])->name('orders.list');
+Route::get('/my-orders', [OrderController::class, 'list'])->name('orders.list');
 Route::get('/orders/details/{order_id}', [OrderController::class, 'getOrderDetailsAjax'])->name('orders.details.ajax');
 
 Route::post('/checkout/address/add', [CheckoutController::class, 'addAddress'])
