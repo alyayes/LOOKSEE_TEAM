@@ -1,9 +1,8 @@
 @extends('layouts.main') 
 @section('title', 'LOOKSEE')
 
-{{-- Asumsi Anda memuat CSS di layout atau di sini --}}
 @section('head_scripts')
-    <link rel="stylesheet" href="{{ asset('assets/css/home.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/home.css') }}">
 @endsection
 
 @section('content')
@@ -24,97 +23,96 @@
     <div class="main-about-us">
         <h2>Why <Span>Choose Us?</Span></h2>     
         <p><d>LOOKSEE</d> is an innovative fashion platform that provides outfit recommendations for campus activities. 
-            We offer a personalization feature that allows users to customize their outfit concepts according to their mood. ... <a href="aboutLaPe.php"><i>Learn More</i></a>
-        </p> <br>
-        <div class="about-icon">
-            <h>
-                <i class='bx bx-wink-smile'> Full Personalization</i>
-                <p>The recommended outfit truly matches each user's mood, providing freedom of expression and a unique appearance.</p>
-                <br>
-                <i class='bx bx-trending-up'> Current Trends</i>
-                <p>Always stay updated with the latest fashion trends and provide outfit recommendations that make you feel confident on campus.</p>
-                <br>
-                <i class='bx bx-wallet'> Quality Assurance and Budget-Friendly</i>
-                <p>All product recommendations are from trusted brands with high quality, and they fit various budgets suitable for students.</p>
-            </h>
-        </div>
+            We offer a personalization feature that allows users to customize their outfit concepts according to their mood. ... 
+            <a href="aboutLaPe.php"><i>Learn More</i></a>
+        </p>
+        <br>
     </div>
 </section>
 
+
+{{-- ========================  PRODUK WANITA  ======================== --}}
 <section class="recommend-product" id="latest-product">
     <div class="text">
         <h2>Latest <span>Products</span></h2>
         <h3>Woman</h3>
     </div> 
+
     <div class="product-grid">
         @forelse($productsWoman as $row)
         <div class="product-card">
             <div class="product-image">
-                <img src="{{ asset('storage/uploads/' . $row['gambar_produk']) }}" alt="{{ $row['nama_produk'] }}">
+                <img src="{{ asset('storage/uploads/' . $row['gambar_produk']) }}" 
+                     alt="{{ $row['nama_produk'] }}">
             </div>
+
             <div class="product-details">
                 <h4>{{ $row['nama_produk'] }}</h4>
                 <p>Rp. {{ number_format($row['harga'], 0, ',', '.') }}</p>
+
                 <div class="actions">
-                    <button class="btn favorite-btn" onclick="addToFavorites({{ $row['id_produk'] }})">Add to Favorite</button>
-                    <button class="btn buy-now-btn" onclick="addToCart({{ $row['id_produk'] }})">Add to Cart</button>
+                    <button class="btn favorite-btn" 
+                            onclick="addToFavorites({{ $row['id_produk'] }})">
+                        Add to Favorite
+                    </button>
+
+                    <button class="btn buy-now-btn" 
+                            onclick="addToCart({{ $row['id_produk'] }})">
+                        Add to Cart
+                    </button>
                 </div>
             </div>
         </div>
         @empty
             <p>Tidak ada produk wanita saat ini.</p>
         @endforelse
-    </div><br>
-    
-    <div class="page-btn">
-        @for ($i = 1; $i <= $totalPagesWoman; $i++)
-            <span class="@if($i == $pageWoman) active @endif" onclick="goToPage('page_woman', {{ $i }})"> {{ $i }} </span>
-        @endfor
-        @if ($pageWoman < $totalPagesWoman)
-            <span onclick="goToPage('page_woman', {{ $pageWoman + 1 }})">&#8594;</span>
-        @endif
     </div>
 </section>
 
+
+{{-- ========================  PRODUK PRIA  ======================== --}}
 <section class="recommend-product" id="recommend">
     <div class="text">
         <h3>Man</h3>
     </div>
+
     <div class="product-grid">
         @forelse($productsMan as $row)
         <div class="product-card">
             <div class="product-image">
-                <img src="{{ asset('storage/uploads/' . $row['gambar_produk']) }}" alt="{{ $row['nama_produk'] }}">
+                <img src="{{ asset('storage/uploads/' . $row['gambar_produk']) }}" 
+                     alt="{{ $row['nama_produk'] }}">
             </div>
+
             <div class="product-details">
                 <h4>{{ $row['nama_produk'] }}</h4>
                 <p>Rp. {{ number_format($row['harga'], 0, ',', '.') }}</p>
+
                 <div class="actions">
-                    <button class="btn favorite-btn" onclick="addToFavorites({{ $row['id_produk'] }})">Add to Favorite</button>
-                    <button class="btn buy-now-btn" onclick="addToCart({{ $row['id_produk'] }})">Add to Cart</button>
+                    <button class="btn favorite-btn" 
+                            onclick="addToFavorites({{ $row['id_produk'] }})">
+                        Add to Favorite
+                    </button>
+
+                    <button class="btn buy-now-btn" 
+                            onclick="addToCart({{ $row['id_produk'] }})">
+                        Add to Cart
+                    </button>
                 </div>
             </div>
         </div>
         @empty
             <p>Tidak ada produk pria saat ini.</p>
         @endforelse
-    </div><br>
-    
-    <div class="page-btn">
-        @for ($i = 1; $i <= $totalPagesMan; $i++)
-            <span class="@if($i == $pageMan) active @endif" onclick="goToPage('page_man', {{ $i }})"> {{ $i }} </span>
-        @endfor
-        @if ($pageMan < $totalPagesMan)
-            <span onclick="goToPage('page_man', {{ $pageMan + 1 }})">&#8594;</span>
-        @endif
     </div>
 </section>
 
-@include('home.mood') 
 
+@include('home.mood')
+
+
+{{-- ========================  PARTNERSHIP  ======================== --}}
 <div class="partner-platform-wrapper">
-    
-    {{-- GROUP 1: PARTNER --}}
     <div class="partner-group">
         <h3 class="partner-title">Our Partner</h3>
         <div class="partner-logos">
@@ -124,7 +122,6 @@
         </div>
     </div>
 
-    {{-- GROUP 2: PLATFORM --}}
     <div class="platform-group">
         <h3 class="platform-title">Our Platform</h3>
         <div class="platform-logos">
@@ -138,65 +135,56 @@
     </div>
 </div>
 
-@section('footer_scripts')
-<script>
-    // Fungsi untuk navigasi pagination Home
-    function goToPage(param, value) {
-        const url = new URL(window.location.href);
-        url.searchParams.set(param, value);
-        
-        // Hapus parameter pagination kategori lain jika ada
-        if (param === 'page_woman') {
-            url.searchParams.delete('page_man');
-        } else if (param === 'page_man') {
-            url.searchParams.delete('page_woman');
-        }
-        
-        url.hash = '';
-        window.location.href = url.toString();
-    }
-    
-    function addToFavorites(idProduk) {
-        fetch('add_to_favorite.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'id_produk=' + idProduk
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message);
-        })
-        .catch(err => {
-            console.error('Error:', err);
-            alert('Terjadi kesalahan.');
-        });
-    }
-
-    function addToCart(idProduk) {
-        fetch('add_to_cart.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'id_produk=' + idProduk
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message);
-            // Opsional: perbarui tampilan jumlah item di keranjang (misal di ikon keranjang navbar)
-            // if (data.cart_item_count) {
-            //     updateCartIcon(data.cart_item_count);
-            // }
-        })
-        .catch(err => {
-            console.error('Error:', err);
-            alert('Terjadi kesalahan saat menambahkan ke keranjang.');
-        });
-    }
-    
-</script>
 
 @endsection
+
+
+{{-- ========================  JAVASCRIPT FAVORITE & CART  ======================== --}}
+@section('footer_scripts')
+<script>
+
+function addToFavorites(idProduk) {
+    fetch("{{ route('products.addToFavorite') }}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": "{{ csrf_token() }}"
+        },
+        body: JSON.stringify({
+            id_produk: idProduk
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message);
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Terjadi kesalahan saat menambah favorite.");
+    });
+}
+
+
+function addToCart(idProduk) {
+    fetch("{{ route('products.addToCart') }}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": "{{ csrf_token() }}"
+        },
+        body: JSON.stringify({
+            id_produk: idProduk
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message);
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Terjadi kesalahan saat menambah ke keranjang.");
+    });
+}
+
+</script>
 @endsection
