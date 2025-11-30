@@ -2,17 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\StyleJournal;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Carbon\Carbon;
 
 class StyleJournalController extends Controller
 {
     private function format_tanggal($date_string) {
         if (empty($date_string)) return '';
-        $timestamp = strtotime($date_string);
+        
+        $carbonDate = Carbon::parse($date_string);
+
         $bulan_indonesia = [
-            1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-            'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+            1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei',
+            'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
         ];
         return date('d', $timestamp) . ' ' . $bulan_indonesia[(int)date('m', $timestamp)] . ' ' . date('Y', $timestamp);
     }
@@ -181,32 +185,28 @@ class StyleJournalController extends Controller
                 'image' => 'journal1.jpeg'
             ]
         ];
+        
+        return $carbonDate->format('d') . ' ' . $bulan_indonesia[(int)$carbonDate->format('m')] . ' ' . $carbonDate->format('Y');
     }
 
     public function index()
     {
-        $articles_data = $this->getArticlesDummyData();
+        $journals = StyleJournal::orderBy('publication_date', 'desc')->paginate(6);
+        
+        $journals->getCollection()->transform(function ($journal) {
+            $journal->formatted_date = $this->format_tanggal($journal->publication_date);
+            return $journal;
+        });
 
-        $articles_data = collect($articles_data)->sortByDesc('id_journal')->values()->all();
-        $articles_per_page = 6;
-        $total_articles = count($articles_data);
-        $total_pages = ceil($total_articles / $articles_per_page);
-        return view('stylejournal.index', compact('articles_data', 'articles_per_page', 'total_pages'));
+        return view('stylejournal.index', compact('journals'));
     }
     
-    // Menampilkan detail artikel 
     public function show($id)
     {
-        $articles_data = $this->getArticlesDummyData();
-        $article = collect($articles_data)->firstWhere('id_journal', (int)$id);
+        $journal = StyleJournal::findOrFail($id);
 
-        if (!$article) {
-            // Jika artikel tidak ditemukan
-            abort(404);
-        }
+        $journal->formatted_date = $this->format_tanggal($journal->publication_date);
 
-        $article['formatted_date'] = $this->format_tanggal($article['publication_date']);
-
-        return view('stylejournal.show', compact('article'));
+        return view('stylejournal.show', compact('journal'));
     }
 }
