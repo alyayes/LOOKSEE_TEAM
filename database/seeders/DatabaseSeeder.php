@@ -23,11 +23,11 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
-    UserAddressSeeder::class,
-    OrderSeeder::class,
-    OrderItemsSeeder::class,
-    OrderPaymentsSeeder::class,
-]);
+            UserAddressSeeder::class,
+            OrderSeeder::class,
+            OrderItemsSeeder::class,
+            OrderPaymentsSeeder::class,
+        ]);
 
     }
 }

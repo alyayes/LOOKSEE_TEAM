@@ -25,7 +25,7 @@ class User extends Authenticatable
     'bio',
     'birthday',
     'country',
-    'alamat',      // ➜ WAJIB TAMBAH
+    'alamat', 
     'phone',
     'twitter',
     'facebook',
