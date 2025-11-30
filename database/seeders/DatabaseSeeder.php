@@ -14,7 +14,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             ProdukSeeder::class,
+<<<<<<< Updated upstream
             AdminSeeder::class,
+=======
+>>>>>>> Stashed changes
         ]);
     }
 }
