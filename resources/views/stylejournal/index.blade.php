@@ -6,21 +6,6 @@
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}"> 
 @endsection
 
-@section('styles')
-<style>
-    /* HATI-HATI: Aturan ini harus dipindahkan ke style.css setelah berhasil! */
-    nav[role="navigation"] svg {
-        width: 24px !important; 
-        height: 24px !important;
-        color: #1F2937 !important; 
-        fill: currentColor !important;
-    }
-    nav[role="navigation"] a {
-        font-size: 1rem !important;
-    }
-</style>
-@endsection
-
 @section('content')
     <div class="offer">
         <div class="small-container">
