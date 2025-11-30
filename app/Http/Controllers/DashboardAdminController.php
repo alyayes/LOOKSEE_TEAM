@@ -68,7 +68,7 @@ class DashboardAdminController extends Controller
             'latest_orders' => $latest_orders,
         ]);
 
-        return view('dashboardAdmin.dashboardAdmin', $data);
+        return view('admin.dashboardAdmin.dashboardAdmin', $data);
     }
 
     

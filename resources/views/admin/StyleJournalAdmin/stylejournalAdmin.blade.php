@@ -65,7 +65,6 @@
 @section('content')
 <div class="propic">
     <div class="content-area">
-        {{-- Notifikasi (Jika ada pesan success atau error dari Controller) --}}
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
@@ -74,7 +73,6 @@
         @endif
 
         <section style="margin-top: 0;">
-            {{-- Button Add Journal menggunakan route() Laravel --}}
             <button type="button" class="btn btn-primary" onclick="window.location.href='{{ route('stylejournalAdmin.create') }}';">
                 <i class='bx bx-plus'></i> Add Journal
             </button>
@@ -96,24 +94,22 @@
                 @forelse ($journals as $journal)
                     <tr>
                         <td>
-                            {{-- MENGGUNANAKAN VARIABEL $uploadWebDir DARI CONTROLLER --}}
-                            <img src="{{ asset('storage/uploads/admin/stylejournal/' . $journal['image']) }}" 
+                            <img src="{{ asset('assets/images/journal/' . $journal['image']) }}" 
                                 width="60" 
                                 height="60" 
                                 alt="Gambar Journal">
                         </td>
                         <td>{{ $journal['title'] }}</td>
                         <td>{{ $journal['descr'] }}</td>
-                        {{-- Ganti Str::limit dengan fungsi jika Anda tidak menggunakan facade Str --}}
                         <td>{{ Illuminate\Support\Str::limit($journal['content'] ?? '', 150) }}</td>
-                        <td>{{ $journal['publication_date'] }}</td>
+                        
+                        <td>{{ date('Y-m-d', strtotime($journal['publication_date'])) }}</td>
+                        
                         <td>
-                            {{-- Link Edit menggunakan route() dan ID --}}
                             <a href="{{ route('stylejournalAdmin.edit', $journal['id_journal']) }}" class="btn btn-success btn-action" title="Edit">
                                 <i class='bx bx-edit'></i>
                             </a>
 
-                            {{-- Form Delete menggunakan metode POST dan @method('DELETE') --}}
                             <form action="{{ route('stylejournalAdmin.destroy', $journal['id_journal']) }}" method="POST" style="display:inline-block;">
                                 @csrf
                                 @method('DELETE')
@@ -130,7 +126,7 @@
                 @endforelse
             </tbody>
         </table>
-    </div> {{-- Penutup .content-area --}}
+    </div>
 
     <script>
         function myFunction() {

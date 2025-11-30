@@ -49,12 +49,18 @@ Route::get('/logout', function() {
     return redirect()->route('login')->with('info', 'Anda telah berhasil logout.');
 })->name('logout');
 
-// style journal
-Route::get('/style-journal', [StyleJournalController::class, 'index'])->name('journal.index');
-// style journal read more
-Route::get('/style-journal/{id}', [StyleJournalController::class, 'show'])->name('journal.show');
+// --- Style Journal (USER ROUTES) ---
 
-//d
+// Rute Index (Daftar Jurnal)
+Route::get('/style-journal', [StyleJournalController::class, 'index'])->name('journal.index');
+
+// Rute CRUD 
+Route::get('/style-journal/create', [StyleJournalController::class, 'create'])->name('journal.create');
+Route::post('/style-journal', [StyleJournalController::class, 'store'])->name('journal.store');
+Route::get('/style-journal/{style_journal}', [StyleJournalController::class, 'show'])->name('journal.show');
+Route::get('/style-journal/{style_journal}/edit', [StyleJournalController::class, 'edit'])->name('journal.edit');
+Route::put('/style-journal/{style_journal}', [StyleJournalController::class, 'update'])->name('journal.update');
+Route::delete('/style-journal/{style_journal}', [StyleJournalController::class, 'destroy'])->name('journal.destroy');
 
 // --- HALAMAN UTAMA & STATIS ---
 Route::get('/', function () {
@@ -161,11 +167,12 @@ Route::post('/logout', function () {
 })->name('logout');
 // Tambahkan di routes/web.php
 Route::delete('/products/{id}', [ProductsAdminController::class, 'destroy'])->name('products.destroy');
+
+// STYLE JOURNAL ADMIN
 Route::resource('stylejournalAdmin', StyleJournalAdminController::class);
 
-
-Route::resource('stylejournalAdmin', StyleJournalAdminController::class)->names([
-    'index' => 'stylejournalAdmin.stylejournalAdmin',
+Route::resource('stylejournal', StyleJournalAdminController::class)->names([
+    'index' => 'stylejournalAdmin.index',
     'create' => 'stylejournalAdmin.create',
     'store' => 'stylejournalAdmin.store',
     'show' => 'stylejournalAdmin.show',

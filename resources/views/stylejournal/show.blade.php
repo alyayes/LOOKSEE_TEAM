@@ -1,6 +1,6 @@
 @extends('layouts.main', ['hideHeader' => true, 'hideFooter' => true])
 
-    @section('title', $article['title'] . ' | LOOKSEE Journal')
+    @section('title', $journal->title . ' | LOOKSEE Journal')
 
     @section('head_scripts')
         <link rel="stylesheet" href="{{ asset('assets/css/show.css') }}">
@@ -12,7 +12,7 @@
     @endsection
 
     @section('content')
-            
+                
         <header class="bg-white border-b shadow-sm sticky top-0 z-10">
             <nav class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
                 <a href="{{ route('journal.index') }}" class="text-2xl text-gray-700 hover:text-black" aria-label="Kembali">
@@ -30,39 +30,32 @@
             
             <main class="bg-white p-6 md:p-10 rounded-xl shadow-lg">
                 <article>
-                    {{-- Title Artikel --}}
                     <h2 class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
-                        {{ $article['title'] }}
+                        {{ $journal->title }}
                     </h2>
                     
-                    {{-- Tanggal Publikasi --}}
-                    @if (isset($article['formatted_date']))
+                    @if (isset($journal->formatted_date))
                     <div class="mt-4 text-sm text-gray-500">
-                        {{-- formatted_date dibuat di Controller --}}
-                        <span>Publikasi: {{ $article['formatted_date'] }}</span>
+                        <span>Publikasi: {{ $journal->formatted_date }}</span>
                     </div>
                     @endif
 
-                    {{-- Gambar Artikel --}}
                     <figure class="my-8">
-                        <img src="{{ asset('storage/uploads/' . $article['image']) }}" 
-                            alt="{{ $article['title'] }}" 
+                        <img src="{{ asset('assets/images/journal/' . $journal->image) }}" 
+                            alt="{{ $journal->title }}" 
                             class="article-image w-full h-auto object-cover rounded-lg shadow-md">
                     </figure>
 
-                    {{-- Deskripsi Singkat --}}
                     <div class="bg-pink-50 text-pink-800 p-4 rounded-lg my-8 text-center">
-                        <p>{{ $article['descr'] }}</p>
+                        <p>{{ $journal->descr }}</p>
                     </div>
 
-                    {{-- Konten Utama --}}
                     <div class="prose-fallback text-gray-700 leading-relaxed space-y-4"> 
-                        {!! nl2br(e($article['content'])) !!}
+                        {!! nl2br(e($journal->content)) !!}
                     </div>
                     
                 </article>
 
-                {{-- Reaksi Pengguna --}}
                 <section class="mt-12 p-6 border-2 border-pink-200 rounded-xl text-center">
                     <h4 class="font-semibold text-gray-800">How did this article make you feel?</h4>
                     <div class="flex justify-center space-x-8 md:space-x-12 mt-4">
