@@ -191,8 +191,10 @@
                             </div>
                         </td>
                         {{-- Menggunakan Laravel Route Helper untuk URL --}}
-                        <td><a href="{{ route('admin.order.detail', ['order_id' => $row['order_id']]) }}"><i
-                                    class='bx bx-show-alt'></i></a></td>
+                        <td><a href="{{ route('admin.order.detail', $row->order_id ?? $row->id) }}">
+                                <i class='bx bx-show-alt'></i>
+                            </a>
+                        </td>
                     </tr>
                 @empty
                     <tr>

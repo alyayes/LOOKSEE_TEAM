@@ -3,12 +3,13 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\UserAddress;
 
 class UserAddressSeeder extends Seeder
 {
     public function run(): void
     {
+<<<<<<< HEAD
         $addresses = [
             [
                 'id' => 1,
@@ -26,5 +27,10 @@ class UserAddressSeeder extends Seeder
         ];
 
         DB::table('user_address')->insert($addresses);
+=======
+
+       UserAdress::factory()->count(10)->create();
+>>>>>>> ac45bf6855e45eb26551de48b5ab39479d467c31
     }
 }
+

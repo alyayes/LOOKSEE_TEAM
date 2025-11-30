@@ -8,68 +8,37 @@ class DashboardAdminController extends Controller
 {
 
     public function index()
-    {
-        $data_cards = [
-            'user_count' => 11,               
-            'product_count' => 53,            
-            'order_count' => 42,              
-            'total_sales' => 15015500.00,     
-        ];
+{
+    // Hitung data card
+    $data_cards = [
+        'user_count' => User::count(),
+        'product_count' => Product::count(),
+        'order_count' => Order::count(),
+        'total_sales' => Order::sum('total_price'),
+    ];
 
-        $latest_orders = [
-            [
-                "order_id" => 48,
-                "order_date" => "2025-06-16 12:57:24",
-                "total_price" => 347000.00,
-                "metode_pembayaran" => "Bank Transfer",
-                "status" => "pending", 
-                "username" => "whoolyy",
-                "nama_produk_list" => "Shenning Knit<br>Executive Sleeve Stripes"
-            ],
-            [
-                "order_id" => 44,
-                "order_date" => "2025-06-11 15:59:19",
-                "total_price" => 202000.00,
-                "metode_pembayaran" => "Bank Transfer",
-                "status" => "completed", 
-                "username" => "luuccy_",
-                "nama_produk_list" => "Basic Top<br>Shenning Knit"
-            ],
-            [
-                "order_id" => 43,
-                "order_date" => "2025-06-11 13:58:34",
-                "total_price" => 360000.00,
-                "metode_pembayaran" => "Bank Transfer",
-                "status" => "completed", 
-                "username" => "veliya",
-                "nama_produk_list" => "Denim Overshirt"
-            ],
-            [
-                "order_id" => 42,
-                "order_date" => "2025-06-10 15:22:32",
-                "total_price" => 232500.00,
-                "metode_pembayaran" => "Bank Transfer",
-                "status" => "pending", 
-                "username" => "dior",
-                "nama_produk_list" => "Red Shirt<br>Sheen Pashmina Silk<br>Ribonnie"
-            ],
-            [
-                "order_id" => 32,
-                "order_date" => "2025-06-10 09:13:05",
-                "total_price" => 1799500.00,
-                "metode_pembayaran" => "Bank Transfer",
-                "status" => "prepared", 
-                "username" => "carlotee_",
-                "nama_produk_list" => "Grizzly Rompi<br>Sheen Pashmina Silk<br>Sepatu Nike<br>Jeans Boyfriend<br>Cargo Loose Jeans<br>Hyunbin Kaos Polos<br>Ladiesbag<br>Executive Sleeve Stripes<br>Loose Pants<br>Gia Jeans Highwaist"
-            ],
-        ];
+    // Ambil latest orders (misal 5 order terbaru) beserta relasi user dan produk
+    $latest_orders = Order::with('user', 'products')
+        ->orderBy('created_at', 'desc')
+        ->take(5)
+        ->get()
+        ->map(function ($order) {
+            return [
+                'order_id' => $order->id,
+                'order_date' => $order->created_at->format('Y-m-d H:i:s'),
+                'total_price' => $order->total_price,
+                'metode_pembayaran' => $order->payment_method,
+                'status' => $order->status,
+                'username' => $order->user->username ?? '-',
+                'nama_produk_list' => $order->products->map(fn($p) => $p->name)->implode('<br>'),
+            ];
+        });
 
-        $data = array_merge($data_cards, [
-            'latest_orders' => $latest_orders,
-        ]);
+    $data = array_merge($data_cards, ['latest_orders' => $latest_orders]);
 
-        return view('dashboardAdmin.dashboardAdmin', $data);
-    }
+    return view('admin.dashboardAdmin.dashboardAdmin', $data);
+}
+
 
     
     public function updateOrderStatus(Request $request)

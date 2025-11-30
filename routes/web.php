@@ -27,6 +27,10 @@ Route::get('/register', [AuthController::class, 'showRegister'])->name('register
 // register POST
 Route::post('/register', [AuthController::class, 'register']);
 
+Route::get('/check-auth', function() {
+    dd(Auth::id());
+});
+
 // Home
 // 1. HOME PAGE 
 Route::get('/home', [HomeController::class, 'index'])->name('homepage');
@@ -178,20 +182,13 @@ Route::resource('stylejournalAdmin', StyleJournalAdminController::class)->names(
 ]);
 Route::get('/dashboard', [DashboardAdminController::class, 'index'])->name('dashboard.dashboardAdmin');
 
-// Route untuk mengupdate status order 
-Route::post('/orders/update-status', [DashboardAdminController::class, 'updateOrderStatus'])->name('orders.update_status');
+Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::get('/orders', [OrdersAdminController::class, 'index'])->name('admin.orders.index');
+    Route::get('/orders/{order_id}', [OrdersAdminController::class, 'detail'])->name('admin.order.detail');
+    Route::post('/orders/update-status', [OrderController::class, 'updateStatus'])
+        ->name('orders.update_status');
+});
 
-// Mengubah pemanggilan controller ke AnalyticsAdminController
-Route::get('/analytics', [AnalyticsAdminController::class, 'index'])->name('admin.analytics.analyticsAdmin');
-// Grouping route admin
-// Route untuk menampilkan daftar order
-Route::get('/orders', [OrdersAdminController::class, 'index'])->name('orders.ordersAdmin');
-
-// Route untuk update status
-Route::post('/orders/update-status', [DashboardAdminController::class, 'updateOrderStatus'])->name('orders.update_status');
-
-Route::get('/admin/orders/{order_id}', [OrdersAdminController::class, 'show'])
-    ->name('admin.order.detail');
 
 Route::get('/users-admin', [UsersAdminController::class, 'index'])->name('users-admin.usersAdmin');
 Route::get('/toAdmin', [TodaysOutfitAdminController::class, 'index'])->name('toAdmin.toAdmin');

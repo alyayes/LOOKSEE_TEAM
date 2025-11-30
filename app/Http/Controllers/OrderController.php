@@ -50,4 +50,23 @@ class OrderController extends Controller
 
         return view('orders.list', compact('orders', 'order_counts', 'status_filter'));
     }
+
+    public function updateStatus(Request $request)
+    {
+        $request->validate([
+            'order_id' => 'required|integer|exists:orders,id',
+            'status' => 'required|string|in:pending,prepared,shipped,completed',
+        ]);
+
+        // Cari order dan update status
+        $order = Order::find($request->order_id);
+        $order->status = $request->status;
+        $order->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status order berhasil diperbarui!'
+        ]);
+    }
+
 }
