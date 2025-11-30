@@ -84,4 +84,32 @@ class CartController extends Controller
     {
         return redirect()->route('cart');
     }
+
+    public function addToCart($id_produk)
+    {
+        $userId = auth()->id();
+
+        $existingCart = DB::table('cart')
+            ->where('user_id', $userId)
+            ->where('id_produk', $id_produk)
+            ->first();
+
+        if ($existingCart) {
+            DB::table('cart')
+                ->where('id', $existingCart->id)
+                ->increment('quantity', 1);
+        } else {
+            DB::table('cart')->insert([
+                'user_id'   => $userId,
+                'id_produk' => $id_produk,
+                'quantity'  => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Produk berhasil ditambahkan ke keranjang!'
+        ]);
+    }
 }
