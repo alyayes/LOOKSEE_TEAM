@@ -1,715 +1,759 @@
-/* Variabel Warna Konsisten (dari cart.css) */
 :root {
-    --primary-pink: rgb(250, 156, 211); /* Pink utama */
-    --primary-pink-hover: rgb(248, 99, 186); /* Pink saat hover */
-    --text-dark: #333;
-    --text-medium: #555;
-    --text-light: #777;
-    --bg-light: #f4f4f4; /* Background halaman */
-    --bg-white: #ffffff; /* Background card */
-    --border-light: #eee;
-    --border-medium: #ddd;
-    --success-green: #28a745; /* Untuk tombol Place Order */
-    --success-green-hover: #218838;
-}
-
-/* General Styling */
-.contain {
-    background-color: #f8f8f8; /* Warna abu muda agar card lebih menonjol */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    margin-bottom: 20px;
-}
-.checkout-container {
-    background-color: var(--bg-white);
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    padding: 30px;
-    width: 100%;
-    max-width: 1200px; /* Diperluas untuk layout desktop */
-    box-sizing: border-box;
-    margin-top: 20px;
-}
-
-.checkout-page-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 25px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid var(--border-light);
-}
-
-.checkout-page-header .back-arrow {
-    font-size: 1.8em;
-    color: var(--text-medium);
-    margin-right: 15px;
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-.checkout-page-header .back-arrow:hover {
-    color: var(--primary-pink);
-}
-
-.checkout-page-header h2 {
-    margin: 0;
-    font-size: 2em;
-    font-weight: 700;
-    color: var(--text-dark);
-}
-
-/* --- Layout Utama Desktop (Grid) --- */
-@media (min-width: 769px) { /* Terapkan grid untuk layar tablet ke atas */
-    .checkout-main-content {
-        display: grid;
-        grid-template-columns: 2fr 1fr; /* Kolom kiri (alamat, produk) lebih lebar, kolom kanan (shipping, payment) lebih kecil */
-        gap: 30px; /* Jarak antar kolom */
-        margin-bottom: 30px;
-    }
-
-    .left-column {
-        display: flex;
-        flex-direction: column;
-        gap: 25px; /* Jarak antar section-card di kolom kiri */
-    }
-
-    .right-column {
-        display: flex;
-        flex-direction: column;
-        gap: 25px; /* Jarak antar section-card di kolom kanan */
-    }
-
-    /* Penyesuaian tombol edit address untuk posisi absolut di desktop */
-    /* .delivery-address-section sudah ada di bawah, pindahkan saja @media block */
-}
-/* --- Akhir Layout Utama Desktop --- */
-
-
-.section-card {
-    background-color: var(--bg-white);
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.section-card h3 {
-    color: var(--text-dark);
-    font-size: 1.4em;
-    margin-top: 0;
-    margin-bottom: 15px;
-    border-bottom: 1px solid var(--border-light);
-    padding-bottom: 10px;
-}
-
-/* Delivery Address Section */
-.delivery-address-section {
-    position: relative; /* <--- PERBAIKAN PENTING DI SINI */
-}
-
-.address-details p {
-    margin: 5px 0;
-    color: var(--text-medium);
-    font-size: 1em;
-}
-
-.address-details strong {
-    color: var(--text-dark);
-}
-
-.edit-address-btn {
-    background-color: var(--primary-pink); /* Menggunakan variabel pink yang konsisten */
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 15px;
-    font-size: 0.9em;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    /* Ini akan diposisikan relatif terhadap .delivery-address-section karena memiliki position: relative */
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: auto; /* Pastikan tidak full width */
-    text-align: initial;
-}
-
-.edit-address-btn:hover {
-    background-color: var(--primary-pink-hover); /* Warna pink saat hover */
-}
-
-
-/* Product Summary Section */
-.product-header-checkout {
-    display: grid; /* Menggunakan grid untuk header */
-    grid-template-columns: 2fr 1fr 0.8fr 1fr; /* Sesuaikan lebar kolom */
-    align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--border-medium);
-    font-weight: 600;
-    color: var(--text-medium);
-    font-size: 0.9em;
-}
-
-.col-product {
-    text-align: left;
-}
-
-.col-unit-price,
-.col-quantity,
-.col-total-price {
-    text-align: center;
-}
-
-.col-total-price {
-    text-align: right;
-}
-
-.product-list-checkout {
-    border: 1px solid var(--border-light);
-    border-radius: 8px;
-    overflow: hidden;
-    margin-top: 15px;
-}
-
-.product-item-checkout {
-    display: grid; /* Menggunakan grid untuk item */
-    grid-template-columns: 2fr 1fr 0.8fr 1fr; /* Sesuaikan lebar kolom */
-    align-items: center;
-    padding: 15px 20px; /* Tambahkan padding horizontal */
-    border-bottom: 1px dashed var(--border-light);
-}
-
-.product-item-checkout:last-child {
-    border-bottom: none;
-}
-
-.product-thumb-checkout {
-    width: 60px;
-    height: 60px;
-    border-radius: 8px;
-    object-fit: cover;
-    margin-right: 10px;
-    border: 1px solid var(--border-light);
-}
-
-.product-item-checkout .col-product {
-    display: flex;
-    align-items: center;
-    font-weight: 500;
-    color: var(--text-dark);
-}
-
-.product-item-checkout .col-unit-price,
-.product-item-checkout .col-quantity,
-.product-item-checkout .col-total-price {
-    text-align: center;
-    font-weight: 500;
-    color: var(--text-dark);
-}
-
-.product-item-checkout .col-total-price {
-    text-align: right;
-    font-weight: 600;
-    color: var(--primary-pink);
-}
-
-/* Shipping Method Section */
-.shipping-option {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-    border: 1px solid var(--border-medium);
-    border-radius: 8px;
-    padding: 15px;
-    background-color: var(--bg-white);
-}
-
-.shipping-option input[type="radio"] {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    width: 18px;
-    height: 18px;
-    border: 2px solid var(--primary-pink);
-    border-radius: 50%;
-    outline: none;
-    cursor: pointer;
-    position: relative;
-    top: 2px;
-}
-
-.shipping-option input[type="radio"]:checked {
-    background-color: var(--primary-pink);
-    border-color: var(--primary-pink);
-}
-
-.shipping-option input[type="radio"]:checked::after {
-    content: '';
-    width: 8px;
-    height: 8px;
-    background-color: white;
-    border-radius: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.shipping-option label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 600;
-    color: var(--text-dark);
-    cursor: pointer;
-}
-
-.shipping-option label .bx {
-    font-size: 1.3em;
-    color: var(--primary-pink);
-}
-
-.shipping-option .shipping-cost {
-    margin-left: auto;
-    font-weight: 700;
-    color: var(--primary-pink);
-    font-size: 1.1em;
-}
-
-.shipping-estimate {
-    flex-basis: 100%;
-    font-size: 0.9em;
-    color: var(--text-light);
-    margin-left: 28px;
-    margin-top: -5px;
-}
-
-/* Payment Method Section */
-.payment-options {
-    padding-top: 10px;
-}
-
-.payment-type {
-    background-color: var(--bg-white);
-    border: 1px solid var(--border-medium);
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 10px;
-}
-
-.payment-type input[type="radio"] {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    width: 18px;
-    height: 18px;
-    border: 2px solid var(--primary-pink);
-    border-radius: 50%;
-    outline: none;
-    cursor: pointer;
-    position: relative;
-    top: 2px;
-    margin-right: 8px;
-}
-
-.payment-type input[type="radio"]:checked {
-    background-color: var(--primary-pink);
-    border-color: var(--primary-pink);
-}
-
-.payment-type input[type="radio"]:checked::after {
-    content: '';
-    width: 8px;
-    height: 8px;
-    background-color: white;
-    border-radius: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.payment-type label {
-    display: flex;
-    align-items: center;
-    font-weight: 600;
-    color: var(--text-dark);
-    cursor: pointer;
-}
-
-.payment-type label img {
-    height: 24px;
-    width: 24px;
-    object-fit: contain;
-    margin-right: 10px;
-}
-
-.bank-selection, .ewallet-selection {
-    background-color: white;
-    border: 1px dashed var(--border-medium);
-    border-radius: 8px;
-    padding: 15px;
-    margin-top: 15px;
-}
-
-.bank-selection h4, .ewallet-selection h4 {
-    font-size: 1.1em;
-    color: var(--text-medium);
-    margin-top: 0;
-    margin-bottom: 10px;
-    border-bottom: 1px dashed var(--border-light);
-    padding-bottom: 5px;
-}
-
-.bank-list, .ewallet-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Responsive grid untuk 3 kolom */
-    gap: 15px;
-}
-
-.bank-option, .ewallet-option {
-    display: flex;
-    align-items: center;
-    padding: 5px;
-    border-radius: 5px;
-}
-
-.bank-option input[type="radio"], .ewallet-option input[type="radio"] {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    width: 16px;
-    height: 16px;
-    border: 2px solid var(--primary-pink);
-    border-radius: 50%;
-    outline: none;
-    cursor: pointer;
-    position: relative;
-    top: 1px;
-    margin-right: 8px;
-}
-
-.bank-option input[type="radio"]:checked, .ewallet-option input[type="radio"]:checked {
-    background-color: var(--primary-pink);
-    border-color: var(--primary-pink);
-}
-
-.bank-option input[type="radio"]:checked::after, .ewallet-option input[type="radio"]:checked::after {
-    content: '';
-    width: 6px;
-    height: 6px;
-    background-color: white;
-    border-radius: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.bank-option label, .ewallet-option label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--text-dark);
-    font-weight: 500;
-    cursor: pointer;
-    flex-grow: 1;
-}
-
-.bank-option img, .ewallet-option img {
-    width: 24px;
-    height: 24px;
-    border-radius: 4px;
-    object-fit: contain;
-}
-
-
-/* Checkout Summary Footer */
-.checkout-summary-footer {
-    background-color: var(--bg-white);
-    border-radius: 12px;
-    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
-    padding: 25px 30px;
-    margin-top: 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap; /* Untuk responsive */
-}
-
-.summary-details {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start; /* Align text to the left for better readability in two-column footer */
-    gap: 5px;
-}
-
-.total-price-display,
-.total-item-count-display {
-    font-size: 1.1em;
-    font-weight: 600;
-    color: var(--text-dark);
-}
-
-#grandTotalPriceCheckout {
-    color: var(--primary-pink);
-    font-size: 1.4em;
-    font-weight: 700;
-}
-
-#totalItemCountCheckout {
-    color: var(--primary-pink);
-    font-size: 1.2em;
-    font-weight: 700;
-}
-
-.place-order-button {
-    background-color: var(--primary-pink);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 12px 25px;
-    font-size: 1.1em;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 4px 10px rgba(250, 156, 211, 0.4);
-}
-
-.place-order-button:hover {
-    background-color: var(--primary-pink-hover);
-    transform: translateY(-2px);
-}
-
-/* Modal Styling */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-.modal-content {
-    background-color: #fefefe;
-    margin: auto;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    width: 90%;
-    max-width: 500px;
-    position: relative;
-    animation: slideIn 0.3s ease-out; /* Tambahkan animasi slide-in */
-}
-
-.modal-content h3 {
-    margin-top: 0;
-    margin-bottom: 20px;
-    color: var(--text-dark);
-    font-size: 1.3em;
-    border-bottom: 1px solid var(--border-light);
-    padding-bottom: 10px;
-}
-
-.modal .close-btn {
-    color: #aaa;
-    font-size: 28px;
-    font-weight: bold;
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    cursor: pointer;
-}
-
-.modal .close-btn:hover,
-.modal .close-btn:focus {
-    color: var(--text-dark);
-    text-decoration: none;
-}
-
-.modal .form-group {
-    margin-bottom: 15px;
-}
-
-.modal .form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 500;
-    color: var(--text-medium);
-}
-
-.modal .form-group input[type="text"],
-.modal .form-group input[type="tel"],
-.modal .form-group textarea {
-    width: calc(100% - 20px);
-    padding: 10px;
-    border: 1px solid var(--border-medium);
-    border-radius: 6px;
-    font-size: 1em;
-    box-sizing: border-box;
-}
-
-.modal .save-address-btn {
-    background-color: var(--primary-pink);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 20px;
-    font-size: 1em;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    width: 100%;
-    margin-top: 10px;
-}
-
-.modal .save-address-btn:hover {
-    background-color: var(--primary-pink-hover);
-}
-
-
-/* Keyframe for modal animation */
-@keyframes slideIn {
-    from { transform: translateY(-50px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
-
-
-/* Responsive Design */
-@media (min-width: 769px) { /* Untuk layar tablet dan desktop */
-    .checkout-container {
-        max-width: 1000px; /* Lebar lebih fleksibel */
-    }
-    .checkout-main-content {
-        grid-template-columns: 2fr 1.2fr; /* Kolom kiri lebih lebar, kanan menyesuaikan */
-        gap: 30px;
-    }
-    /* .edit-address-btn sudah diatur di luar media query agar absolut di desktop */
-    .product-header-checkout {
-        display: grid; /* Tampilkan header di desktop */
-    }
-    .product-item-checkout {
-        grid-template-columns: 2fr 1fr 0.8fr 1fr; /* Default grid desktop */
-        padding: 15px 20px;
-    }
-    .checkout-summary-footer {
-        flex-direction: row; /* Kembali ke layout baris */
-        align-items: center;
-        justify-content: space-between;
-    }
-    .summary-details {
-        align-items: flex-start; /* Sejajarkan teks ke kiri */
-    }
-}
-
-@media (max-width: 768px) { /* Untuk mobile (di bawah 769px) */
-    .checkout-container {
-        padding: 20px;
-        margin-top: 10px;
-    }
-    h2 {
-        font-size: 1.8em;
-        margin-bottom: 20px;
-    }
-    .section-card {
-        padding: 15px;
-    }
-    .section-card h3 {
-        font-size: 1.2em;
-    }
-    .edit-address-btn {
-        position: static; /* Hilangkan posisi absolut di mobile */
-        margin-top: 15px;
-        width: 100%; /* Lebar penuh di mobile */
-        text-align: center;
-    }
-    .checkout-main-content {
-        grid-template-columns: 1fr; /* Satu kolom */
-        gap: 20px;
-    }
-    .product-header-checkout {
-        display: none; /* Sembunyikan header produk */
-    }
-    .product-item-checkout {
-        grid-template-columns: 1fr; /* Item produk menjadi satu kolom */
-        flex-wrap: wrap;
-        padding: 15px 0; /* Sesuaikan padding */
-        gap: 10px;
-    }
-    .product-item-checkout .col-product,
-    .product-item-checkout .col-unit-price,
-    .product-item-checkout .col-quantity,
-    .product-item-checkout .col-total-price {
-        text-align: left; /* Atur ulang alignment */
-        width: 100%; /* Ambil lebar penuh */
-    }
-    .product-item-checkout .col-product {
-        margin-bottom: 10px;
-    }
-    .product-thumb-checkout {
-        width: 50px;
-        height: 50px;
-    }
-    .checkout-summary-footer {
-        flex-direction: column;
-        align-items: flex-end; /* Tetap kanan untuk ringkasan mobile */
-        gap: 15px;
-    }
-    .summary-details {
-        width: 100%;
-        align-items: flex-end;
-    }
-    .place-order-button {
-        width: 100%;
-        padding: 10px 20px;
-        font-size: 1em;
-    }
-    .bank-list, .ewallet-list {
-        grid-template-columns: 1fr; /* Satu kolom untuk bank/ewallet di mobile */
-    }
-    .bank-option, .ewallet-option {
-        width: 100%;
-    }
-}
-
-@media (max-width: 480px) { /* Untuk ponsel kecil */
-    body {
-        padding: 10px;
-    }
-    .checkout-container {
-        padding: 15px;
-    }
-    .checkout-page-header h2 {
-        font-size: 1.5em;
-    }
-    .section-card h3 {
-        font-size: 1.1em;
-    }
-    .product-thumb-checkout {
-        width: 40px;
-        height: 40px;
-    }
-    .modal-content {
-        padding: 15px;
-    }
-    .modal .form-group input[type="text"],
-    .modal .form-group input[type="tel"],
-    .modal .form-group textarea {
-        width: calc(100% - 16px); /* Adjust padding */
-        padding: 8px;
-    }
-}
-ini checkout.css
+            --primary-pink: rgb(250, 156, 211); /* Pink utama */
+            --primary-pink-hover: rgb(248, 99, 186); /* Pink saat hover */
+            --text-dark: #333;
+            --text-medium: #555;
+            --text-light: #777;
+            --bg-light: #f4f4f4;
+            --bg-white: #ffffff;
+            --border-light: #eee;
+            --border-medium: #ddd;
+        }
+
+        /* General Styling */
+        .contain {
+            background-color: #f8f8f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding-bottom: 20px;
+        }
+        .checkout-container {
+            background-color: var(--bg-white);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            width: 100%;
+            max-width: 1200px;
+            box-sizing: border-box;
+            margin-top: 20px;
+        }
+
+        .checkout-page-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .checkout-page-header .back-arrow {
+            font-size: 1.8em;
+            color: var(--text-medium);
+            margin-right: 15px;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .checkout-page-header .back-arrow:hover {
+            color: var(--primary-pink);
+        }
+
+        .checkout-page-header h2 {
+            margin: 0;
+            font-size: 2em;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        /* --- Layout Utama Desktop (Grid) --- */
+        @media (min-width: 769px) {
+            .checkout-main-content {
+                display: grid;
+                grid-template-columns: 2fr 1fr;
+                gap: 30px;
+                margin-bottom: 30px;
+            }
+
+            .left-column {
+                display: flex;
+                flex-direction: column;
+                gap: 25px;
+            }
+
+            .right-column {
+                display: flex;
+                flex-direction: column;
+                gap: 25px;
+            }
+        }
+
+        .section-card {
+            background-color: var(--bg-white);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-card h3 {
+            color: var(--text-dark);
+            font-size: 1.4em;
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 10px;
+        }
+
+        /* Delivery Address Section */
+        .delivery-address-section {
+            position: relative;
+        }
+
+        .address-details p {
+            margin: 5px 0;
+            color: var(--text-medium);
+            font-size: 1em;
+        }
+
+        .address-details strong {
+            color: var(--text-dark);
+        }
+
+        .edit-address-btn {
+            background-color: var(--primary-pink);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 15px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: auto;
+            text-align: initial;
+        }
+
+        .edit-address-btn:hover {
+            background-color: var(--primary-pink-hover);
+        }
+
+        /* Product Summary Section */
+        .product-header-checkout {
+            display: grid;
+            grid-template-columns: 2fr 1fr 0.8fr 1fr;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-medium);
+            font-weight: 600;
+            color: var(--text-medium);
+            font-size: 0.9em;
+        }
+
+        .col-product { text-align: left; }
+        .col-unit-price, .col-quantity, .col-total-price { text-align: center; }
+        .col-total-price { text-align: right; }
+
+        .product-list-checkout {
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .product-item-checkout {
+            display: grid;
+            grid-template-columns: 2fr 1fr 0.8fr 1fr;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px dashed var(--border-light);
+        }
+
+        .product-item-checkout:last-child {
+            border-bottom: none;
+        }
+
+        .product-thumb-checkout {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-right: 10px;
+            border: 1px solid var(--border-light);
+        }
+
+        .product-item-checkout .col-product {
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .product-item-checkout .col-unit-price,
+        .product-item-checkout .col-quantity,
+        .product-item-checkout .col-total-price {
+            text-align: center;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .product-item-checkout .col-total-price {
+            text-align: right;
+            font-weight: 600;
+            color: var(--primary-pink);
+        }
+
+        /* Shipping Method Section */
+        .shipping-option {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-medium);
+            border-radius: 8px;
+            padding: 15px;
+            background-color: var(--bg-white);
+        }
+
+        .shipping-option input[type="radio"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--primary-pink);
+            border-radius: 50%;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+            top: 2px;
+        }
+
+        .shipping-option input[type="radio"]:checked {
+            background-color: var(--primary-pink);
+            border-color: var(--primary-pink);
+        }
+
+        .shipping-option input[type="radio"]:checked::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .shipping-option label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+        .shipping-option label .bx {
+            font-size: 1.3em;
+            color: var(--primary-pink);
+        }
+
+        .shipping-option .shipping-cost {
+            margin-left: auto;
+            font-weight: 700;
+            color: var(--primary-pink);
+            font-size: 1.1em;
+        }
+
+        .shipping-estimate {
+            flex-basis: 100%;
+            font-size: 0.9em;
+            color: var(--text-light);
+            margin-left: 28px;
+            margin-top: -5px;
+        }
+
+        /* Payment Method Section */
+        .payment-options {
+            padding-top: 10px;
+        }
+
+        .payment-type {
+            background-color: var(--bg-white);
+            border: 1px solid var(--border-medium);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+
+        .payment-type input[type="radio"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--primary-pink);
+            border-radius: 50%;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+            top: 2px;
+            margin-right: 8px;
+        }
+
+        .payment-type input[type="radio"]:checked {
+            background-color: var(--primary-pink);
+            border-color: var(--primary-pink);
+        }
+
+        .payment-type input[type="radio"]:checked::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .payment-type label {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+        .bank-selection, .ewallet-selection {
+            background-color: white;
+            border: 1px dashed var(--border-medium);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .bank-selection h4, .ewallet-selection h4 {
+            font-size: 1.1em;
+            color: var(--text-medium);
+            margin-top: 0;
+            margin-bottom: 10px;
+            border-bottom: 1px dashed var(--border-light);
+            padding-bottom: 5px;
+        }
+
+        .bank-list, .ewallet-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .bank-option, .ewallet-option {
+            display: flex;
+            align-items: center;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .bank-option input[type="radio"], .ewallet-option input[type="radio"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--primary-pink);
+            border-radius: 50%;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+            top: 1px;
+            margin-right: 8px;
+        }
+
+        .bank-option input[type="radio"]:checked, .ewallet-option input[type="radio"]:checked {
+            background-color: var(--primary-pink);
+            border-color: var(--primary-pink);
+        }
+
+        .bank-option input[type="radio"]:checked::after, .ewallet-option input[type="radio"]:checked::after {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .bank-option label, .ewallet-option label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-dark);
+            font-weight: 500;
+            cursor: pointer;
+            flex-grow: 1;
+        }
+
+        /* Checkout Summary Footer */
+        .checkout-summary-footer {
+            background-color: var(--bg-white);
+            border-radius: 12px;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
+            padding: 25px 30px;
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .summary-details {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+        }
+
+        .total-price-display,
+        .total-item-count-display {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        #grandTotalPriceCheckout {
+            color: var(--primary-pink);
+            font-size: 1.4em;
+            font-weight: 700;
+        }
+
+        #totalItemCountCheckout {
+            color: var(--primary-pink);
+            font-size: 1.2em;
+            font-weight: 700;
+        }
+
+        .place-order-button {
+            background-color: var(--primary-pink);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(250, 156, 211, 0.4);
+        }
+
+        .place-order-button:hover {
+            background-color: var(--primary-pink-hover);
+            transform: translateY(-2px);
+        }
+
+        /* Modal Styling */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .modal-content h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+            font-size: 1.3em;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 10px;
+        }
+
+        .modal .close-btn {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            cursor: pointer;
+        }
+
+        .modal .close-btn:hover,
+        .modal .close-btn:focus {
+            color: var(--text-dark);
+            text-decoration: none;
+        }
+
+        .modal .form-group {
+            margin-bottom: 15px;
+        }
+
+        .modal .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--text-medium);
+        }
+
+        .modal .form-group input[type="text"],
+        .modal .form-group input[type="tel"],
+        .modal .form-group textarea {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid var(--border-medium);
+            border-radius: 6px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+
+        .modal .save-address-btn {
+            background-color: var(--primary-pink);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .modal .save-address-btn:hover {
+            background-color: var(--primary-pink-hover);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Responsive Design */
+        @media (min-width: 769px) {
+            .checkout-container {
+                max-width: 1000px;
+            }
+            .checkout-main-content {
+                grid-template-columns: 2fr 1.2fr;
+                gap: 30px;
+            }
+            .product-header-checkout {
+                display: grid;
+            }
+            .product-item-checkout {
+                grid-template-columns: 2fr 1fr 0.8fr 1fr;
+                padding: 15px 20px;
+            }
+            .checkout-summary-footer {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .summary-details {
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .checkout-container {
+                padding: 20px;
+                margin-top: 10px;
+            }
+            h2 {
+                font-size: 1.8em;
+                margin-bottom: 20px;
+            }
+            .section-card {
+                padding: 15px;
+            }
+            .section-card h3 {
+                font-size: 1.2em;
+            }
+            .edit-address-btn {
+                position: static;
+                margin-top: 15px;
+                width: 100%;
+                text-align: center;
+            }
+            .checkout-main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .product-header-checkout {
+                display: none;
+            }
+            .product-item-checkout {
+                grid-template-columns: 1fr;
+                flex-wrap: wrap;
+                padding: 15px 0;
+                gap: 10px;
+            }
+            .product-item-checkout .col-product,
+            .product-item-checkout .col-unit-price,
+            .product-item-checkout .col-quantity,
+            .product-item-checkout .col-total-price {
+                text-align: left;
+                width: 100%;
+            }
+            .product-item-checkout .col-product {
+                margin-bottom: 10px;
+            }
+            .product-thumb-checkout {
+                width: 50px;
+                height: 50px;
+            }
+            .checkout-summary-footer {
+                flex-direction: column;
+                align-items: flex-end;
+                gap: 15px;
+            }
+            .summary-details {
+                width: 100%;
+                align-items: flex-end;
+            }
+            .place-order-button {
+                width: 100%;
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+            .bank-list, .ewallet-list {
+                grid-template-columns: 1fr;
+            }
+            .bank-option, .ewallet-option {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .checkout-container {
+                padding: 15px;
+            }
+            .checkout-page-header h2 {
+                font-size: 1.5em;
+            }
+            .section-card h3 {
+                font-size: 1.1em;
+            }
+            .product-thumb-checkout {
+                width: 40px;
+                height: 40px;
+            }
+            .modal-content {
+                padding: 15px;
+            }
+            .modal .form-group input[type="text"],
+            .modal .form-group input[type="tel"],
+            .modal .form-group textarea {
+                width: calc(100% - 16px);
+                padding: 8px;
+            }
+        }
+
+        /* CSS KHUSUS ADDRESS LIST & TOMBOL ADD NEW ADDRESS */
+        .address-list-container {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding-right: 5px;
+        }
+        .address-card-item {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            background: #fff;
+        }
+        .address-card-item:hover {
+            border-color: var(--primary-pink);
+            background-color: #fff0f5;
+        }
+        .address-card-item.selected {
+            border: 2px solid var(--primary-pink);
+            background-color: #fff0f5;
+        }
+        .address-actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        .btn-action-sm {
+            padding: 5px 10px;
+            font-size: 12px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-edit { background: #ffc107; color: #000; }
+        .btn-delete { background: #ff4d4d; color: white; }
+        
+        /* TOMBOL PINK SESUAI REQUEST */
+        .add-new-address-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-pink); /* Menggunakan variabel Pink */
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-new-address-btn:hover {
+            background-color: var(--primary-pink-hover); /* Efek Hover Pink Gelap */
+        }
+
+        .modal-header-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .back-to-list-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .badge-default {
+            background: #4CAF50;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            margin-left: 5px;
+        }

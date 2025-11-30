@@ -14,37 +14,39 @@
         
         <!--navigation-->
         <ul class="metismenu" id="menu">
-            <li>
-                <a href="#"> 
-                    <i class='bx bx-home-alt'></i>
-                    <div class="menu-title">Dashboard</div>
-                </a>
-                <a href="#">
-                    <i class='bx bxs-bar-chart-alt-2'></i>
-                    <div class="menu-title">Analytics</div>
-                </a>
-                <a href="{{ route('products.index') }}"> 
-                    <i class='bx bxs-shopping-bags'></i>
-                    <div class="menu-title">Products</div>
-                </a>
-                <a href="#"> 
-                    <i class='bx bxs-group' ></i>
-                    <div class="menu-title">Users</div>
-                </a>
-                <a href="#"> 
-                    <i class='bxr bx-shopping-bag-alt'></i> 
-                    <div class="menu-title">Order</div>
-                </a>
-                <a href="#"> 
-                    <i class='bx bx-note'></i>
-                    <div class="menu-title">Style Journal</div>
-                </a>
-                <a href="#">
-                    <i class='bx bxs-t-shirt'></i>
-                    <div class="menu-title">Today's Outfit</div>
-                </a>
-            </li>
-        </ul>
+    <li>
+        <a href="{{ route('dashboard.dashboardAdmin') }}"> 
+            <i class='bx bx-home-alt'></i>
+            <div class="menu-title">Dashboard</div>
+        </a>
+        <a href="{{ route('dashboard.dashboardAdmin') }}">
+            <i class='bx bxs-bar-chart-alt-2'></i>
+            <div class="menu-title">Analytics</div>
+        </a>
+        <a href="{{ route('products.index') }}"> 
+            <i class='bx bxs-shopping-bags'></i>
+            <div class="menu-title">Products</div>
+        </a>
+        <a href="{{ route('users-admin.usersAdmin') }}"> 
+            <i class='bx bxs-group' ></i>
+            <div class="menu-title">Users</div>
+        </a>
+        <a href="{{ route('admin.orders.index') }}"> 
+    <i class='bxr bx-shopping-bag-alt'></i> 
+    <div class="menu-title">Order</div>
+</a>
+>
+        <a href="{{ route('stylejournalAdmin.index') }}"> 
+            <i class='bx bx-note'></i>
+            <div class="menu-title">Style Journal</div>
+        </a>
+        <a href="{{ route('toAdmin.toAdmin') }}">
+            <i class='bx bxs-t-shirt'></i>
+            <div class="menu-title">Today's Outfit</div>
+        </a>
+    </li>
+</ul>
+
     </div>
     
     <header>
@@ -87,7 +89,7 @@
                                             <div class="user-online">
                                                 <img src="{{ asset('assets/images/sanha.jpg') }}" class="msg-avatar" alt="user avatar">
                                             </div>
-                                            <div class="flex-grow-1">
+                                            <div class="grow ">
                                                 <h6 class="msg-name">Sanha <span class="msg-time float-end">5 sec ago</span></h6>
                                                 <p class="msg-info">Is this product still available?</p>
                                             </div>
@@ -99,7 +101,7 @@
                                             <div class="notify bg-light-primary">
                                                 <img src="{{ asset('assets/images/app/github.png') }}" width="25" alt="user avatar">
                                             </div>
-                                            <div class="flex-grow-1">
+                                            <div class="grow">
                                                 <h6 class="msg-name">New 24 authors<span class="msg-time float-end">1 day ago</span></h6>
                                                 <p class="msg-info">24 new authors joined last week</p>
                                             </div>

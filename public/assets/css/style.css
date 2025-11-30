@@ -328,3 +328,43 @@ ul li a:hover {
         cursor: pointer;
     }
 }
+
+
+/* --- Perbaikan Pagination Agar Kecil dan Rapi --- */
+
+/* Menyesuaikan ukuran ikon SVG panah pada navigasi pagination */
+nav[role="navigation"] svg {
+    /* Mengurangi ukuran ikon dari default (biasanya 20px) menjadi 16px */
+    width: 1rem !important;  /* 16px */
+    height: 1rem !important; /* 16px */
+    
+    /* Memastikan warna tetap sama (agar tidak perlu ganti di file Blade) */
+    color: #1F2937 !important; 
+    fill: currentColor !important;
+}
+
+/* Mengatur ukuran font dan padding pada angka halaman */
+nav[role="navigation"] a,
+nav[role="navigation"] span {
+    /* Mengurangi ukuran font agar lebih kecil */
+    font-size: 0.875rem !important; /* 14px */
+    
+    /* Mengurangi padding vertikal dan horizontal */
+    padding: 0.25rem 0.5rem !important; /* Membuat tombol angka lebih tipis */
+    line-height: 1 !important; /* Meratakan konten */
+}
+
+/* Mengatur teks status (Showing X to Y results) */
+nav[role="navigation"] p.text-sm {
+    font-size: 0.8rem;
+    padding: 0 10px;
+    margin: 0;
+}
+
+/* Memperbaiki posisi keseluruhan container pagination */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+}

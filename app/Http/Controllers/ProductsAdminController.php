@@ -52,6 +52,8 @@ class ProductsAdminController extends Controller
             'mood' => $request->mood,
             'preferensi' => $request->preferensi,
             'stock' => $request->stock,
+            'platform' => $request->platform,
+            'link_produk' => $request->link_produk,
             'gambar_produk' => $namaFile,
         ]);
 
@@ -74,6 +76,8 @@ class ProductsAdminController extends Controller
             'mood' => 'nullable',
             'preferensi' => 'nullable',
             'stock' => 'nullable|integer',
+            'platform' => 'nullable',
+            'link_produk' => 'nullable|url',
             'gambar_produk' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
@@ -98,11 +102,13 @@ class ProductsAdminController extends Controller
         $product->mood = $request->mood;
         $product->preferensi = $request->preferensi;
         $product->stock = $request->stock;
+        $product->platform = $request->platform;
+        $product->link_produk = $request->link_produk;
         $product->harga = (float)$request->harga;
 
         $product->save();
 
-        return redirect()->route('admin.productsAdmin.index')->with('success', 'Produk berhasil diperbarui');
+        return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui');
     }
 
     public function destroy($id)
@@ -116,7 +122,6 @@ class ProductsAdminController extends Controller
 
         $product->delete();
 
-        return redirect()->route(route: 'products.index')->with('success', 'Produk berhasil dihapus');
+        return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus');
     }
 }
-
