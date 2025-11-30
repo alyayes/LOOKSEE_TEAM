@@ -10,7 +10,7 @@
                 <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
-                    </foreach>
+                    @endforeach
                 </ul>
             </div>
         @endif

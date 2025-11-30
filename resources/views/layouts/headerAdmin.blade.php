@@ -36,7 +36,7 @@
     <div class="menu-title">Order</div>
 </a>
 >
-        <a href="{{ route('stylejournalAdmin.stylejournalAdmin') }}"> 
+        <a href="{{ route('stylejournalAdmin.index') }}"> 
             <i class='bx bx-note'></i>
             <div class="menu-title">Style Journal</div>
         </a>
