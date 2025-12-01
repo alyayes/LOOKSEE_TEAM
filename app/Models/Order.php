@@ -13,6 +13,12 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'address_id',
+        'nama_penerima',
+        'no_telepon',
+        'alamat_lengkap',
+        'kota',
+        'provinsi',
+        'kode_pos',
         'total_price',
         'shipping_cost',
         'grand_total',
@@ -21,10 +27,6 @@ class Order extends Model
         'shipping_method'
     ];
 
-    public function produk()
-    {
-        return $this->belongsTo(Produk::class, 'produk_id'); // FK sesuai tabel orders
-    }
     public function items()
     {
         return $this->hasMany(OrderItem::class, 'order_id', 'order_id');
@@ -44,5 +46,4 @@ class Order extends Model
     {
         return $this->belongsTo(UserAddress::class, 'address_id', 'id');
     }
-    
 }

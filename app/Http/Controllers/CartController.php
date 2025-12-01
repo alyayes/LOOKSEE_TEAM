@@ -8,10 +8,8 @@ use App\Models\Produk;
 
 class CartController extends Controller
 {
-    // MENAMPILKAN KERANJANG (GLOBAL)
     public function index()
     {
-        // Ambil semua data keranjang (tanpa filter user, biar semua bisa lihat)
         $data_cart = CartsItems::with('produk')->get();
         
         $cart_items = [];
@@ -21,7 +19,8 @@ class CartController extends Controller
             if ($item->produk) {
                 $total_selected_price += $item->produk->harga * $item->quantity;
 
-                $cart_items[$item->id_produk] = [
+                $cart_items[$item->product_id] = [
+                    'id_produk'     => $item->product_id, 
                     'nama_produk'   => $item->produk->nama_produk,
                     'harga'         => $item->produk->harga,
                     'stock'         => $item->produk->stock,
@@ -36,33 +35,26 @@ class CartController extends Controller
         return view('cart.cart', compact('cart_items', 'total_selected_price', 'total_products'));
     }
 
-    // FUNGSI TAMBAH KE KERANJANG (YANG DIPERBAIKI)
     public function addToCart($id_produk)
     {
-        // 1. Cek apakah produk dengan ID ini ada di database?
-        // (Supaya tidak error Foreign Key jika ID salah)
         $produkExists = Produk::where('id_produk', $id_produk)->exists();
         
         if (!$produkExists) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Produk ID ' . $id_produk . ' tidak ditemukan/sudah dihapus!'
+                'message' => 'Produk tidak ditemukan!'
             ], 404);
         }
 
-        // 2. Set User ID Dummy (Wajib ada biar database gak nolak)
-        $userId = 33; 
-
-        // 3. Cek apakah barang sudah ada di keranjang
-        $cek = CartsItems::where('id_produk', $id_produk)->first();
+        $cek = CartsItems::where('product_id', $id_produk)->first();
 
         if ($cek) {
             $cek->increment('quantity');
         } else {
             CartsItems::create([
-                'user_id'   => $userId,
-                'id_produk' => $id_produk,
-                'quantity'  => 1
+                'user_id'    => 33, 
+                'product_id' => $id_produk,
+                'quantity'   => 1
             ]);
         }
 
@@ -74,16 +66,20 @@ class CartController extends Controller
 
     public function update(Request $req)
     {
-        CartsItems::where('id_produk', $req->id_produk)
-                  ->update(['quantity' => $req->quantity]);
+        CartsItems::where('product_id', $req->id_produk)->delete();
 
-        return redirect('/cart');
+        CartsItems::create([
+            'user_id'    => 33,
+            'product_id' => $req->id_produk,
+            'quantity'   => $req->quantity
+        ]);
+
+        return response()->json(['status' => 'success']);
     }
 
     public function delete(Request $req)
     {
-        CartsItems::where('id_produk', $req->id_produk)
-                  ->delete();
+        CartsItems::where('product_id', $req->id_produk)->delete();
 
         return redirect('/cart');
     }
