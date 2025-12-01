@@ -92,14 +92,44 @@ class ProfileController extends Controller
 
     public function uploadImage(Request $request)
     {
+        $user = auth()->user(); 
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Authentication required.');
+        }
+
         $request->validate([
             'image' => 'required|image|max:2048'
         ]);
 
         $file = $request->file('image');
         $filename = time().'_'.$file->getClientOriginalName();
-        $file->move(public_path('assets/images/todays outfit'), $filename);
 
-        return back()->with('success', 'Image uploaded successfully.');
+        $publicPath = public_path('assets/images/todays outfit');
+        $file->move($publicPath, $filename);
+
+        return redirect()->route('profile.post.create', ['temp_image_filename' => $filename]);
+    }
+
+    public function showCreatePostForm(Request $request)
+    {
+        // Mengambil nama file dari parameter URL (query string)
+        $filename = $request->query('temp_image_filename');
+        
+        if (!$filename) {
+            // Jika tidak ada gambar, redirect kembali ke profil
+            return redirect()->route('profile.index')->with('error', 'Anda harus mengunggah gambar terlebih dahulu.');
+        }
+
+        // Mendapatkan semua produk untuk modal tagging
+        $all_products = Produk::all(); 
+
+        // Tentukan path gambar yang akan ditampilkan di blade
+        $imagePath = asset('assets/images/todays outfit/' . $filename);
+        
+        return view('profile.create_post', [
+            'imagePath' => $imagePath,
+            'imageFilename' => $filename, // Nama file untuk disimpan di DB saat POST
+            'all_products' => $all_products,
+        ]);
     }
 }
