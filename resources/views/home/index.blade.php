@@ -2,7 +2,7 @@
 @section('title', 'LOOKSEE')
 
 @section('head_scripts')
-    <link rel="stylesheet" href="{{ asset('assets/css/home.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/home.css') }}">
 @endsection
 
 @section('content')
@@ -63,8 +63,15 @@
                 <p>Rp. {{ number_format($row['harga'], 0, ',', '.') }}</p>
 
                 <div class="actions">
-                    <button class="btn favorite-btn" onclick="addToFavorites({{ $row['id_produk'] }})">Add to Favorite</button>
-                    <button class="btn buy-now-btn" onclick="addToCart({{ $row['id_produk'] }})">Add to Cart</button>
+                    <button class="btn favorite-btn" 
+                            onclick="addToFavorites({{ $row['id_produk'] }})">
+                        Add to Favorite
+                    </button>
+
+                    <button class="btn buy-now-btn" 
+                            onclick="addToCart({{ $row['id_produk'] }})">
+                        Add to Cart
+                    </button>
                 </div>
             </div>
         </div>
@@ -106,8 +113,15 @@
                 <p>Rp. {{ number_format($row['harga'], 0, ',', '.') }}</p>
 
                 <div class="actions">
-                    <button class="btn favorite-btn" onclick="addToFavorites({{ $row['id_produk'] }})">Add to Favorite</button>
-                    <button class="btn buy-now-btn" onclick="addToCart({{ $row['id_produk'] }})">Add to Cart</button>
+                    <button class="btn favorite-btn" 
+                            onclick="addToFavorites({{ $row['id_produk'] }})">
+                        Add to Favorite
+                    </button>
+
+                    <button class="btn buy-now-btn" 
+                            onclick="addToCart({{ $row['id_produk'] }})">
+                        Add to Cart
+                    </button>
                 </div>
             </div>
         </div>
@@ -131,6 +145,10 @@
 
 @include('home.mood')
 
+@include('home.mood')
+
+
+{{-- ========================  PARTNERSHIP  ======================== --}}
 <div class="partner-platform-wrapper">
     <div class="partner-group">
         <h3 class="partner-title">Our Partner</h3>
