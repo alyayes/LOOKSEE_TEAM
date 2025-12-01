@@ -175,29 +175,44 @@
     }
 
     function addToCart(idProduk) {
-        fetch(`/cart/add/${idProduk}`, {
+        // Buat URL secara manual karena parameter ID ada di URL
+        const url = "{{ url('/cart/add') }}/" + idProduk;
+
+        fetch(url, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
-                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+                "Accept": "application/json",
+                "X-CSRF-TOKEN": "{{ csrf_token() }}"
             },
-            body: JSON.stringify({})
+            body: JSON.stringify({}) // Body kosong tidak masalah karena ID ada di URL
         })
-        .then(response => response.json()) 
+        .then(response => {
+            if (response.status === 401) {
+                alert("Silakan login terlebih dahulu.");
+                window.location.href = "{{ route('login') }}";
+                return null;
+            }
+            if (!response.ok) {
+                // Coba ambil pesan error dari server jika ada
+                return response.json().then(errData => {
+                    throw new Error(errData.message || 'Terjadi kesalahan pada server');
+                });
+            }
+            return response.json();
+        })
         .then(data => {
-            if(data.status === 'error') {
-                alert(data.message); 
-            } else {
-                alert(data.message || 'Berhasil ditambahkan!');
+            if (data) {
+                alert(data.message);
+                // Update icon keranjang jika ada fungsi tersebut
             }
         })
         .catch(error => {
             console.error("Detail Error:", error);
-            alert("Gagal koneksi. Cek Console (F12) untuk detail.");
+            alert(error.message || "Gagal menambahkan ke keranjang.");
         });
     }
-
-
+    
 </script>
 
 @endsection

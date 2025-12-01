@@ -1,4 +1,4 @@
-@if($order_detail)
+@if(isset($order_detail) && $order_detail)
     <div class="modal-order-details">
         <p><strong>Order Date:</strong> {{ \Carbon\Carbon::parse($order_detail['order_date'])->format('d M Y, H:i') }}</p>
         <p><strong>Status:</strong> <span class="order-status-badge status-{{ strtolower($order_detail['status'] ?? 'unknown') }}">{{ ucfirst($order_detail['status'] ?? 'N/A') }}</span></p>
@@ -19,8 +19,8 @@
         <div class="modal-order-items-list">
             @forelse($order_detail['items'] ?? [] as $item)
                 <div class="modal-order-item">
-                    <img src="{{ asset('assets/images/produk-looksee/' . ($item['gambar_produk'] ?? 'placeholder.jpg')) }}"
-                         onerror="this.onerror=null;this.src='https://placehold.co/50x50/E0E0E0/ADADAD?text=N/A';"
+                    <img src="{{ asset('assets/images/produk-looksee/' . ($item['gambar_produk'] ?? 'default.jpg')) }}"
+                         onerror="this.onerror=null;this.src='https://placehold.co/50x50/E0E0E0/ADADAD?text=No+Image';"
                          alt="{{ $item['nama_produk'] ?? '' }}" class="item-thumb">
                     <div class="item-info">
                         <span class="name">{{ $item['nama_produk'] ?? 'Product Name' }}</span>
@@ -39,12 +39,11 @@
 
         @if(strtolower($order_detail['status'] ?? '') == 'pending')
             <div class="modal-actions">
-                 <a href="{{ route('payment.details') }}" class="btn-primary">Proceed to Payment</a> {{-- Asumsi order_id disimpan di session --}}
-                 {{-- Atau: <a href="{{ route('payment.details', ['order_id' => $order_detail['order_id']]) }}" class="btn-primary">Proceed to Payment</a> --}}
+                 <a href="{{ route('payment.details') }}" class="btn-primary">Proceed to Payment</a>
             </div>
         @endif
 
     </div>
 @else
-    <p style="color: red; text-align: center;">Could not retrieve order details.</p>
+    <p style="color: red; text-align: center;">Could not retrieve order details. Data is missing.</p>
 @endif

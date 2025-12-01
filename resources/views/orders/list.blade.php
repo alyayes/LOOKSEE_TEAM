@@ -1,4 +1,3 @@
-{{-- resources/views/orders/list.blade.php --}}
 @extends('layouts.main')
 
 @section('title', 'My Orders - LOOKSEE')
@@ -66,7 +65,7 @@
             @empty
                 <div class="empty-orders-message">
                     <p>No orders found{{ $status_filter !== 'all' ? ' for status: ' . ucfirst($status_filter) : '' }}.</p>
-                    <a href="{{ route('homepage') }}">Start Shopping</a> {{-- Link ke Home --}}
+                    <a href="{{ route('homepage') }}">Start Shopping</a> 
                 </div>
             @endforelse
         </div>
@@ -126,5 +125,4 @@
             if (event.target === modal) closeOrderDetailsModal();
         });
     </script>
-
 @endsection

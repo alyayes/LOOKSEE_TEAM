@@ -1,5 +1,3 @@
-{{-- resources/views/checkout/checkout.blade.php --}}
-
 @extends('layouts.main')
 
 @section('title', 'Checkout - LOOKSEE')
@@ -14,6 +12,13 @@
 <div class="contain">
     @if(session('success'))
         <div style="background: #d4edda; color: #155724; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div style="background: #f8d7da; color: #721c24; padding: 15px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #f5c6cb;">
+            <b>Gagal:</b> {{ session('error') }}
         </div>
     @endif
 
@@ -26,6 +31,7 @@
         <form method="POST" action="{{ route('checkout.process') }}" id="checkoutForm"> 
             @csrf
             <input type="hidden" name="selected_products_ids" value="{{ $selectedIdsString }}">
+
             <div class="checkout-main-content">
                 <div class="left-column">
                     <div class="section-card delivery-address-section">
@@ -100,7 +106,7 @@
                             @foreach ($main_payment_methods as $method)
                                 <div class="payment-type">
                                     <input type="radio" id="paymentMethod{{ $method['method_id'] }}" name="payment_method" value="{{ $method['method_name'] }}"
-                                        @if($loop->first || $method['method_name'] == 'Bank Transfer') checked @endif> 
+                                            @if($loop->first || $method['method_name'] == 'Bank Transfer') checked @endif> 
                                     <label for="paymentMethod{{ $method['method_id'] }}">
                                         {{ $method['method_name'] }}
                                     </label>
@@ -213,7 +219,7 @@
 
                 <form id="addressFormInput" method="POST" action="{{ route('checkout.address.add') }}">
                     @csrf
-                    <div id="methodField"></div> {{-- Tempat naruh @method('PUT') --}}
+                    <div id="methodField"></div> 
                     
                     <div class="form-group">
                         <label>Receiver Name:</label>
@@ -254,6 +260,7 @@
 
         </div>
     </div>
+</div>
 @endsection
 
 @section('footer_scripts')
@@ -330,9 +337,7 @@
             document.getElementById('methodField').innerHTML = '';
             
             const csrfToken = document.querySelector('input[name="_token"]').value;
-            
             formInput.reset();
-
             document.querySelector('input[name="_token"]').value = csrfToken;
         }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\CartsItems;
 use App\Models\Produk;
 
@@ -10,7 +11,12 @@ class CartController extends Controller
 {
     public function index()
     {
-        $data_cart = CartsItems::with('produk')->get();
+        $userId = Auth::id();
+        if (!$userId) return redirect()->route('login');
+
+        $data_cart = CartsItems::with('produk')
+            ->where('user_id', $userId)
+            ->get();
         
         $cart_items = [];
         $total_selected_price = 0;
@@ -37,6 +43,14 @@ class CartController extends Controller
 
     public function addToCart($id_produk)
     {
+        $userId = Auth::id();
+        if (!$userId) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Silakan login terlebih dahulu.'
+            ], 401);
+        }
+
         $produkExists = Produk::where('id_produk', $id_produk)->exists();
         
         if (!$produkExists) {
@@ -46,13 +60,15 @@ class CartController extends Controller
             ], 404);
         }
 
-        $cek = CartsItems::where('product_id', $id_produk)->first();
+        $cek = CartsItems::where('user_id', $userId)
+                         ->where('product_id', $id_produk)
+                         ->first();
 
         if ($cek) {
             $cek->increment('quantity');
         } else {
             CartsItems::create([
-                'user_id'    => 33, 
+                'user_id'    => $userId, 
                 'product_id' => $id_produk,
                 'quantity'   => 1
             ]);
@@ -66,20 +82,20 @@ class CartController extends Controller
 
     public function update(Request $req)
     {
-        CartsItems::where('product_id', $req->id_produk)->delete();
-
-        CartsItems::create([
-            'user_id'    => 33,
-            'product_id' => $req->id_produk,
-            'quantity'   => $req->quantity
-        ]);
+        $userId = Auth::id();
+        CartsItems::where('user_id', $userId)
+                  ->where('product_id', $req->id_produk)
+                  ->update(['quantity' => $req->quantity]);
 
         return response()->json(['status' => 'success']);
     }
 
     public function delete(Request $req)
     {
-        CartsItems::where('product_id', $req->id_produk)->delete();
+        $userId = Auth::id();
+        CartsItems::where('user_id', $userId)
+                  ->where('product_id', $req->id_produk)
+                  ->delete();
 
         return redirect('/cart');
     }

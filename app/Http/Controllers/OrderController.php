@@ -4,18 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\Produk;
-use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
-    private $userId = 33;
-
     public function list(Request $request)
     {
         $status_filter = $request->status ?? 'all';
-        $userId = $this->userId;
+        $userId = Auth::id();
 
         $order_counts = [
             'all'       => Order::where('user_id', $userId)->count(),
@@ -33,7 +30,6 @@ class OrderController extends Controller
         }
 
         $orders = $orders_query->get()->map(function ($order) {
-            // PERBAIKAN JOIN: ganti 'order_items.product_id' jadi 'order_items.id_produk'
             $items = OrderItem::where('order_id', $order->order_id)
                 ->join('produk_looksee', 'order_items.id_produk', '=', 'produk_looksee.id_produk')
                 ->select(
@@ -57,13 +53,15 @@ class OrderController extends Controller
 
     public function getOrderDetailsAjax($order_id)
     {
-        $order = Order::where('order_id', $order_id)->first();
+        $userId = Auth::id();
+        $order = Order::where('order_id', $order_id)
+                      ->where('user_id', $userId)
+                      ->first();
 
         if (!$order) {
             return response('Order not found', 404);
         }
 
-        // PERBAIKAN JOIN DISINI JUGA
         $items = OrderItem::where('order_id', $order->order_id)
             ->join('produk_looksee', 'order_items.id_produk', '=', 'produk_looksee.id_produk')
             ->select(
@@ -90,12 +88,12 @@ class OrderController extends Controller
             'order_date'       => $order->order_date,
             'status'           => $order->status,
             'total_price'      => $order->grand_total,
-            'nama_penerima'    => $order->nama_penerima,
-            'no_telepon'       => $order->no_telepon,
-            'alamat_lengkap'   => $order->alamat_lengkap,
-            'kota'             => $order->kota,
-            'provinsi'         => $order->provinsi,
-            'kode_pos'         => $order->kode_pos,
+            'nama_penerima'    => $order->nama_penerima ?? '-',
+            'no_telepon'       => $order->no_telepon ?? '-',
+            'alamat_lengkap'   => $order->alamat_lengkap ?? '-',
+            'kota'             => $order->kota ?? '-',
+            'provinsi'         => $order->provinsi ?? '-',
+            'kode_pos'         => $order->kode_pos ?? '-',
             'kurir'            => $order->shipping_method,
             'items'            => $items,
             'payment_method'   => $payment_method,
@@ -103,13 +101,16 @@ class OrderController extends Controller
             'transaction_code' => $payment ? $payment->transaction_code : '-'
         ];
 
-        return view('orders._details_modal_content', compact('order_detail'));
+        return view('orders.modal_content', compact('order_detail'));
     }
 
     public function updateStatus(Request $request)
     {
-        $order = Order::find($request->order_id);
-        if ($order) {
+        $order = Order::where('order_id', $request->order_id)
+                      ->where('user_id', Auth::id())
+                      ->first();
+                      
+        if ($order && $request->status == 'cancelled') {
             $order->status = $request->status;
             $order->save();
             return response()->json(['success' => true]);

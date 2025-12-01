@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Models\CartsItems;
 use App\Models\UserAddress;
 use App\Models\PaymentMethod;
@@ -15,10 +16,11 @@ use App\Models\OrderPayment;
 
 class CheckoutController extends Controller
 {
-    private $userId = 33; // Hardcode User ID
-
     public function index(Request $request)
     {
+        $userId = Auth::id();
+        if (!$userId) return redirect()->route('login');
+
         $selectedIdsString = $request->query('selected_products');
         
         if (!$selectedIdsString) {
@@ -28,27 +30,21 @@ class CheckoutController extends Controller
         $selectedIds = array_filter(explode(',', $selectedIdsString));
 
         $cartData = CartsItems::with('produk')
+                              ->where('user_id', $userId)
                               ->whereIn('product_id', $selectedIds)
                               ->get();
 
         $cart_items = [];
-        
-        // Grouping Data
         foreach ($cartData as $item) {
             if ($item->produk) {
-                // Logic Overwrite/Merge Quantity
-                if (isset($cart_items[$item->product_id])) {
-                    $cart_items[$item->product_id]['quantity'] += $item->quantity;
-                } else {
-                    $cart_items[$item->product_id] = [
-                        'product_id'    => $item->product_id,
-                        'nama_produk'   => $item->produk->nama_produk,
-                        'harga'         => $item->produk->harga,
-                        'gambar_produk' => $item->produk->gambar_produk,
-                        'quantity'      => $item->quantity,
-                        'stock'         => $item->produk->stock,
-                    ];
-                }
+                $cart_items[$item->product_id] = [
+                    'product_id'    => $item->product_id,
+                    'nama_produk'   => $item->produk->nama_produk,
+                    'harga'         => $item->produk->harga,
+                    'gambar_produk' => $item->produk->gambar_produk,
+                    'quantity'      => $item->quantity,
+                    'stock'         => $item->produk->stock,
+                ];
             }
         }
 
@@ -60,12 +56,12 @@ class CheckoutController extends Controller
         $shipping_cost = 20000;
         $grand_total = $total_selected_price + $shipping_cost;
 
-        $all_addresses = UserAddress::where('user_id', $this->userId)->orderBy('is_default', 'desc')->get();
+        $all_addresses = UserAddress::where('user_id', $userId)->orderBy('is_default', 'desc')->get();
         $address = $all_addresses->first();
 
         $delivery_data = [
             'id'          => $address->id ?? null,
-            'name'        => $address->receiver_name ?? 'Guest',
+            'name'        => $address->receiver_name ?? Auth::user()->name,
             'phone'       => $address->phone_number ?? '-',
             'address'     => $address->full_address ?? 'Belum ada alamat',
             'city'        => $address->city ?? '-',
@@ -92,46 +88,36 @@ class CheckoutController extends Controller
         ));
     }
 
-public function processCheckout(Request $request)
+    public function processCheckout(Request $request)
     {
-        // 1. Validasi Input
+        $userId = Auth::id();
+        if (!$userId) return redirect()->route('login');
+
         $selectedIdsString = $request->input('selected_products_ids');
 
-        // Fallback: Jika input hidden kosong, coba ambil dari semua cart (Global Mode)
-        // Ini untuk mencegah error jika user refresh halaman checkout
         if (!$selectedIdsString) {
-             $cartCheck = CartsItems::first();
-             if($cartCheck) {
-                 // Ambil semua ID produk di cart sebagai fallback
-                 $allIds = CartsItems::pluck('product_id')->toArray();
-                 $selectedIds = $allIds;
-             } else {
-                 return redirect()->route('cart')->with('error', 'Keranjang kosong.');
-             }
-        } else {
-            $selectedIds = explode(',', $selectedIdsString);
+            return redirect()->back()->with('error', 'Tidak ada produk yang dipilih.');
         }
 
-        // 2. Ambil Data Cart
-        $cartData = CartsItems::with('produk')->whereIn('product_id', $selectedIds)->get();
+        $selectedIds = explode(',', $selectedIdsString);
+
+        $cartData = CartsItems::with('produk')
+                              ->where('user_id', $userId)
+                              ->whereIn('product_id', $selectedIds)
+                              ->get();
 
         if ($cartData->isEmpty()) {
-            return redirect()->route('cart')->with('error', 'Produk tidak ditemukan.');
+            return redirect()->route('cart');
         }
 
-        // 3. Hitung Total
         $cart_items_unique = [];
         foreach ($cartData as $item) {
             if ($item->produk) {
-                if(isset($cart_items_unique[$item->product_id])) {
-                    $cart_items_unique[$item->product_id]['quantity'] += $item->quantity;
-                } else {
-                    $cart_items_unique[$item->product_id] = [
-                        'product_id' => $item->product_id,
-                        'quantity'   => $item->quantity,
-                        'price'      => $item->produk->harga
-                    ];
-                }
+                $cart_items_unique[$item->product_id] = [
+                    'product_id' => $item->product_id,
+                    'quantity'   => $item->quantity,
+                    'price'      => $item->produk->harga
+                ];
             }
         }
 
@@ -139,19 +125,18 @@ public function processCheckout(Request $request)
         foreach ($cart_items_unique as $item) {
             $total_price += $item['price'] * $item['quantity'];
         }
+
         $shipping_cost = 20000;
         $grand_total = $total_price + $shipping_cost;
 
-        // 4. Simpan Transaksi
+        $address = UserAddress::where('user_id', $userId)->orderBy('is_default', 'desc')->first();
+        $addressId = $address ? $address->id : null;
+
         DB::beginTransaction();
         try {
             $order = new Order();
-            $order->user_id = $this->userId;
-            
-            // Ambil Address ID (karena DB kamu cuma terima ID)
-            $addr = UserAddress::where('user_id', $this->userId)->orderBy('is_default', 'desc')->first();
-            $order->address_id = $addr ? $addr->id : null;
-            
+            $order->user_id = $userId;
+            $order->address_id = $addressId;
             $order->total_price     = $total_price;
             $order->shipping_cost   = $shipping_cost;
             $order->grand_total     = $grand_total;
@@ -169,7 +154,6 @@ public function processCheckout(Request $request)
                 ]);
             }
 
-            // Payment
             $paymentMethod = PaymentMethod::where('method_name', $request->payment_method)->first();
             $methodId = $paymentMethod ? $paymentMethod->method_id : 1;
 
@@ -184,35 +168,55 @@ public function processCheckout(Request $request)
                 'e_wallet_payment_id_fk' => $request->ewallet_choice
             ]);
 
-            // Hapus Cart
-            CartsItems::whereIn('product_id', $selectedIds)->delete();
+            CartsItems::where('user_id', $userId)
+                      ->whereIn('product_id', $selectedIds)
+                      ->delete();
 
             DB::commit();
             return redirect()->route('orders.list')->with('success', 'Order berhasil dibuat!');
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', 'Gagal: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal membuat order: ' . $e->getMessage());
         }
     }
 
-    
-
-    // ... (Fungsi addAddress, updateAddress, deleteAddress biarkan sama) ...
-    public function addAddress(Request $request) {
+    public function addAddress(Request $request)
+    {
         $request->validate([
             'receiver_name' => 'required', 'phone_number' => 'required', 'full_address' => 'required',
             'province' => 'required', 'city' => 'required', 'postal_code' => 'required',
         ]);
-        $isFirst = !UserAddress::exists();
+
+        $userId = Auth::id();
+        $isFirst = !UserAddress::where('user_id', $userId)->exists();
+        
         UserAddress::create([
-            'user_id' => $this->userId, 'receiver_name' => $request->receiver_name, 'phone_number' => $request->phone_number,
-            'full_address' => $request->full_address, 'province' => $request->province, 'city' => $request->city,
-            'district' => $request->district ?? '-', 'postal_code' => $request->postal_code, 'is_default' => $isFirst ? true : false,
+            'user_id'       => $userId, 
+            'receiver_name' => $request->receiver_name,
+            'phone_number'  => $request->phone_number,
+            'full_address'  => $request->full_address,
+            'province'      => $request->province,
+            'city'          => $request->city,
+            'district'      => $request->district ?? '-',
+            'postal_code'   => $request->postal_code,
+            'is_default'    => $isFirst ? true : false,
         ]);
+
         return redirect()->back()->with('success', 'Alamat baru berhasil ditambahkan!');
     }
-    
-    public function updateAddress(Request $request, $id) { UserAddress::findOrFail($id)->update($request->all()); return redirect()->back(); }
-    public function deleteAddress($id) { UserAddress::findOrFail($id)->delete(); return redirect()->back(); }
+
+    public function updateAddress(Request $request, $id)
+    {
+        $address = UserAddress::where('user_id', Auth::id())->findOrFail($id);
+        $address->update($request->all());
+        return redirect()->back();
+    }
+
+    public function deleteAddress($id)
+    {
+        $address = UserAddress::where('user_id', Auth::id())->findOrFail($id);
+        $address->delete();
+        return redirect()->back();
+    }
 }
