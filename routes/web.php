@@ -136,7 +136,6 @@ Route::prefix('favorites')->name('favorites.')->group(function () {
     // Endpoint AJAX untuk menambah produk ke keranjang dari halaman favorit
     Route::post('/add-to-cart', [FavoriteController::class, 'addToCart'])->name('addToCart');
 });
-Route::post('/cart/add/', [CartController::class, 'addToCart'])->name('cart.add');
 
 
 // --- HALAMAN PRODUK ---
@@ -151,8 +150,6 @@ Route::prefix('products')->name('products.')->group(function () {
     Route::post('/add-to-favorite', [ProductController::class, 'addToFavorite'])->name('addToFavorite');
 });
 
-// FAVORITE
-Route::post('/favorite/add', [FavoriteController::class, 'store'])->name('favorite.add');
 
 // CART
 Route::post('/cart/add', [CartController::class, 'store'])->name('cart.add');

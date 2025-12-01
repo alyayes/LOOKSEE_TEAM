@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Favorite extends Model
 {
-    protected $table = 'favorites';
+    protected $table = 'favorite';
     protected $primaryKey = 'id_fav';
     protected $fillable = [
-        'id_user',
+        'user_id',
         'id_produk'
     ];
 

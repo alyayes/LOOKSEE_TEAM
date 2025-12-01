@@ -44,14 +44,20 @@ class ProductController extends Controller
     public function addToFavorite(Request $request)
     {
         $request->validate([
-            'id_produk' => 'required|exists:produk_looksee,id_produk'
+'id_produk' => 'required|exists:produk_looksee,id_produk'
         ]);
 
-        // Gunakan session ID untuk favorit juga
-        $sessionId = session()->getId();
+        if (!Auth::check()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Silakan login terlebih dahulu.'
+            ], 401);
+        }
+
+        $userId = Auth::id();
         $productId = $request->id_produk;
 
-        $favorite = Favorite::where('session_id', $sessionId)
+        $favorite = Favorite::where('id_user', $userId)
             ->where('id_produk', $productId)
             ->first();
 
@@ -60,19 +66,19 @@ class ProductController extends Controller
 
             return response()->json([
                 'success' => true,
-                'status'  => 'removed',
+                'status' => 'removed',
                 'message' => 'Produk dihapus dari favorit.'
             ]);
         }
 
         Favorite::create([
-            'session_id' => $sessionId,
+            'id_user' => $userId,
             'id_produk' => $productId
         ]);
 
         return response()->json([
             'success' => true,
-            'status'  => 'added',
+            'status' => 'added',
             'message' => 'Produk ditambahkan ke favorit.'
         ]);
     }
