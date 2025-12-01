@@ -134,6 +134,12 @@ Route::prefix('products')->name('products.')->group(function () {
     Route::post('/add-to-favorite', [ProductController::class, 'addToFavorite'])->name('addToFavorite');
 });
 
+// FAVORITE
+Route::post('/favorite/add', [FavoriteController::class, 'store'])->name('favorite.add');
+
+// CART
+Route::post('/cart/add', [CartController::class, 'store'])->name('cart.add');
+
 /* --- RUTE PRODUK ADMIN (CRUD) --- */
 Route::prefix('admin')->group(function () {
     

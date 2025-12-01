@@ -154,25 +154,31 @@
 
 @section('footer_scripts')
 <script>
-    function goToPage(param, value) {
-        const url = new URL(window.location.href);
-        url.searchParams.set(param, value);
-
-        if (param === 'page_woman') url.searchParams.delete('page_man');
-        if (param === 'page_man') url.searchParams.delete('page_woman');
-
-        url.hash = '';
-        window.location.href = url.toString();
-    }
-
     function addToFavorites(id) {
-        fetch('/favorite/add', { method: 'POST', headers: { 'Content-Type': 'application/json', "X-CSRF-TOKEN": "{{ csrf_token() }}" }, body: JSON.stringify({ id_produk: id }) })
-        .then(res => res.json()).then(data => alert(data.message));
-    }
+    const formData = new FormData();
+    formData.append('id_produk', id);
+    formData.append('_token', "{{ csrf_token() }}");
 
-    function addToCart(id) {
-        fetch('/cart/add', { method: 'POST', headers: { 'Content-Type': 'application/json', "X-CSRF-TOKEN": "{{ csrf_token() }}" }, body: JSON.stringify({ id_produk: id }) })
-        .then(res => res.json()).then(data => alert(data.message));
-    }
+    fetch("{{ route('favorite.add') }}", {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => alert(data.message));
+}
+
+function addToCart(id) {
+    const formData = new FormData();
+    formData.append('id_produk', id);
+    formData.append('_token', "{{ csrf_token() }}");
+
+    fetch("{{ route('cart.add') }}", {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => alert(data.message));
+}
+
 </script>
 @endsection
