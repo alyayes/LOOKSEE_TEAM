@@ -18,7 +18,7 @@ use App\Http\Controllers\StyleJournalAdminController;
 use App\Http\Controllers\DashboardAdminController;
 use App\Http\Controllers\AnalyticsAdminController;
 use App\Http\Controllers\UsersAdminController;
-use App\Http\Controllers\TodaysOutfitAdminController; 
+use App\Http\Controllers\TodaysOutfitAdminController;
 use App\Http\Controllers\PersonalizationController;
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -27,7 +27,7 @@ Route::get('/register', [AuthController::class, 'showRegister'])->name('register
 // register POST
 Route::post('/register', [AuthController::class, 'register']);
 
-Route::get('/check-auth', function() {
+Route::get('/check-auth', function () {
     dd(Auth::id());
 });
 
@@ -43,8 +43,9 @@ Route::get('/mood', [HomeController::class, 'showMoodProducts'])->name('mood.pro
 Route::get('/mood', [HomeController::class, 'showMoodProducts'])->name('mood.products');
 // Profile setting
 Route::get('/settings/profile', [ProfileController::class, 'showSettings'])->name('profile.settings');
+Route::post('/update-profile', [ProfileController::class, 'updateSettings'])->name('profile.update');
 // Route untuk LOGOUT (Perlu Controller tersendiri di proyek nyata)
-Route::get('/logout', function() {
+Route::get('/logout', function () {
     // Simulasi logout
     return redirect()->route('login')->with('info', 'Anda telah berhasil logout.');
 })->name('logout');
@@ -109,51 +110,62 @@ Route::delete('/checkout/address/delete/{id}', [CheckoutController::class, 'dele
 
 // --- ROUTE DUMMY LAIN & REDIRECT ---
 // Redirect URL lama dari header ke URL baru yang lebih rapi
-Route::get('/trends', function () { return redirect()->route('community.trends'); })->name('trends');
+Route::get('/trends', function () {
+    return redirect()->route('community.trends'); })->name('trends');
 // INI BAGIAN YANG DIPERBAIKI: 'komunitas.todaysOutfit' -> 'community.todays-outfit'
-Route::get('/to', function () { return redirect()->route('community.todays-outfit'); })->name('to');
-Route::get('/orders', function () { return redirect()->route('orders.list'); })->name('orders');
+Route::get('/to', function () {
+    return redirect()->route('community.todays-outfit'); })->name('to');
+Route::get('/orders', function () {
+    return redirect()->route('orders.list'); })->name('orders');
 
 // Route dummy untuk link header yang belum dibuat
-Route::get('/favorites', function () { return "Halaman Favorites (Dummy)"; })->name('favorites');
+Route::get('/favorites', function () {
+    return "Halaman Favorites (Dummy)"; })->name('favorites');
 // Route::get('/settings', function () { return "Halaman Settings (Dummy)"; })->name('settings');
-Route::get('/logout', function () { return "Proses Logout (Dummy)"; })->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
 
 // --- HALAMAN FAVORIT ---
 Route::prefix('favorites')->name('favorites.')->group(function () {
     // Menampilkan halaman utama My Favorites
     Route::get('/', [FavoriteController::class, 'index'])->name('index');
-    
+
     // Endpoint AJAX untuk menghapus produk dari favorit
     Route::post('/delete', [FavoriteController::class, 'deleteFavorite'])->name('delete');
-    
+
     // Endpoint AJAX untuk menambah produk ke keranjang dari halaman favorit
     Route::post('/add-to-cart', [FavoriteController::class, 'addToCart'])->name('addToCart');
 });
-Route::post('/cart/add/{id_produk}', [CartController::class, 'addToCart'])->name('cart.add');
+Route::post('/cart/add/', [CartController::class, 'addToCart'])->name('cart.add');
 
 
 // --- HALAMAN PRODUK ---
 Route::prefix('products')->name('products.')->group(function () {
     // Halaman detail untuk satu produk
     Route::get('/{id}', [ProductController::class, 'show'])->name('detail');
-    
+
     // Endpoint AJAX untuk menambah ke keranjang dari halaman detail
     Route::post('/add-to-cart', [ProductController::class, 'addToCart'])->name('addToCart');
-    
+
     // Endpoint AJAX untuk menambah/menghapus favorit
     Route::post('/add-to-favorite', [ProductController::class, 'addToFavorite'])->name('addToFavorite');
 });
 
+// FAVORITE
+Route::post('/favorite/add', [FavoriteController::class, 'store'])->name('favorite.add');
+
+// CART
+Route::post('/cart/add', [CartController::class, 'store'])->name('cart.add');
+
 /* --- RUTE PRODUK ADMIN (CRUD) --- */
 Route::prefix('admin')->group(function () {
-    
+
     // 1. [GET] Index: Menampilkan daftar produk
     // URI: /admin/products
-    Route::get('/products', [ProductsAdminController::class, 'index'])->name('products.index'); 
+    Route::get('/products', [ProductsAdminController::class, 'index'])->name('products.index');
     // 2. [GET] Create: Menampilkan form tambah produk
     // URI: /admin/products/add
-Route::get('/products/add', [ProductsAdminController::class, 'add'])->name('products.add');
+    Route::get('/products/add', [ProductsAdminController::class, 'add'])->name('products.add');
     // 3. [POST] Store: Memproses data form tambah
     // URI: /admin/products
     Route::post('/products', [ProductsAdminController::class, 'store'])->name('products.store');
@@ -191,10 +203,20 @@ Route::resource('stylejournal', StyleJournalAdminController::class)->names([
 ]);
 Route::get('/dashboard', [DashboardAdminController::class, 'index'])->name('dashboard.dashboardAdmin');
 
+<<<<<<< HEAD
 Route::prefix('admin')->group(function () {    
     Route::get('/orders', [OrdersAdminController::class, 'index'])->name('admin.orders.index');    
     Route::post('/orders/update-status', [OrdersAdminController::class, 'updateStatus'])->name('admin.order.updateStatus');
     Route::get('/orders/{order_id}', [OrdersAdminController::class, 'show'])->name('admin.order.detail');
+=======
+Route::prefix('admin')->group(function () {
+    Route::get('/orders', [OrdersAdminController::class, 'index'])->name('admin.orders.index');
+    Route::get('/orders/{order_id}', [OrdersAdminController::class, 'detail'])->name('admin.order.detail');
+    Route::post('/orders/update-status', [OrdersAdminController::class, 'updateStatus'])
+        ->name('admin.order.updateStatus');
+    Route::get('/admin/orders/{order_id}', [OrdersAdminController::class, 'show'])
+        ->name('admin.order.detail');
+>>>>>>> 5586a1b294553a0d208443be0c79417f906441a7
 
 });
 
@@ -202,11 +224,3 @@ Route::prefix('admin')->group(function () {
 Route::get('/users-admin', [UsersAdminController::class, 'index'])->name('users-admin.usersAdmin');
 Route::get('/toAdmin', [TodaysOutfitAdminController::class, 'index'])->name('toAdmin.toAdmin');
 
-// Rute utama (/) akan mengecek status onboarding
-Route::get('/', [PersonalizationController::class, 'showOnboarding']); 
-// Route ini men-serve halaman Home jika onboarding sudah selesai
-Route::get('/homepage', [HomeController::class, 'index'])->name('persona');
-
-// ONBOARDING ROUTES
-Route::get('/onboarding/personalize', [PersonalizationController::class, 'showOnboarding'])->name('onboarding.show');
-Route::post('/onboarding/process', [PersonalizationController::class, 'processOnboarding'])->name('onboarding.process');

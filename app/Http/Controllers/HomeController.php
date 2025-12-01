@@ -10,10 +10,13 @@ class HomeController extends Controller
     private $limit = 5; 
     private $moodLimit = 10;
 
+    // Method Home Page (URL: /home)
     public function index(Request $request)
     {
+        // GANTI DUMMY KE DATABASE
         $allProducts = Produk::orderByDesc('id_produk')->get();
 
+        // --- Produk Wanita ---
         $productsWoman = $allProducts->filter(function($p) {
             return in_array($p->kategori, ['Wanita', 'Woman']);
         })->values()->all();
@@ -44,14 +47,17 @@ class HomeController extends Controller
         ]);
     }
 
+    // Method Selected Mood (URL: /mood)
     public function showMoodProducts(Request $request)
     {
+        // GANTI DUMMY KE DATABASE
         $allProducts = Produk::orderByDesc('id_produk')->get();
 
         $mood = strtolower($request->query('mood', 'netral'));
         $gender = strtolower($request->query('gender', ''));
         $currentPage = $request->query('page', 1);
 
+        // --- 2. Filter Mood + Gender ---
         $filteredProducts = $allProducts->filter(function($p) use ($mood, $gender) {
 
             $isMoodMatch = str_contains(strtolower($p->mood), $mood);
@@ -64,6 +70,7 @@ class HomeController extends Controller
             return $isMoodMatch && $isGenderMatch;
         })->values()->all();
 
+        // --- 3. Pagination Manual ---
         $totalProducts = count($filteredProducts);
         $totalPages = ceil($totalProducts / $this->moodLimit);
         $offset = ($currentPage - 1) * $this->moodLimit;
