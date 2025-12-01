@@ -2,49 +2,45 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Favorite;
 use App\Models\Produk;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FavoriteController extends Controller
 {
-    public function index()
+    public function store(Request $request)
     {
-        $userId = 1; // sementara, karena kamu bilang jangan pakai Auth dulu
+        $request->validate([
+            'id_produk' => 'required|exists:produk,id_produk'
+        ]);
 
-        // Ambil daftar favorite user
-        $favorites = Favorite::where('user_id', $userId)->get();
+        $user = Auth::user();
 
-        $favorite_products = [];
+        $existing = Favorite::where('id_user', $user->id)
+                            ->where('id_produk', $request->id_produk)
+                            ->first();
 
-        foreach ($favorites as $fav) {
-
-            // Ambil produk dari tabel produk_looksee (MODEL SUDAH BENAR)
-            $produk = Produk::where('id_produk', $fav->id_produk)->first();
-
-            if ($produk) {
-                $favorite_products[] = [
-                    'id_fav'        => $fav->id_fav,
-                    'id_produk'     => $produk->id_produk,
-                    'nama_produk'   => $produk->nama_produk,
-                    'harga'         => $produk->harga,
-                    'gambar_produk' => $produk->gambar_produk,
-                ];
-            }
+        if ($existing) {
+            $existing->delete();
+            return response()->json(['status' => 'removed']);
         }
 
-        return view('favorite.favorite', compact('favorite_products'));
+        Favorite::create([
+            'id_user' => $user->id,
+            'id_produk' => $request->id_produk
+        ]);
+
+        return response()->json(['status' => 'added']);
     }
 
-    public function deleteFavorite(Request $request)
+    public function index()
     {
-        $request->validate(['id_favorite' => 'required|numeric']);
+        $user = Auth::user();
+        $favorite_products = Favorite::with('produk')
+            ->where('id_user', $user->id)
+            ->get();
 
-        Favorite::where('id_fav', $request->id_favorite)->delete();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Product successfully removed!'
-        ]);
+        return view('favorite.favorite', compact('favorite_products'));
     }
 }

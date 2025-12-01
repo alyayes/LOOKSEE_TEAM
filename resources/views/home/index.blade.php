@@ -13,37 +13,49 @@
             <h5>New Collection</h5>
             <h1>New Woman Tops <br> Collection</h1>
             <p>Outfit the Day, Own the Mood!</p>
-            <a href="#mood" class="main-btn">Suits the Mood<i class='bx bx-right-arrow-alt'></i></a>
-            <a href="#latest-product" class="main-btn">Shop Now<i class='bx bx-right-arrow-alt'></i></a>
+            <a href="#mood" class="main-btn">Suits the Mood <i class='bx bx-right-arrow-alt'></i></a>
+            <a href="#latest-product" class="main-btn">Shop Now <i class='bx bx-right-arrow-alt'></i></a>
         </div>
     </div>
 </section>
 
 <section class="main-about">
     <div class="main-about-us">
-        <h2>Why <Span>Choose Us?</Span></h2>     
-        <p><d>LOOKSEE</d> is an innovative fashion platform that provides outfit recommendations for campus activities. 
-            We offer a personalization feature that allows users to customize their outfit concepts according to their mood. ... 
-            <a href="aboutLaPe.php"><i>Learn More</i></a>
-        </p>
+        <h2>Why <span>Choose Us?</span></h2>
+        <p><d>LOOKSEE</d> is an innovative platform...</p>
         <br>
+
+        <div class="about-icon">
+            <h>
+                <i class='bx bx-wink-smile'> Full Personalization</i>
+                <p>The recommended outfit truly matches each user's mood.</p>
+                <br>
+
+                <i class='bx bx-trending-up'> Current Trends</i>
+                <p>Stay updated with the latest fashion trends.</p>
+                <br>
+
+                <i class='bx bx-wallet'> Quality Assurance and Budget-Friendly</i>
+                <p>Trusted brands & budget-friendly prices.</p>
+            </h>
+        </div>
     </div>
 </section>
 
-
-{{-- ========================  PRODUK WANITA  ======================== --}}
+{{-- ================= WOMAN ================= --}}
 <section class="recommend-product" id="latest-product">
     <div class="text">
         <h2>Latest <span>Products</span></h2>
         <h3>Woman</h3>
-    </div> 
+    </div>
 
     <div class="product-grid">
         @forelse($productsWoman as $row)
         <div class="product-card">
             <div class="product-image">
-                <img src="{{ asset('storage/uploads/' . $row['gambar_produk']) }}" 
-                     alt="{{ $row['nama_produk'] }}">
+                <img 
+                    src="{{ asset('assets/images/produk-looksee/' . $row['gambar_produk']) }}" 
+                    alt="{{ $row['nama_produk'] }}">
             </div>
 
             <div class="product-details">
@@ -67,10 +79,21 @@
             <p>Tidak ada produk wanita saat ini.</p>
         @endforelse
     </div>
+
+    <div class="page-btn">
+        @for ($i = 1; $i <= $totalPagesWoman; $i++)
+            <span class="{{ $i == $pageWoman ? 'active' : '' }}" onclick="goToPage('page_woman', {{ $i }})">
+                {{ $i }}
+            </span>
+        @endfor
+
+        @if ($pageWoman < $totalPagesWoman)
+            <span onclick="goToPage('page_woman', {{ $pageWoman + 1 }})">&#8594;</span>
+        @endif
+    </div>
 </section>
 
-
-{{-- ========================  PRODUK PRIA  ======================== --}}
+{{-- ================= MAN ================= --}}
 <section class="recommend-product" id="recommend">
     <div class="text">
         <h3>Man</h3>
@@ -80,8 +103,9 @@
         @forelse($productsMan as $row)
         <div class="product-card">
             <div class="product-image">
-                <img src="{{ asset('storage/uploads/' . $row['gambar_produk']) }}" 
-                     alt="{{ $row['nama_produk'] }}">
+                <img 
+                    src="{{ asset('assets/images/produk-looksee/' . $row['gambar_produk']) }}" 
+                    alt="{{ $row['nama_produk'] }}">
             </div>
 
             <div class="product-details">
@@ -105,8 +129,21 @@
             <p>Tidak ada produk pria saat ini.</p>
         @endforelse
     </div>
+
+    <div class="page-btn">
+        @for ($i = 1; $i <= $totalPagesMan; $i++)
+            <span class="{{ $i == $pageMan ? 'active' : '' }}" onclick="goToPage('page_man', {{ $i }})">
+                {{ $i }}
+            </span>
+        @endfor
+
+        @if ($pageMan < $totalPagesMan)
+            <span onclick="goToPage('page_man', {{ $pageMan + 1 }})">&#8594;</span>
+        @endif
+    </div>
 </section>
 
+@include('home.mood')
 
 @include('home.mood')
 
@@ -116,7 +153,7 @@
     <div class="partner-group">
         <h3 class="partner-title">Our Partner</h3>
         <div class="partner-logos">
-            <a href="https://www.instagram.com/satriabandungjaya/" class="brand-toko">
+            <a href="https://www.instagram.com/satriabandungjaya/">
                 <img src="{{ asset('assets/images/sbj.jpg') }}" alt="Satria Bandung Jaya">
             </a>
         </div>
@@ -125,82 +162,41 @@
     <div class="platform-group">
         <h3 class="platform-title">Our Platform</h3>
         <div class="platform-logos">
-            <a href="https://shopee.co.id/" class="brand-toko">
-                <img src="{{ asset('assets/images/shopee.jpg') }}" alt="Shopee">
-            </a>
-            <a href="https://www.tokopedia.com/" class="brand-toko">
-                <img src="{{ asset('assets/images/tokped.jpg') }}" alt="Tokopedia">
-            </a>
+            <a href="https://shopee.co.id/"><img src="{{ asset('assets/images/shopee.jpg') }}" alt="Shopee"></a>
+            <a href="https://www.tokopedia.com/"><img src="{{ asset('assets/images/tokped.jpg') }}" alt="Tokopedia"></a>
         </div>
     </div>
 </div>
 
-
 @endsection
 
-
-{{-- ========================  JAVASCRIPT FAVORITE & CART  ======================== --}}
 @section('footer_scripts')
 <script>
-    // Fungsi untuk navigasi pagination Home
-    function goToPage(param, value) {
-        const url = new URL(window.location.href);
-        url.searchParams.set(param, value);
-        
-        // Hapus parameter pagination kategori lain jika ada
-        if (param === 'page_woman') {
-            url.searchParams.delete('page_man');
-        } else if (param === 'page_man') {
-            url.searchParams.delete('page_woman');
-        }
-        
-        url.hash = '';
-        window.location.href = url.toString();
-    }
-    
-    function addToFavorites(idProduk) {
-        fetch('add_to_favorite.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'id_produk=' + idProduk
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message);
-        })
-        .catch(err => {
-            console.error('Error:', err);
-            alert('Terjadi kesalahan.');
-        });
-    }
+    function addToFavorites(id) {
+    const formData = new FormData();
+    formData.append('id_produk', id);
+    formData.append('_token', "{{ csrf_token() }}");
 
-    function addToCart(idProduk) {
-        fetch(`/cart/add/${idProduk}`, {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
-            },
-            body: JSON.stringify({})
-        })
-        .then(response => response.json()) 
-        .then(data => {
-            if(data.status === 'error') {
-                alert(data.message); 
-            } else {
-                alert(data.message || 'Berhasil ditambahkan!');
-            }
-        })
-        .catch(error => {
-            console.error("Detail Error:", error);
-            alert("Gagal koneksi. Cek Console (F12) untuk detail.");
-        });
-    }
+    fetch("{{ route('favorite.add') }}", {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => alert(data.message));
+}
 
+function addToCart(id) {
+    const formData = new FormData();
+    formData.append('id_produk', id);
+    formData.append('_token', "{{ csrf_token() }}");
 
-</script>
+    fetch("{{ route('cart.add') }}", {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => alert(data.message));
+}
 
 </script>
 @endsection
