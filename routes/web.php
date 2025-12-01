@@ -122,8 +122,8 @@ Route::get('/orders', function () {
 Route::get('/favorites', function () {
     return "Halaman Favorites (Dummy)"; })->name('favorites');
 // Route::get('/settings', function () { return "Halaman Settings (Dummy)"; })->name('settings');
-Route::get('/logout', function () {
-    return "Proses Logout (Dummy)"; })->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
 
 // --- HALAMAN FAVORIT ---
 Route::prefix('favorites')->name('favorites.')->group(function () {
