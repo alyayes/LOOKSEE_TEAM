@@ -6,13 +6,14 @@ use App\Models\User;
 use App\Models\Produk;
 use App\Models\UserAddress;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
 
     public function index()
     {
-        $user = User::first(); 
+        $user = Auth::user(); 
         if (!$user) abort(404, 'User tidak ditemukan');
 
         $addresses = UserAddress::where('user_id', $user->id)->get();
@@ -32,7 +33,7 @@ class ProfileController extends Controller
 
     public function showSettings()
     {
-        $user = User::first();
+        $user = Auth::user();
         if (!$user) abort(404, 'User tidak ditemukan');
 
         return view('profile.settings', [
@@ -40,9 +41,9 @@ class ProfileController extends Controller
         ]);
     }
 
-        public function updateSettings(Request $request)
+    public function updateSettings(Request $request)
     {
-        $user = User::first();
+        $user = Auth::user();
         if (!$user) abort(404, 'User tidak ditemukan');
 
         $request->validate([
@@ -58,7 +59,7 @@ class ProfileController extends Controller
             'instagram' => 'nullable|string|max:100',
         ]);
 
-        // Handle foto profile
+        // Foto profil
         if ($request->hasFile('profile_picture')) {
             $file = $request->file('profile_picture');
             $filename = time() . '_' . $file->getClientOriginalName();
@@ -89,10 +90,9 @@ class ProfileController extends Controller
         return redirect()->route('profile.settings')->with('success', 'Profile updated successfully.');
     }
 
-
     public function uploadImage(Request $request)
     {
-        $user = auth()->user(); 
+        $user = Auth::user(); 
         if (!$user) {
             return redirect()->route('login')->with('error', 'Authentication required.');
         }
@@ -112,23 +112,19 @@ class ProfileController extends Controller
 
     public function showCreatePostForm(Request $request)
     {
-        // Mengambil nama file dari parameter URL (query string)
         $filename = $request->query('temp_image_filename');
         
         if (!$filename) {
-            // Jika tidak ada gambar, redirect kembali ke profil
             return redirect()->route('profile.index')->with('error', 'Anda harus mengunggah gambar terlebih dahulu.');
         }
 
-        // Mendapatkan semua produk untuk modal tagging
         $all_products = Produk::all(); 
 
-        // Tentukan path gambar yang akan ditampilkan di blade
         $imagePath = asset('assets/images/todays outfit/' . $filename);
         
         return view('profile.create_post', [
             'imagePath' => $imagePath,
-            'imageFilename' => $filename, // Nama file untuk disimpan di DB saat POST
+            'imageFilename' => $filename,
             'all_products' => $all_products,
         ]);
     }

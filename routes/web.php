@@ -136,7 +136,7 @@ Route::prefix('favorites')->name('favorites.')->group(function () {
     // Endpoint AJAX untuk menambah produk ke keranjang dari halaman favorit
     Route::post('/add-to-cart', [FavoriteController::class, 'addToCart'])->name('addToCart');
 });
-Route::post('/cart/add/{id_produk}', [CartController::class, 'addToCart'])->name('cart.add');
+Route::post('/cart/add/', [CartController::class, 'addToCart'])->name('cart.add');
 
 
 // --- HALAMAN PRODUK ---
