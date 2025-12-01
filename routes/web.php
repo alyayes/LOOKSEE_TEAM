@@ -43,6 +43,7 @@ Route::get('/mood', [HomeController::class, 'showMoodProducts'])->name('mood.pro
 Route::get('/mood', [HomeController::class, 'showMoodProducts'])->name('mood.products');
 // Profile setting
 Route::get('/settings/profile', [ProfileController::class, 'showSettings'])->name('profile.settings');
+Route::post('/update-profile', [ProfileController::class, 'updateSettings'])->name('profile.update');
 // Route untuk LOGOUT (Perlu Controller tersendiri di proyek nyata)
 Route::get('/logout', function() {
     // Simulasi logout
@@ -205,11 +206,3 @@ Route::prefix('admin')->group(function () {
 Route::get('/users-admin', [UsersAdminController::class, 'index'])->name('users-admin.usersAdmin');
 Route::get('/toAdmin', [TodaysOutfitAdminController::class, 'index'])->name('toAdmin.toAdmin');
 
-// Rute utama (/) akan mengecek status onboarding
-Route::get('/', [PersonalizationController::class, 'showOnboarding']); 
-// Route ini men-serve halaman Home jika onboarding sudah selesai
-Route::get('/homepage', [HomeController::class, 'index'])->name('persona');
-
-// ONBOARDING ROUTES
-Route::get('/onboarding/personalize', [PersonalizationController::class, 'showOnboarding'])->name('onboarding.show');
-Route::post('/onboarding/process', [PersonalizationController::class, 'processOnboarding'])->name('onboarding.process');
