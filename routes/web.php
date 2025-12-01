@@ -43,6 +43,7 @@ Route::get('/mood', [HomeController::class, 'showMoodProducts'])->name('mood.pro
 Route::get('/mood', [HomeController::class, 'showMoodProducts'])->name('mood.products');
 // Profile setting
 Route::get('/settings/profile', [ProfileController::class, 'showSettings'])->name('profile.settings');
+Route::post('/update-profile', [ProfileController::class, 'updateSettings'])->name('profile.update');
 // Route untuk LOGOUT (Perlu Controller tersendiri di proyek nyata)
 Route::get('/logout', function() {
     // Simulasi logout
