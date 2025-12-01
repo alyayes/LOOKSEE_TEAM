@@ -241,8 +241,11 @@
                                 </div>
                             </div>
                         </td>
-                        {{-- Menggunakan helper route() untuk link detail order --}}
-                        <td><a href="{{ url('order_detail/' . $row['order_id']) }}"><i class='bx bx-show-alt'></i></a></td>
+                        <td>
+                            <a href="{{ route('admin.order.detail', ['order_id' => $row['order_id']]) }}">
+                                <i class='bx bx-show-alt'></i>
+                            </a>
+                        </td>
                     </tr>
                 @empty
                     <tr>
@@ -286,7 +289,7 @@
                     // Ambil CSRF token dari meta tag
                     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
                     // URL untuk AJAX update status (Pastikan route ini sudah didefinisikan)
-                    const updateStatusUrl = '{{ route('orders.update_status') }}'; 
+                    const updateStatusUrl = '{{ route('admin.order.updateStatus') }}';
 
                     // 1. Toggle Dropdown Status
                     document.querySelectorAll('.status-badge').forEach(badge => {

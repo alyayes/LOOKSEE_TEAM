@@ -191,13 +191,10 @@ Route::resource('stylejournal', StyleJournalAdminController::class)->names([
 ]);
 Route::get('/dashboard', [DashboardAdminController::class, 'index'])->name('dashboard.dashboardAdmin');
 
-Route::prefix('admin')->group(function () {
-    Route::get('/orders', [OrdersAdminController::class, 'index'])->name('admin.orders.index');
-    Route::get('/orders/{order_id}', [OrdersAdminController::class, 'detail'])->name('admin.order.detail');
-    Route::post('/orders/update-status', [OrdersAdminController::class, 'updateStatus'])
-        ->name('admin.order.updateStatus');
-    Route::get('/admin/orders/{order_id}', [OrdersAdminController::class, 'show'])
-    ->name('admin.order.detail');
+Route::prefix('admin')->group(function () {    
+    Route::get('/orders', [OrdersAdminController::class, 'index'])->name('admin.orders.index');    
+    Route::post('/orders/update-status', [OrdersAdminController::class, 'updateStatus'])->name('admin.order.updateStatus');
+    Route::get('/orders/{order_id}', [OrdersAdminController::class, 'show'])->name('admin.order.detail');
 
 });
 
