@@ -142,49 +142,65 @@
 {{-- ========================  JAVASCRIPT FAVORITE & CART  ======================== --}}
 @section('footer_scripts')
 <script>
-
-function addToFavorites(idProduk) {
-    fetch("{{ route('products.addToFavorite') }}", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": "{{ csrf_token() }}"
-        },
-        body: JSON.stringify({
-            id_produk: idProduk
+    // Fungsi untuk navigasi pagination Home
+    function goToPage(param, value) {
+        const url = new URL(window.location.href);
+        url.searchParams.set(param, value);
+        
+        // Hapus parameter pagination kategori lain jika ada
+        if (param === 'page_woman') {
+            url.searchParams.delete('page_man');
+        } else if (param === 'page_man') {
+            url.searchParams.delete('page_woman');
+        }
+        
+        url.hash = '';
+        window.location.href = url.toString();
+    }
+    
+    function addToFavorites(idProduk) {
+        fetch('add_to_favorite.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'id_produk=' + idProduk
         })
-    })
-    .then(res => res.json())
-    .then(data => {
-        alert(data.message);
-    })
-    .catch(err => {
-        console.error(err);
-        alert("Terjadi kesalahan saat menambah favorite.");
-    });
-}
-
-
-function addToCart(idProduk) {
-    fetch("{{ route('products.addToCart') }}", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": "{{ csrf_token() }}"
-        },
-        body: JSON.stringify({
-            id_produk: idProduk
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
         })
-    })
-    .then(res => res.json())
-    .then(data => {
-        alert(data.message);
-    })
-    .catch(err => {
-        console.error(err);
-        alert("Terjadi kesalahan saat menambah ke keranjang.");
-    });
-}
+        .catch(err => {
+            console.error('Error:', err);
+            alert('Terjadi kesalahan.');
+        });
+    }
+
+    function addToCart(idProduk) {
+        fetch(`/cart/add/${idProduk}`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => response.json()) 
+        .then(data => {
+            if(data.status === 'error') {
+                alert(data.message); 
+            } else {
+                alert(data.message || 'Berhasil ditambahkan!');
+            }
+        })
+        .catch(error => {
+            console.error("Detail Error:", error);
+            alert("Gagal koneksi. Cek Console (F12) untuk detail.");
+        });
+    }
+
+
+</script>
 
 </script>
 @endsection
