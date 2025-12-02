@@ -214,3 +214,4 @@ Route::get('/homepage', [HomeController::class, 'index'])->name('persona');
 // ONBOARDING ROUTES
 Route::get('/onboarding/personalize', [PersonalizationController::class, 'showOnboarding'])->name('onboarding.show');
 Route::post('/onboarding/process', [PersonalizationController::class, 'processOnboarding'])->name('onboarding.process');
+});
