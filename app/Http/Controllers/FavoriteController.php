@@ -38,11 +38,19 @@ class FavoriteController extends Controller
     {
         $user = Auth::user();
 
-        // PAGINATION FIX
+        // FAVORITE PRODUCTS
         $favorite_products = Favorite::with('product')
             ->where('user_id', $user->id)
-            ->paginate(8); // bebas 8 per halaman
+            ->paginate(8);
 
-        return view('favorite.favorite', compact('favorite_products', 'user'));
+        // STYLE FAVORITES (sementara kosong)
+        $liked_posts = collect(); // FIX ERROR Undefined variable
+
+        return view('favorite.favorite', [
+            'favorite_products' => $favorite_products,
+            'liked_posts' => $liked_posts,
+            'user' => $user
+        ]);
     }
+
 }

@@ -15,12 +15,13 @@
 
     {{-- Navigasi Tab --}}
     <div class="tabs">
-        {{-- Menggunakan 'this' untuk memberitahu JS tombol mana yang diklik --}}
         <div class="tab active" onclick="showTab('style', this)">Style</div>
         <div class="tab" onclick="showTab('products', this)">Products</div>
     </div>
 
-    {{-- Konten Tab "Style" --}}
+    {{-- =======================
+         TAB: STYLE
+       ======================= --}}
     <div id="style" class="content">
         <div class="gallery">
             @forelse ($liked_posts as $post)
@@ -28,8 +29,7 @@
                     <a href="{{ route('community.post.detail', ['id' => $post['id_post']]) }}" class="card-link-wrapper">
                         <div class="image-placeholder">
                             <img src="{{ asset('assets/images/todays outfit/' . ($post['image_post'] ?? 'placeholder.jpg')) }}"
-                                 alt="Post image: {{ $post['caption'] }}"
-                                >
+                                alt="Post image: {{ $post['caption'] }}">
                             <p class="like-count-overlay"><i class='bx bxs-heart'></i> {{ $post['total_likes'] }}</p>
                         </div>
                         <div class="card-body">
@@ -38,6 +38,7 @@
                                 <img src="{{ asset('assets/images/profile/' . ($user['profile_picture'] ?? 'profile2.jpeg')) }}"
                                     alt="Profile picture of {{ $user['username'] ?? '' }}" />
                                 <p class="username-text">{{ $post['username'] }}</p>
+
                                 @if(!empty($post['mood']))
                                     @php $mood_class = 'mood-' . strtolower(str_replace(' ', '-', $post['mood'])); @endphp
                                     <span class="tag {{ $mood_class }}">{{ $post['mood'] }}</span>
@@ -52,30 +53,41 @@
         </div>
     </div>
 
-    {{-- Konten Tab "Products" --}}
+    {{-- =======================
+         TAB: PRODUCTS
+       ======================= --}}
     <div id="products" class="content" style="display: none;">
         <div class="product-grid">
-            @forelse ($favorite_products as $product)
-                <div class="product-card" id="product-{{ $product['id_fav'] }}">
+
+            @forelse ($favorite_products as $fav)
+                <div class="product-card" id="product-{{ $fav->id_fav }}">
+                    
+                    {{-- IMAGE --}}
                     <div class="product-image">
-                        <img src="{{ asset('assets/images/produk-looksee/' . ($product['gambar_produk'] ?? 'placeholder.jpg')) }}"
-                             alt="{{ $product['nama_produk'] }}"
+                        <img src="{{ asset('assets/images/produk-looksee/' . ($fav->product->gambar_produk ?? 'placeholder.jpg')) }}"
+                             alt="{{ $fav->product->nama_produk }}"
                              onerror="this.onerror=null;this.src='https://placehold.co/200x200/EFEFEF/AAAAAA?text=No+Image';">
                     </div>
+
+                    {{-- DETAILS --}}
                     <div class="product-details">
-                        <h4>{{ $product['nama_produk'] }}</h4>
-                        <p>Rp {{ number_format($product['harga'], 0, ',', '.') }}</p>
+                        <h4>{{ $fav->product->nama_produk }}</h4>
+                        <p>Rp {{ number_format($fav->product->harga, 0, ',', '.') }}</p>
+                        
                         <div class="actions">
-                            <button class="btn favorite-btn" data-fav-id="{{ $product['id_fav'] }}">Delete</button>
-                            <button class="btn buy-now-btn" data-product-id="{{ $product['id_produk'] }}">Add to Cart</button>
+                            <button class="btn favorite-btn" data-fav-id="{{ $fav->id_fav }}">Delete</button>
+                            <button class="btn buy-now-btn" data-product-id="{{ $fav->id_produk }}">Add to Cart</button>
                         </div>
                     </div>
+
                 </div>
             @empty
                 <p class="empty-message">You haven't added any products to your favorites yet.</p>
             @endforelse
+
         </div>
     </div>
+
 </div>
 @endsection
 

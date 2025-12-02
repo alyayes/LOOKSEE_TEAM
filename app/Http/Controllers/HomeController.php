@@ -58,7 +58,7 @@ class HomeController extends Controller
         // AMBIL DATA REAL DARI DATABASE
         $allProducts = Produk::orderByDesc('id_produk')->get();
 
-        $mood = strtolower($request->query('mood', 'netral'));
+        $mood = strtolower($request->query('mood', 'neutral'));
         $gender = strtolower($request->query('gender', ''));
         $currentPage = $request->query('page', 1);
 

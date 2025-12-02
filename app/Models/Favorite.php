@@ -8,7 +8,7 @@ class Favorite extends Model
 {
     protected $table = 'favorite';
     protected $primaryKey = 'id_fav';
-    public $timestamps = true;
+    public $timestamps = false;
     protected $fillable = [
         'user_id',
         'id_produk'
@@ -19,7 +19,7 @@ class Favorite extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function produk()
+    public function product()
     {
         return $this->belongsTo(Produk::class, 'id_produk', 'id_produk');
     }
