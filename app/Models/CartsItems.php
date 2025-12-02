@@ -7,13 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class CartsItems extends Model
 {
-    // 
     use HasFactory;
     
-    protected $table = 'carts_items';
-    protected $primaryKey = 'cart_item_id';
-    public $timestamps = false;
-    protected $fillable = ['user_id', 'id_produk', 'quantity', 'added_at'];
+    protected $table = 'carts_items';    
+    public $timestamps = true; 
+    protected $fillable = ['user_id', 'product_id', 'quantity', 'created_at'];
 
     public function user()
     {
@@ -22,6 +20,6 @@ class CartsItems extends Model
 
     public function produk()
     {
-        return $this->belongsTo(Produk::class, 'id_produk');
+        return $this->belongsTo(Produk::class, 'product_id', 'id_produk');
     }
 }

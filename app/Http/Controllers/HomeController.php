@@ -58,12 +58,10 @@ class HomeController extends Controller
         // AMBIL DATA REAL DARI DATABASE
         $allProducts = Produk::orderByDesc('id_produk')->get();
 
-        // --- 1. Ambil Input ---
         $mood = strtolower($request->query('mood', 'netral'));
         $gender = strtolower($request->query('gender', ''));
         $currentPage = $request->query('page', 1);
 
-        // --- 2. Filter Mood + Gender ---
         $filteredProducts = $allProducts->filter(function($p) use ($mood, $gender) {
 
             // cek mood: produk->mood mengandung kata mood yang dicari (case-insensitive)
@@ -78,7 +76,6 @@ class HomeController extends Controller
             return $isMoodMatch && $isGenderMatch;
         })->values()->all();
 
-        // --- 3. Pagination Manual ---
         $totalProducts = count($filteredProducts);
         $totalPages = ceil($totalProducts / $this->moodLimit);
 

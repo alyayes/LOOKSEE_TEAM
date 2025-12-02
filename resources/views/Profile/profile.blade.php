@@ -17,7 +17,7 @@
             }
         @endphp
         <img src="{{ asset('assets/images/profile/' . ($userData['profile_picture'] ?? 'placeholder.jpg')) }}" 
-                        alt="Profile Picture" class="profile-pic">
+            alt="Profile Picture" class="profile-pic">
         <h1>{{ $userData['name'] ?? 'N/A' }}</h1>
         <p>@<span>{{ $userData['username'] ?? 'N/A' }}</span></p>
         <p>{{ $userData['bio'] ?? 'No bio available.' }}</p>
@@ -37,11 +37,31 @@
             <div class="posting">
                 <div class="post-header">
                     <a href="#">
-                        <img src="{{ asset('assets/images/profile/' . ($userData['profile_picture'] ?? 'placeholder.jpg')) }}" 
+                        <img src="{{ asset('assets/images/profile/' . ($userData['profile_picture'] ?? 'placeholder.jpg')) }}"
                         alt="Profile Picture" class="profile-pic">
                         <div class="username">@<span>{{ $userData['username'] ?? 'N/A' }}</span></div>
                     </a>
-                    <div class="timestamp">{{ \Carbon\Carbon::parse($post['created_at'])->format('d M Y') }}</div>
+                    
+                    {{-- Tombol Aksi (Edit & Delete) dan Timestamp --}}
+                    <div class="post-actions-menu">
+                        <div class="timestamp">{{ \Carbon\Carbon::parse($post['created_at'])->format('d M Y') }}</div>
+                        
+                        <div class="dropdown">
+                            <button class="dropbtn"><i class='bx bx-dots-vertical-rounded'></i></button>
+                            <div class="dropdown-content">
+                                {{-- Tombol edit --}}
+                                <a href="{{ route('profile.post.edit', ['id' => $post->id_post]) }}">Edit Post</a>
+
+                                {{-- Tombol hapus --}}
+                                <form action="{{ route('profile.post.destroy', ['id' => $post->id_post]) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus postingan ini?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="delete-btn">Hapus Post</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="capt">
                     <p class="post-caption">{!! nl2br(e($post['caption'] ?? '')) !!}</p>
@@ -68,10 +88,9 @@
                     </div>
                 </div>
                 <div class="poster">
-                    
                     <img src="{{ asset('assets/images/todays outfit/' . ($post['image_post'] ?? 'placeholder.jpg')) }}" 
-                         onerror="this.onerror=null;this.src='https://placehold.co/600x600/EFEFEF/AAAAAA?text=No+Image';"
-                         alt="Post Image">
+                        onerror="this.onerror=null;this.src='https://placehold.co/600x600/EFEFEF/AAAAAA?text=No+Image';"
+                        alt="Post Image">
                 </div>
                 <div class="post-actions">
                     <div class="likes-comments">
@@ -92,9 +111,9 @@
             @forelse($gallery_posts as $post)
                 <div class="image-placeholder">
                     <a href="{{ route('community.post.detail', ['id' => $post['id_post']]) }}">
-                        <img src="{{ asset('assets/images/todays outfit/' . ($post['image_post'] ?? 'placeholder.jpg')) }}" 
-                         onerror="this.onerror=null;this.src='https://placehold.co/600x600/EFEFEF/AAAAAA?text=No+Image';"
-                         alt="Post Image">
+                        <img src="{{ asset('assets/images/todays outfit/' . ($post['image_post'] ?? 'placeholder.jpg')) }}"
+                            onerror="this.onerror=null;this.src='https://placehold.co/600x600/EFEFEF/AAAAAA?text=No+Image';"
+                            alt="Post Image">
                     </a>
                 </div>
             @empty

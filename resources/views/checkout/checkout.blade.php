@@ -12,10 +12,8 @@
 
 @section('content')
 <div class="contain">
-    {{-- Tampilkan pesan sukses jika ada --}}
     @if(session('success'))
         <div style="background: #d4edda; color: #155724; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
-            {{ session('success') }}
         </div>
     @endif
 
@@ -27,6 +25,7 @@
 
         <form method="POST" action="{{ route('checkout.process') }}" id="checkoutForm"> 
             @csrf
+            <input type="hidden" name="selected_products_ids" value="{{ $selectedIdsString }}">
             <div class="checkout-main-content">
                 <div class="left-column">
                     <div class="section-card delivery-address-section">
@@ -43,10 +42,8 @@
                             </span></p>
                         </div>
                         
-                        {{-- Tombol Buka Modal --}}
                         <button type="button" class="edit-address-btn" onclick="openAddressModal()">Change / Add Address</button>
 
-                        {{-- Hidden inputs untuk data checkout final --}}
                         <input type="hidden" id="hiddenDeliveryName" name="delivery_name" value="{{ $delivery_data['name'] }}">
                         <input type="hidden" id="hiddenDeliveryPhone" name="delivery_phone" value="{{ $delivery_data['phone'] }}">
                         <input type="hidden" id="hiddenDeliveryAddress" name="delivery_address" value="{{ $delivery_data['address'] }}">
@@ -162,15 +159,12 @@
         </form>
     </div>
 
-    <!-- MODAL ADDRESS MANAGER -->
     <div id="addressManagerModal" class="modal">
         <div class="modal-content" style="max-width: 600px;">
             <span class="close-btn" onclick="closeAddressModal()">&times;</span>
             
-            <!-- VIEW 1: LIST ALAMAT -->
             <div id="addressListView">
                 <h3>Select Address</h3>
-                {{-- TOMBOL PINK ADA DISINI --}}
                 <button type="button" class="add-new-address-btn" onclick="showAddForm()">+ Add New Address</button>
                 
                 <div class="address-list-container">
@@ -211,7 +205,6 @@
                 </div>
             </div>
 
-            <!-- VIEW 2: FORM INPUT/EDIT (Hidden by default) -->
             <div id="addressFormView" style="display: none;">
                 <div class="modal-header-nav">
                     <button type="button" class="back-to-list-btn" onclick="showListView()"><i class='bx bx-left-arrow-alt'></i> Back to List</button>
@@ -266,7 +259,6 @@
 @section('footer_scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // --- Payment Logic ---
             const paymentMethodRadios = document.querySelectorAll('input[name="payment_method"]');
             const bankSelectionDiv = document.getElementById('bankSelectionDiv');
             const ewalletSelectionDiv = document.getElementById('ewalletSelectionDiv');
@@ -294,7 +286,6 @@
             paymentMethodRadios.forEach(radio => radio.addEventListener('change', togglePaymentDetails));
             togglePaymentDetails(); 
 
-            // --- Form Checkout Validation ---
             const checkoutForm = document.getElementById('checkoutForm');
             if(checkoutForm) {
                 checkoutForm.addEventListener('submit', function(event) {
@@ -311,7 +302,6 @@
             }
         });
 
-        // --- NEW ADDRESS MODAL LOGIC ---
         const addressModal = document.getElementById('addressManagerModal');
         const viewList = document.getElementById('addressListView');
         const viewForm = document.getElementById('addressFormView');
@@ -364,13 +354,11 @@
         }
 
         function selectAddress(element) {
-            // Update Tampilan Utama
             document.getElementById('deliveryNameDisplay').innerText = element.getAttribute('data-name');
             document.getElementById('deliveryPhoneDisplay').innerText = element.getAttribute('data-phone');
             document.getElementById('deliveryAddressDisplay').innerText = 
                 `${element.getAttribute('data-address')}, ${element.getAttribute('data-district')}, ${element.getAttribute('data-city')}, ${element.getAttribute('data-province')}, ${element.getAttribute('data-postal')}`;
 
-            // Update Hidden Inputs
             document.getElementById('hiddenDeliveryName').value = element.getAttribute('data-name');
             document.getElementById('hiddenDeliveryPhone').value = element.getAttribute('data-phone');
             document.getElementById('hiddenDeliveryAddress').value = element.getAttribute('data-address');
@@ -378,7 +366,6 @@
             document.getElementById('hiddenDeliveryProvince').value = element.getAttribute('data-province');
             document.getElementById('hiddenDeliveryPostalCode').value = element.getAttribute('data-postal');
 
-            // Visual feedback
             document.querySelectorAll('.address-card-item').forEach(el => el.classList.remove('selected'));
             element.classList.add('selected');
 

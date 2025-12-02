@@ -2,58 +2,52 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\User;       
-use App\Models\Produk;    
 use App\Models\Order;
+use App\Models\Produk;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class DashboardAdminController extends Controller
 {
     public function index()
     {
-        $data_cards = [
-            'user_count' => User::count(),
-            'product_count' => Produk::count(),
-            'order_count' => Order::count(),
-            'total_sales' => Order::sum('total_price'),
-        ];
+        $user_count = User::count();
+        $product_count = Produk::count();
+        $order_count = Order::count();
+        $total_sales = Order::where('status', '!=', 'cancelled')->sum('grand_total');
 
-        // Ambil 5 order terbaru beserta relasi user dan produk
-        $latest_orders = Order::with('user', 'produk')
+        $latest_orders = Order::with(['user', 'items.produk', 'payment.method'])
             ->orderBy('created_at', 'desc')
             ->take(5)
             ->get()
             ->map(function ($order) {
+                
+                $productNames = $order->items->map(function($item) {
+                    return $item->produk ? $item->produk->nama_produk : 'Produk Dihapus';
+                })->join(', ');
+
+                $paymentMethod = '-';
+                if ($order->payment && $order->payment->method) {
+                    $paymentMethod = $order->payment->method->method_name;
+                }
+
                 return [
-                    'order_id' => $order->id,
-                    'order_date' => $order->created_at?->format('Y-m-d H:i:s') ?? '-',
-                    'total_price' => $order->total_price,
-                    'metode_pembayaran' => $order->payment_method,
+                    'order_id' => $order->order_id,
+                    'order_date' => $order->created_at ? $order->created_at->format('Y-m-d H:i:s') : '-',
+                    'total_price' => $order->grand_total,
+                    'metode_pembayaran' => $paymentMethod,
                     'status' => $order->status,
-                    'username' => $order->user->username ?? '-',
-                    'nama_produk_list' => $order->produk->name ?? '-', // relasi produk
+                    'username' => $order->user ? $order->user->username : 'Guest',
+                    'nama_produk_list' => $productNames ?: '-',
                 ];
             });
 
-        $data = array_merge($data_cards, ['latest_orders' => $latest_orders]);
-
-        return view('admin.dashboardAdmin.dashboardAdmin', $data);
-    }
-
-    public function updateOrderStatus(Request $request)
-    {
-        $orderId = $request->input('order_id');
-        $newStatus = $request->input('status');
-
-        if (!$orderId || !$newStatus) {
-            return response()->json(['success' => false, 'message' => 'Order ID atau status tidak valid.'], 400);
-        }
-
-        \Log::info("SIMULASI: Order ID: {$orderId} status diperbarui menjadi: {$newStatus}");
-
-        return response()->json([
-            'success' => true,
-            'message' => "Status Order ID {$orderId} berhasil diperbarui menjadi {$newStatus} (SIMULASI BERHASIL)."
-        ]);
+        return view('admin.dashboardAdmin.dashboardAdmin', compact(
+            'latest_orders', 
+            'user_count', 
+            'product_count', 
+            'order_count',
+            'total_sales' 
+        ));
     }
 }

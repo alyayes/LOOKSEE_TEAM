@@ -9,7 +9,7 @@ class Post extends Model
 {
     use HasFactory;
 
-    protected $table = 'posts'; // sesuaikan kalau nama tabelmu berbeda
+    protected $table = 'posts'; 
 
     protected $primaryKey = 'id_post';
 
@@ -27,7 +27,6 @@ class Post extends Model
         'created_at'
     ];
 
-    // Relasi ke User (many-to-one)
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');

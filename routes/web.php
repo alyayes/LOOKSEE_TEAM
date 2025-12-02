@@ -81,6 +81,17 @@ Route::prefix('profile')->name('profile.')->group(function () {
     Route::post('/post', [ProfileController::class, 'storePost'])->name('post.store');
 });
 
+// Rute untuk Edit dan Hapus Postingan
+Route::middleware(['auth'])->group(function () {
+    // Menampilkan form edit
+    Route::get('/profile/post/{id}/edit', [ProfileController::class, 'showEditPostForm'])->name('profile.post.edit');
+    
+    // Menyimpan hasil edit
+    Route::put('/profile/post/{id}', [ProfileController::class, 'updatePost'])->name('profile.post.update');
+    
+    // Menghapus postingan
+    Route::delete('/profile/post/{id}', [ProfileController::class, 'destroyPost'])->name('profile.post.destroy');
+});
 
 // --- ALUR CHECKOUT ---
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
@@ -175,8 +186,10 @@ Route::resource('stylejournalAdmin', StyleJournalAdminController::class)->names(
 ]);
 Route::get('/dashboard', [DashboardAdminController::class, 'index'])->name('dashboard.dashboardAdmin');
 
-// Route untuk mengupdate status order 
-Route::post('/orders/update-status', [DashboardAdminController::class, 'updateOrderStatus'])->name('orders.update_status');
+Route::prefix('admin')->group(function () {    
+    Route::get('/orders', [OrdersAdminController::class, 'index'])->name('admin.orders.index');    
+    Route::post('/orders/update-status', [OrdersAdminController::class, 'updateStatus'])->name('admin.order.updateStatus');
+    Route::get('/orders/{order_id}', [OrdersAdminController::class, 'show'])->name('admin.order.detail');
 
 // Mengubah pemanggilan controller ke AnalyticsAdminController
 Route::get('/analytics', [AnalyticsAdminController::class, 'index'])->name('admin.analytics.analyticsAdmin');
