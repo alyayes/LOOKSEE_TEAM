@@ -64,3 +64,66 @@
             });
         });
         
+// assets/js/post_detail.js
+
+document.addEventListener('DOMContentLoaded', function() {
+    const likeButton = document.querySelector('.post-like-button');
+
+    if (likeButton) {
+        likeButton.addEventListener('click', function() {
+            const postId = this.getAttribute('data-post-id');
+            const url = this.getAttribute('data-like-url');
+            const csrfToken = this.getAttribute('data-csrf');
+            const icon = this.querySelector('i');
+            const countElement = this.querySelector('.count');
+
+            // Cek status saat ini (untuk UI feedback sebelum fetch)
+            const isCurrentlyLiked = this.classList.contains('liked');
+
+            // Visual feedback: disable tombol
+            this.style.pointerEvents = 'none'; 
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                // Anda tidak perlu mengirim body, karena post ID sudah ada di URL
+                body: JSON.stringify({}) 
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update tampilan ikon
+                    if (data.is_liked) {
+                        this.classList.add('liked');
+                        icon.classList.remove('bx-heart');
+                        icon.classList.add('bxs-heart'); // Solid heart
+                    } else {
+                        this.classList.remove('liked');
+                        icon.classList.remove('bxs-heart');
+                        icon.classList.add('bx-heart'); // Outline heart
+                    }
+                    
+                    // Update jumlah like
+                    countElement.textContent = data.new_like_count;
+                    
+                } else {
+                    alert(data.message || 'Gagal memproses like.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan koneksi.');
+            })
+            .finally(() => {
+                // Re-enable tombol
+                this.style.pointerEvents = 'auto'; 
+            });
+        });
+    }
+
+    // ... Anda dapat menambahkan logika untuk add-to-cart di sini juga,
+    // menggunakan atribut data-product-id pada elemen .add-to-cart-product
+});

@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Like;
+use App\Models\Comment;
 use App\Models\Post; // Import Model Post (Asumsi Anda sudah membuatnya)
 use App\Models\User; // Import Model User (Asumsi Anda sudah membuatnya)
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class CommunityController extends Controller
 {
@@ -47,26 +50,31 @@ class CommunityController extends Controller
      */
     public function showPostDetail($id)
     {
-        // Gunakan findOrFail untuk mencari post berdasarkan id_post (primary key)
-        // dan secara otomatis melempar 404 jika tidak ditemukan.
-        // Eager load relasi 'user', 'comments', dan 'items' (jika ada relasi untuk post_items).
-        $post = Post::with(['user', 'comments'])->findOrFail($id);
-        
-        // Data relasi (user dan comments) sudah tersedia di objek $post
-        $user = $post->user;
-        $comments = $post->comments;
-        
-        // Asumsi relasi 'items' ada untuk post_items, jika tidak, Anda perlu membuat Model dan Relasinya
-        // Jika post_items (produk yang ditandai) ada dalam tabel terpisah yang berelasi dengan 'posts',
-        // maka Anda dapat mengambilnya seperti:
-        $post_items = $post->items ?? collect(); // Asumsi $post->items adalah relasi
-        
-        // Jika 'comments' sudah di-eager load, Anda tidak perlu loop lagi.
-        // Tapi jika Anda ingin memuat data user dalam setiap komentar, 
-        // pastikan relasi 'user' didefinisikan di Model Comment dan di-eager load.
-        // Contoh: $post = Post::with(['user', 'comments.user'])->findOrFail($id);
+        $post = Post::with('user')->findOrFail($id);
+        $userId = Auth::id();
 
-        return view('komunitas.post_detail', compact('post', 'user', 'post_items', 'comments'));
+        // 1. Logika untuk menentukan status like (yang sudah kita perbaiki)
+        $isLikedByUser = false;
+        if ($userId) {
+            $isLikedByUser = Like::where('user_id', $userId)
+                                    ->where('id_post', $post->id_post)
+                                    ->exists();
+        }
+
+        // 2. LOGIKA BARU: Ambil semua komentar untuk post ini, muat relasi user
+        $comments = Comment::where('id_post', $post->id_post)
+                        ->with('user') // Muat data pengguna yang membuat komentar
+                        ->orderBy('created_at', 'asc') // Urutkan dari yang terbaru/lama
+                        ->get();
+        
+        // 3. Kirim semua data ke view
+        return view('komunitas.post_detail', [
+            'post' => $post->toArray(), // Pastikan Anda mengonversi ke array jika di view menggunakan sintaks array
+            'user' => $post->user ? $post->user->toArray() : [], // Asumsi user adalah relasi pada Post
+            'post_items' => $post->items, // Asumsi ini sudah dimuat atau merupakan relasi
+            'is_liked_by_user' => $isLikedByUser, 
+            'comments' => $comments, // <<< VARIABEL INI WAJIB DIKIRIM
+        ]);
     }
 
     // Fungsi likePost, addComment, dan sharePost tetap dipertahankan sebagai fungsi dummy
@@ -82,5 +90,54 @@ class CommunityController extends Controller
     public function sharePost(Request $request, $id) { 
         // Logika untuk menambah share count ke database harus ada di sini
         return response()->json(['success' => true, 'share_count' => Post::findOrFail($id)->share_count + 1]); 
+    }
+
+    public function toggleLike(Request $request, $id)
+    {
+        // 1. Pastikan pengguna sudah login
+    $userId = Auth::id();
+
+        if (!$userId) {
+            // Pengguna tidak login, kembalikan error
+            return response()->json([
+                'success' => false,
+                'message' => 'Silakan login untuk menyukai postingan ini.'
+            ], 401); 
+        }
+
+        $userId = Auth::id();
+        $postId = $id;
+
+        // Cari apakah like sudah ada
+        $like = Like::where('user_id', $userId)
+                    ->where('id_post', $postId)
+                    ->first();
+
+        $isLiked = false;
+
+        if ($like) {
+            // Jika like sudah ada, hapus (UNLIKE)
+            $like->delete();
+            $isLiked = false;
+            $message = 'Postingan tidak disukai.';
+        } else {
+            // Jika like belum ada, buat record baru (LIKE)
+            Like::create([
+                'user_id' => $userId,
+                'id_post' => $postId,
+            ]);
+            $isLiked = true;
+            $message = 'Postingan disukai dan ditambahkan ke favorit Anda.';
+        }
+
+        // Hitung ulang jumlah total likes untuk post ini
+        $newLikeCount = Like::where('id_post', $postId)->count();
+
+        return response()->json([
+            'success' => true,
+            'is_liked' => $isLiked,
+            'new_like_count' => $newLikeCount,
+            'message' => $message
+        ]);
     }
 }

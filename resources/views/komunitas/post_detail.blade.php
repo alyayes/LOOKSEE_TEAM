@@ -52,11 +52,11 @@
                     </p>
                 </div>
                 <div class="feed-item-stats">
-                    <span class="stat-item post-like-button" 
-                          data-post-id="{{ $post['id_post'] }}" 
-                          data-like-url="{{ route('community.post.like', ['id' => $post['id_post']]) }}"
-                          data-csrf="{{ csrf_token() }}">
-                        <i class='bx bx-heart'></i> 
+                    <span class="stat-item post-like-button {{ $is_liked_by_user ? 'liked' : '' }}" 
+                            data-post-id="{{ $post['id_post'] }}" 
+                            data-like-url="{{ route('community.post.like', ['id' => $post['id_post']]) }}"
+                            data-csrf="{{ csrf_token() }}">
+                        <i class='bx {{ $is_liked_by_user ? 'bxs-heart' : 'bx-heart' }}'></i> 
                         <span class="count">{{ $post['like_count'] ?? 0 }}</span>
                     </span>
                     <span class="stat-item"><i class='bx bx-comment'></i> <span class="count">{{ $post['comment_count'] ?? 0 }}</span></span>
