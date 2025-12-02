@@ -42,7 +42,7 @@ Route::prefix('community')->name('community.')->group(function () {
     Route::get('/trends', [CommunityController::class, 'trends'])->name('trends');
     Route::get('/todays-outfit', [CommunityController::class, 'todaysOutfit'])->name('todays-outfit');
     Route::get('/post/{id}', [CommunityController::class, 'showPostDetail'])->name('post.detail');
-    Route::post('/post/{id}/like', [CommunityController::class, 'likePost'])->name('post.like');
+    Route::post('/post/{id}/like', [CommunityController::class, 'toggleLike'])->name('post.like');
     Route::post('/post/{id}/comment', [CommunityController::class, 'addComment'])->name('post.comment');
     Route::post('/post/{id}/share', [CommunityController::class, 'sharePost'])->name('post.share');
 });

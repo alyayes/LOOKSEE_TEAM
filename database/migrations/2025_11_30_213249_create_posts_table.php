@@ -1,5 +1,7 @@
 <?php
 
+// database/migrations/2025_11_30_213249_create_posts_table.php
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -9,8 +11,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('posts', function (Blueprint $table) {
-    $table->id(); // primary key bigint unsigned
-    $table->unsignedBigInteger('user_id')->nullable(); 
+
+    $table->bigIncrements('id_post'); // auto increment PK
+    $table->unsignedBigInteger('user_id')->nullable(); // harus unsignedBigInteger sesuai users.user_id
     $table->string('image_post')->nullable();
     $table->text('caption')->nullable();
     $table->text('hashtags')->nullable();
@@ -20,7 +23,8 @@ return new class extends Migration
     $table->integer('share_count')->default(0);
     $table->timestamps();
 
-    $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+    // Foreign key ke users.user_id
+    $table->foreign('user_id')->references('user_id')->on('users')->onDelete('set null');
 });
 
     }
