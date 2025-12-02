@@ -1,5 +1,7 @@
 @extends('layouts.mainAdmin')
+
 <link rel="stylesheet" href="{{ asset('assets/css/dashboardAdmin.css') }}">
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 @section('title', 'Dashboard')
 
@@ -17,7 +19,8 @@
     margin-bottom: 50px;
 }
 
-#myTable th, #myTable td {
+#myTable th,
+#myTable td {
     text-align: left;
     padding: 12px;
     border: 1px solid #ddd;
@@ -56,6 +59,7 @@ table {
 </style>
 @endsection
 
+
 @section('content')
 <div class="page-wrapper">
     <div class="page-content">
@@ -65,7 +69,7 @@ table {
 
             <!-- Total User -->
             <div class="col">
-                <div class="card radius-10 border-start border-0 border-4 border-info">
+                <div class="card radius-10 border-start border-0 border-info">
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div>
@@ -82,7 +86,7 @@ table {
 
             <!-- Total Product -->
             <div class="col">
-                <div class="card radius-10 border-start border-0 border-4 border-danger">
+                <div class="card radius-10 border-start border-0 border-danger">
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div>
@@ -99,7 +103,7 @@ table {
 
             <!-- Total Orders -->
             <div class="col">
-                <div class="card radius-10 border-start border-0 border-4 border-success">
+                <div class="card radius-10 border-start border-0 border-success">
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div>
@@ -116,7 +120,7 @@ table {
 
             <!-- Total Sales -->
             <div class="col">
-                <div class="card radius-10 border-start border-0 border-4 border-warning">
+                <div class="card radius-10 border-start border-0 border-warning">
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div>
@@ -162,16 +166,20 @@ table {
 
                 <!-- STATUS DROPDOWN -->
                 <td>
-                    <select class="form-select status-select status-{{ strtolower($row['status']) }}"
+                    <select
+                        class="form-select status-select status-{{ strtolower($row['status']) }}"
                         data-order-id="{{ $row['order_id'] }}"
-                        data-original-status="{{ strtolower($row['status']) }}">
+                        data-original-status="{{ strtolower($row['status']) }}"
+                    >
 
-                        @php $statuses = ['pending', 'prepared', 'shipped', 'completed']; @endphp
+                        @php
+                            $statuses = ['pending', 'prepared', 'shipped', 'completed'];
+                        @endphp
 
                         @foreach ($statuses as $s)
-                        <option value="{{ $s }}" {{ strtolower($row['status']) == $s ? 'selected' : '' }}>
-                            {{ ucfirst($s) }}
-                        </option>
+                            <option value="{{ $s }}" {{ strtolower($row['status']) == $s ? 'selected' : '' }}>
+                                {{ ucfirst($s) }}
+                            </option>
                         @endforeach
                     </select>
                 </td>
@@ -183,23 +191,27 @@ table {
                     </a>
                 </td>
             </tr>
+
             @empty
             <tr>
                 <td colspan="8" class="text-center">Tidak ada data order terbaru.</td>
             </tr>
             @endforelse
+
         </table>
 
     </div>
 </div>
 @endsection
 
+
 @section('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    const updateStatusUrl = '{{ route('admin.order.updateStatus') }}';
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+    const updateStatusUrl = "{{ route('admin.order.updateStatus') }}";
 
     function updateSelectColor(element, status){
         element.className = 'form-select status-select';
@@ -208,7 +220,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.querySelectorAll('.status-select').forEach(select => {
 
-        updateSelectColor(select, select.value); // warna awal
+        updateSelectColor(select, select.value); 
 
         select.addEventListener('change', function(){
 
@@ -233,8 +245,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 if(data.success){
                     this.dataset.originalStatus = newStatus;
                     updateSelectColor(this, newStatus);
-                }else{
-                    alert('Gagal update status');
+                } else {
+                    alert('Gagal update status!');
                     this.value = originalStatus;
                     updateSelectColor(this, originalStatus);
                 }
