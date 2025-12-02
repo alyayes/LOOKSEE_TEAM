@@ -20,6 +20,8 @@ use App\Http\Controllers\AnalyticsAdminController;
 use App\Http\Controllers\UsersAdminController;
 use App\Http\Controllers\TodaysOutfitAdminController; 
 use App\Http\Controllers\PersonalizationController;
+use Illuminate\Support\Facades\Auth;
+
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -118,7 +120,10 @@ Route::get('/orders', function () { return redirect()->route('orders.list'); })-
 // Route dummy untuk link header yang belum dibuat
 Route::get('/favorites', function () { return "Halaman Favorites (Dummy)"; })->name('favorites');
 // Route::get('/settings', function () { return "Halaman Settings (Dummy)"; })->name('settings');
-Route::get('/logout', function () { return "Proses Logout (Dummy)"; })->name('logout');
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect()->route('login')->with('info', 'Anda berhasil logout.');
+})->name('logout');
 
 // --- HALAMAN FAVORIT ---
 Route::prefix('favorites')->name('favorites.')->group(function () {
