@@ -11,44 +11,43 @@
             <div class="toggle-icon ms-auto"><i class='bx bx-arrow-back'></i>
             </div>
         </div>
-        
+
         <!--navigation-->
         <ul class="metismenu" id="menu">
-    <li>
-        <a href="{{ route('dashboard.dashboardAdmin') }}"> 
-            <i class='bx bx-home-alt'></i>
-            <div class="menu-title">Dashboard</div>
-        </a>
-        <a href="{{ route('dashboard.dashboardAdmin') }}">
-            <i class='bx bxs-bar-chart-alt-2'></i>
-            <div class="menu-title">Analytics</div>
-        </a>
-        <a href="{{ route('products.index') }}"> 
-            <i class='bx bxs-shopping-bags'></i>
-            <div class="menu-title">Products</div>
-        </a>
-        <a href="{{ route('users-admin.usersAdmin') }}"> 
-            <i class='bx bxs-group' ></i>
-            <div class="menu-title">Users</div>
-        </a>
-        <a href="{{ route('admin.orders.index') }}"> 
-    <i class='bxr bx-shopping-bag-alt'></i> 
-    <div class="menu-title">Order</div>
-</a>
->
-        <a href="{{ route('stylejournalAdmin.index') }}"> 
-            <i class='bx bx-note'></i>
-            <div class="menu-title">Style Journal</div>
-        </a>
-        <a href="{{ route('toAdmin.toAdmin') }}">
-            <i class='bx bxs-t-shirt'></i>
-            <div class="menu-title">Today's Outfit</div>
-        </a>
-    </li>
-</ul>
+            <li>
+                <a href="{{ route('dashboard.dashboardAdmin') }}">
+                    <i class='bx bx-home-alt'></i>
+                    <div class="menu-title">Dashboard</div>
+                </a>
+                <a href="{{ route('dashboard.dashboardAdmin') }}">
+                    <i class='bx bxs-bar-chart-alt-2'></i>
+                    <div class="menu-title">Analytics</div>
+                </a>
+                <a href="{{ route('products.index') }}">
+                    <i class='bx bxs-shopping-bags'></i>
+                    <div class="menu-title">Products</div>
+                </a>
+                <a href="{{ route('users-admin.usersAdmin') }}">
+                    <i class='bx bxs-group'></i>
+                    <div class="menu-title">Users</div>
+                </a>
+                <a href="{{ route('admin.orders.index') }}">
+                    <i class='bx bx-shopping-bag'></i>
+                    <div class="menu-title">Order</div>
+                </a>
+                <a href="{{ route('stylejournalAdmin.index') }}">
+                    <i class='bx bx-note'></i>
+                    <div class="menu-title">Style Journal</div>
+                </a>
+                <a href="{{ route('toAdmin.toAdmin') }}">
+                    <i class='bx bxs-t-shirt'></i>
+                    <div class="menu-title">Today's Outfit</div>
+                </a>
+            </li>
+        </ul>
 
     </div>
-    
+
     <header>
         <div class="topbar d-flex align-items-center">
             <nav class="navbar navbar-expand gap-3">
@@ -58,9 +57,14 @@
                 <div class="top-menu ms-auto">
                     <ul class="navbar-nav align-items-center gap-1">
                         <li class="nav-item dropdown dropdown-laungauge d-none d-sm-flex">
-                            <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="avascript:;" data-bs-toggle="dropdown"><img src="{{ asset('assets/flags/4x3/idn.svg') }}" width="22" alt=""></a>
+                            <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="avascript:;"
+                                data-bs-toggle="dropdown"><img src="{{ asset('assets/flags/4x3/idn.svg') }}"
+                                    width="22" alt=""></a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item d-flex align-items-center py-2" href="assets/flags/4x3/idn.svg"><img src="{{ asset('assets/flags/4x3/idn.svg') }}" width="20" alt=""><span class="ms-2">Indonesia</span></a></li>
+                                <li><a class="dropdown-item d-flex align-items-center py-2"
+                                        href="assets/flags/4x3/idn.svg"><img
+                                            src="{{ asset('assets/flags/4x3/idn.svg') }}" width="20"
+                                            alt=""><span class="ms-2">Indonesia</span></a></li>
                                 {{-- ... item bahasa lainnya ... --}}
                             </ul>
                         </li>
@@ -69,10 +73,11 @@
                         <li class="nav-item dark-mode d-none d-sm-flex">
                             <a class="nav-link dark-mode-icon" href="javascript:;"><i class='bx bx-moon'></i></a>
                         </li>
-                        
+
                         {{-- Dropdown Notifikasi --}}
                         <li class="nav-item dropdown dropdown-large">
-                            <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#" data-bs-toggle="dropdown"><span class="alert-count">8</span>
+                            <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#"
+                                data-bs-toggle="dropdown"><span class="alert-count">8</span>
                                 <i class='bx bx-bell'></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
@@ -87,10 +92,12 @@
                                     <a class="dropdown-item" href="javascript:;">
                                         <div class="d-flex align-items-center">
                                             <div class="user-online">
-                                                <img src="{{ asset('assets/images/sanha.jpg') }}" class="msg-avatar" alt="user avatar">
+                                                <img src="{{ asset('assets/images/sanha.jpg') }}" class="msg-avatar"
+                                                    alt="user avatar">
                                             </div>
                                             <div class="grow ">
-                                                <h6 class="msg-name">Sanha <span class="msg-time float-end">5 sec ago</span></h6>
+                                                <h6 class="msg-name">Sanha <span class="msg-time float-end">5 sec
+                                                        ago</span></h6>
                                                 <p class="msg-info">Is this product still available?</p>
                                             </div>
                                         </div>
@@ -99,10 +106,12 @@
                                     <a class="dropdown-item" href="javascript:;">
                                         <div class="d-flex align-items-center">
                                             <div class="notify bg-light-primary">
-                                                <img src="{{ asset('assets/images/app/github.png') }}" width="25" alt="user avatar">
+                                                <img src="{{ asset('assets/images/app/github.png') }}" width="25"
+                                                    alt="user avatar">
                                             </div>
                                             <div class="grow">
-                                                <h6 class="msg-name">New 24 authors<span class="msg-time float-end">1 day ago</span></h6>
+                                                <h6 class="msg-name">New 24 authors<span class="msg-time float-end">1
+                                                        day ago</span></h6>
                                                 <p class="msg-info">24 new authors joined last week</p>
                                             </div>
                                         </div>
@@ -115,28 +124,33 @@
                                 </a>
                             </div>
                         </li>
-                        
+
                     </ul>
                 </div>
                 <div class="user-box dropdown px-3">
-                    <a class="d-flex align-items-center nav-link dropdown-toggle gap-3 dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="d-flex align-items-center nav-link dropdown-toggle gap-3 dropdown-toggle-nocaret"
+                        href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="{{ asset('assets/images/aya.jpg') }}" class="user-img" alt="user avatar">
                         <div class="user-info"></div>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         {{-- Placeholder route for profile --}}
-                        <li><a class="dropdown-item d-flex align-items-center" href="#"><i class="bx bx-user fs-5"></i><span>Profile</span></a>
+                        <li><a class="dropdown-item d-flex align-items-center" href="#"><i
+                                    class="bx bx-user fs-5"></i><span>Profile</span></a>
                         </li>
                         {{-- Placeholder route for messages --}}
-                        <li><a class="dropdown-item d-flex align-items-center" href="#"><i class='bx bx-message-dots'></i></i><span>Message</span></a>
+                        <li><a class="dropdown-item d-flex align-items-center" href="#"><i
+                                    class='bx bx-message-dots'></i></i><span>Message</span></a>
                         </li>
                         <div class="dropdown-divider mb-0"></div>
                         {{-- Logout menggunakan form POST --}}
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <a class="dropdown-item d-flex align-items-center" href="#"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 <i class="bx bx-log-out-circle"></i><span>Logout</span>
                             </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                style="display: none;">
                                 @csrf
                             </form>
                         </li>
@@ -144,5 +158,5 @@
                 </div>
             </nav>
         </div>
-    </header>    
+    </header>
 </div>
