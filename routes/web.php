@@ -90,23 +90,24 @@ Route::prefix('profile')->name('profile.')->group(function () {
 
 
 // --- ALUR CHECKOUT ---
-Route::get('/cart', [CartController::class, 'index'])->name('cart');
-Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
-Route::post('/cart/delete', [CartController::class, 'delete'])->name('cart.delete');
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-Route::post('/checkout', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
-Route::post('/checkout/save-address', [CheckoutController::class, 'saveTemporaryAddress'])->name('checkout.saveAddress');
-Route::get('/payment/details', [PaymentController::class, 'showPaymentDetails'])->name('payment.details');
-Route::get('/my-orders', [OrderController::class, 'list'])->name('orders.list');
-Route::get('/orders/details/{order_id}', [OrderController::class, 'getOrderDetailsAjax'])->name('orders.details.ajax');
+Route::middleware('auth:web')->group(function () {
+    Route::get('/cart', [CartController::class, 'index'])->name('cart');
+    Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+    Route::post('/cart/delete', [CartController::class, 'delete'])->name('cart.delete');
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
+    Route::post('/checkout/save-address', [CheckoutController::class, 'saveTemporaryAddress'])->name('checkout.saveAddress');
+    Route::get('/payment/details', [PaymentController::class, 'showPaymentDetails'])->name('payment.details');
+    Route::get('/my-orders', [OrderController::class, 'list'])->name('orders.list');
+    Route::get('/orders/details/{order_id}', [OrderController::class, 'getOrderDetailsAjax'])->name('orders.details.ajax');
 
-Route::post('/checkout/address/add', [CheckoutController::class, 'addAddress'])
-    ->name('checkout.address.add');
-Route::put('/checkout/address/update/{id}', [CheckoutController::class, 'updateAddress'])
-    ->name('checkout.address.update');
-Route::delete('/checkout/address/delete/{id}', [CheckoutController::class, 'deleteAddress'])
-    ->name('checkout.address.delete');
-
+    Route::post('/checkout/address/add', [CheckoutController::class, 'addAddress'])
+        ->name('checkout.address.add');
+    Route::put('/checkout/address/update/{id}', [CheckoutController::class, 'updateAddress'])
+        ->name('checkout.address.update');
+    Route::delete('/checkout/address/delete/{id}', [CheckoutController::class, 'deleteAddress'])
+        ->name('checkout.address.delete');
+});
 
 // --- ROUTE DUMMY LAIN & REDIRECT ---
 // Redirect URL lama dari header ke URL baru yang lebih rapi
@@ -203,12 +204,6 @@ Route::resource('stylejournal', StyleJournalAdminController::class)->names([
 ]);
 Route::get('/dashboard', [DashboardAdminController::class, 'index'])->name('dashboard.dashboardAdmin');
 
-<<<<<<< HEAD
-Route::prefix('admin')->group(function () {    
-    Route::get('/orders', [OrdersAdminController::class, 'index'])->name('admin.orders.index');    
-    Route::post('/orders/update-status', [OrdersAdminController::class, 'updateStatus'])->name('admin.order.updateStatus');
-    Route::get('/orders/{order_id}', [OrdersAdminController::class, 'show'])->name('admin.order.detail');
-=======
 Route::prefix('admin')->group(function () {
     Route::get('/orders', [OrdersAdminController::class, 'index'])->name('admin.orders.index');
     Route::get('/orders/{order_id}', [OrdersAdminController::class, 'detail'])->name('admin.order.detail');
@@ -216,7 +211,6 @@ Route::prefix('admin')->group(function () {
         ->name('admin.order.updateStatus');
     Route::get('/admin/orders/{order_id}', [OrdersAdminController::class, 'show'])
         ->name('admin.order.detail');
->>>>>>> 5586a1b294553a0d208443be0c79417f906441a7
 
 });
 

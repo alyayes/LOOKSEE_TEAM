@@ -44,7 +44,7 @@
                         </div>
 
                         <div class="item-details">
-                            <img src="{{ asset('storage/uploads/' . ($item['gambar_produk'] ?? 'default.jpg')) }}" 
+                            <img src="{{ asset(($item['gambar_produk'] ?? 'default.jpg')) }}" 
                                  alt="{{ $item['nama_produk'] }}"
                                  class="product-thumb"
                                  onerror="this.src='{{ asset('assets/images/placeholder.jpg') }}'"> 
