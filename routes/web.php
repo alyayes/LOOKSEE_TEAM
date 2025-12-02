@@ -64,6 +64,7 @@ Route::get('/mood', [HomeController::class, 'showMoodProducts'])->name('mood.pro
 
 // Profile settings
 Route::get('/settings/profile', [ProfileController::class, 'showSettings'])->name('profile.settings');
+Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 
 
 /*
