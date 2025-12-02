@@ -27,6 +27,7 @@ class HomeController extends Controller
         $productsWomanPage = array_slice($productsWoman, $offsetWoman, $this->limit);
         $totalPagesWoman = ceil(count($productsWoman) / $this->limit);
 
+        // --- Produk Pria ---
         $productsMan = $allProducts->filter(function($p) {
             return in_array($p->kategori, ['Pria', 'Man']);
         })->values()->all();
@@ -53,6 +54,7 @@ class HomeController extends Controller
         // GANTI DUMMY KE DATABASE
         $allProducts = Produk::orderByDesc('id_produk')->get();
 
+        // --- 1. Ambil Input ---
         $mood = strtolower($request->query('mood', 'netral'));
         $gender = strtolower($request->query('gender', ''));
         $currentPage = $request->query('page', 1);

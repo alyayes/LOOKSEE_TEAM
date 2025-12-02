@@ -39,7 +39,7 @@
 
         @if(strtolower($order_detail['status'] ?? '') == 'pending')
             <div class="modal-actions">
-                 <a href="{{ route('payment.details') }}" class="btn-primary">Proceed to Payment</a>
+                <a href="{{ route('payment.details') }}" class="btn-primary">Proceed to Payment</a>
             </div>
         @endif
 

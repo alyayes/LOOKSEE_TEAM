@@ -1,0 +1,139 @@
+<style>
+        {
+            box-sizing: border-box;
+        }
+
+        #myTable {
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid #ddd;
+            font-size: 18px;
+            margin-bottom: 50px;
+        }
+
+        #myTable th,
+        #myTable td {
+            text-align: left;
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+
+        #myTable tr {
+            border-bottom: 1px solid #ddd;
+        }
+
+        #myTable tr.header,
+        #myTable tr:hover {
+            background-color: rgb(255, 234, 247);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: .35em .65em;
+            font-size: .75em;
+            font-weight: 700;
+            line-height: 1;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            border-radius: .375rem;
+            cursor: pointer;
+            transition: background-color .15s ease-in-out, color .15s ease-in-out;
+        }
+
+        .status-badge.pending {
+            background-color: rgba(255, 193, 7, .8);
+            color: #fff;
+        }
+
+        .status-badge.prepared {
+            background-color: rgb(253, 152, 0);
+            color: #fff;
+        }
+
+        .status-badge.shipped {
+            background-color: rgb(148, 190, 253);
+            color: #fff;
+        }
+
+        .status-badge.completed {
+            background-color: rgb(60, 199, 134);
+            color: #fff;
+        }
+
+        .status-container {
+            position: relative;
+            display: inline-block;
+        }
+
+.table-responsive, 
+.card-body,
+table {
+    overflow: visible !important; 
+}
+
+.status-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown Menu Style */
+.custom-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0; /* Atau right: 0 jika mepet kanan */
+    z-index: 9999 !important; /* Z-Index tinggi supaya muncul paling atas */
+    min-width: 140px;
+    padding: 5px 0;
+    margin-top: 5px;
+    background-color: #fff;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 6px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* Shadow lebih tebal */
+}
+
+/* Class Show untuk menampilkan via JS */
+.custom-dropdown-menu.show {
+    display: block !important;
+}
+
+/* Item Dropdown */
+.custom-dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 8px 15px;
+    clear: both;
+    font-weight: 500;
+    color: #333;
+    text-align: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.custom-dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: #000;
+}
+
+.custom-dropdown-item.active-option {
+    background-color: #FF69B4; /* Pink sesuai tema */
+    color: #fff;
+}   
+.status-select {
+    font-weight: bold;
+    color: white;
+}
+.status-select option {
+    background-color: white;
+    color: #333;
+}
+/* Warna Background Select */
+.status-pending { background-color: #ffc107; border-color: #ffc107; }
+.status-prepared { background-color: #17a2b8; border-color: #17a2b8; }
+.status-shipped { background-color: #007bff; border-color: #007bff; }
+.status-completed { background-color: #28a745; border-color: #28a745; }

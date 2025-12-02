@@ -145,9 +145,6 @@
 
 @include('home.mood')
 
-@include('home.mood')
-
-
 {{-- ========================  PARTNERSHIP  ======================== --}}
 <div class="partner-platform-wrapper">
     <div class="partner-group">
@@ -172,73 +169,44 @@
 
 @section('footer_scripts')
 <script>
-    function addToFavorites(id) {
-    const formData = new FormData();
-    formData.append('id_produk', id);
-    formData.append('_token', "{{ csrf_token() }}");
-
-<<<<<<< HEAD
-    function addToCart(idProduk) {
-        // Buat URL secara manual karena parameter ID ada di URL
-        const url = "{{ url('/cart/add') }}/" + idProduk;
-
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-                "X-CSRF-TOKEN": "{{ csrf_token() }}"
-            },
-            body: JSON.stringify({}) // Body kosong tidak masalah karena ID ada di URL
-        })
-        .then(response => {
-            if (response.status === 401) {
-                alert("Silakan login terlebih dahulu.");
-                window.location.href = "{{ route('login') }}";
-                return null;
-            }
-            if (!response.ok) {
-                // Coba ambil pesan error dari server jika ada
-                return response.json().then(errData => {
-                    throw new Error(errData.message || 'Terjadi kesalahan pada server');
-                });
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data) {
-                alert(data.message);
-                // Update icon keranjang jika ada fungsi tersebut
-            }
-        })
-        .catch(error => {
-            console.error("Detail Error:", error);
-            alert(error.message || "Gagal menambahkan ke keranjang.");
-        });
+    function goToPage(param, value) {
+        const url = new URL(window.location.href);
+        url.searchParams.set(param, value);
+        
+        if (param === 'page_woman') {
+        } else if (param === 'page_man') {
+        }
+        
+        url.hash = '';
+        
+        window.location.href = url.toString();
     }
     
-=======
-    fetch("{{ route('favorite.add') }}", {
-        method: 'POST',
-        body: formData
-    })
-    .then(res => res.json())
-    .then(data => alert(data.message));
-}
+    function addToFavorites(id) {
+        const formData = new FormData();
+        formData.append('id_produk', id);
+        formData.append('_token', "{{ csrf_token() }}");
 
-function addToCart(id) {
-    const formData = new FormData();
-    formData.append('id_produk', id);
-    formData.append('_token', "{{ csrf_token() }}");
+        fetch("{{ route('favorite.add') }}", {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => alert(data.message));
+    }
 
-    fetch("{{ route('cart.add') }}", {
-        method: 'POST',
-        body: formData
-    })
-    .then(res => res.json())
-    .then(data => alert(data.message));
-}
+    function addToCart(id) {
+        const formData = new FormData();
+        formData.append('id_produk', id);
+        formData.append('_token', "{{ csrf_token() }}");
 
->>>>>>> 5586a1b294553a0d208443be0c79417f906441a7
+        fetch("{{ route('cart.add') }}", {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => alert(data.message));
+    }
+
 </script>
 @endsection

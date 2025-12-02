@@ -22,7 +22,7 @@ class Order extends Model
         'total_price',
         'shipping_cost',
         'grand_total',
-        'status',
+        'transaction_status',
         'order_date',
         'shipping_method'
     ];

@@ -12,7 +12,6 @@
 <div class="contain">
     @if(session('success'))
         <div style="background: #d4edda; color: #155724; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
-            {{ session('success') }}
         </div>
     @endif
 
@@ -31,7 +30,6 @@
         <form method="POST" action="{{ route('checkout.process') }}" id="checkoutForm"> 
             @csrf
             <input type="hidden" name="selected_products_ids" value="{{ $selectedIdsString }}">
-
             <div class="checkout-main-content">
                 <div class="left-column">
                     <div class="section-card delivery-address-section">

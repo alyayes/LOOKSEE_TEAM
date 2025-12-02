@@ -41,27 +41,22 @@ class CartController extends Controller
         return view('cart.cart', compact('cart_items', 'total_selected_price', 'total_products'));
     }
 
-    public function addToCart($id_produk)
+    public function addToCart(Request $request)
     {
+        $id_produk = $request->input('id_produk');
         $userId = Auth::id();
+        
         if (!$userId) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Silakan login terlebih dahulu.'
-            ], 401);
+            return response()->json(['status' => 'error', 'message' => 'Silakan login terlebih dahulu.'], 401);
         }
 
         $produkExists = Produk::where('id_produk', $id_produk)->exists();
-        
         if (!$produkExists) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Produk tidak ditemukan!'
-            ], 404);
+            return response()->json(['status' => 'error', 'message' => 'Produk tidak ditemukan!'], 404);
         }
 
         $cek = CartsItems::where('user_id', $userId)
-                         ->where('product_id', $id_produk)
+                         ->where('product_id', $id_produk) 
                          ->first();
 
         if ($cek) {
@@ -74,17 +69,15 @@ class CartController extends Controller
             ]);
         }
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Berhasil masuk keranjang!'
-        ]);
+        return response()->json(['status' => 'success', 'message' => 'Berhasil masuk keranjang!']);
     }
 
     public function update(Request $req)
     {
         $userId = Auth::id();
+        
         CartsItems::where('user_id', $userId)
-                  ->where('product_id', $req->id_produk)
+                  ->where('product_id', $req->id_produk) 
                   ->update(['quantity' => $req->quantity]);
 
         return response()->json(['status' => 'success']);
@@ -93,8 +86,9 @@ class CartController extends Controller
     public function delete(Request $req)
     {
         $userId = Auth::id();
+        
         CartsItems::where('user_id', $userId)
-                  ->where('product_id', $req->id_produk)
+                  ->where('product_id', $req->id_produk) 
                   ->delete();
 
         return redirect('/cart');

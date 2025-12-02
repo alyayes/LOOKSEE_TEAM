@@ -35,16 +35,21 @@ class CheckoutController extends Controller
                               ->get();
 
         $cart_items = [];
+        
         foreach ($cartData as $item) {
             if ($item->produk) {
-                $cart_items[$item->product_id] = [
-                    'product_id'    => $item->product_id,
-                    'nama_produk'   => $item->produk->nama_produk,
-                    'harga'         => $item->produk->harga,
-                    'gambar_produk' => $item->produk->gambar_produk,
-                    'quantity'      => $item->quantity,
-                    'stock'         => $item->produk->stock,
-                ];
+                if (isset($cart_items[$item->product_id])) {
+                    $cart_items[$item->product_id]['quantity'] += $item->quantity;
+                } else {
+                    $cart_items[$item->product_id] = [
+                        'product_id'    => $item->product_id,
+                        'nama_produk'   => $item->produk->nama_produk,
+                        'harga'         => $item->produk->harga,
+                        'gambar_produk' => $item->produk->gambar_produk,
+                        'quantity'      => $item->quantity,
+                        'stock'         => $item->produk->stock,
+                    ];
+                }
             }
         }
 
@@ -113,11 +118,15 @@ class CheckoutController extends Controller
         $cart_items_unique = [];
         foreach ($cartData as $item) {
             if ($item->produk) {
-                $cart_items_unique[$item->product_id] = [
-                    'product_id' => $item->product_id,
-                    'quantity'   => $item->quantity,
-                    'price'      => $item->produk->harga
-                ];
+                if(isset($cart_items_unique[$item->product_id])) {
+                    $cart_items_unique[$item->product_id]['quantity'] += $item->quantity;
+                } else {
+                    $cart_items_unique[$item->product_id] = [
+                        'product_id' => $item->product_id,
+                        'quantity'   => $item->quantity,
+                        'price'      => $item->produk->harga
+                    ];
+                }
             }
         }
 
@@ -137,6 +146,7 @@ class CheckoutController extends Controller
             $order = new Order();
             $order->user_id = $userId;
             $order->address_id = $addressId;
+            
             $order->total_price     = $total_price;
             $order->shipping_cost   = $shipping_cost;
             $order->grand_total     = $grand_total;
@@ -177,7 +187,7 @@ class CheckoutController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', 'Gagal membuat order: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal: ' . $e->getMessage());
         }
     }
 

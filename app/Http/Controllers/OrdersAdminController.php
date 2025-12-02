@@ -9,36 +9,53 @@ class OrdersAdminController extends Controller
 {
     public function index()
     {
-        $orders = Order::with(['user', 'items.produk', 'payment.method', 'payment.bankDetail', 'payment.ewalletDetail'])
+        $orders = Order::with([
+                'user',
+                'items.produk',
+                'payment.method',
+                'payment.bankDetail',
+                'payment.ewalletDetail'
+            ])
             ->orderBy('created_at', 'DESC')
             ->get()
             ->map(function($order) {
-                
+
                 $payment_method = '-';
-                $bank_ewallet_info = '-';
-                
-                if ($order->payment) {
-                    $payment_method = $order->payment->method->method_name ?? '-';
+                $bank_name = '-';
+                $ewallet_name = '-';
+
+                if ($order->payment && $order->payment->method) {
+                    $payment_method = $order->payment->method->method_name;
+
                     if ($payment_method == 'Bank Transfer' && $order->payment->bankDetail) {
-                        $bank_ewallet_info = $order->payment->bankDetail->bank_name;
-                    } elseif ($payment_method == 'E-Wallet' && $order->payment->ewalletDetail) {
-                        $bank_ewallet_info = $order->payment->ewalletDetail->ewallet_provider_name;
+                        $bank_name = $order->payment->bankDetail->bank_name;
+                    }
+
+                    if ($payment_method == 'E-Wallet' && $order->payment->ewalletDetail) {
+                        $ewallet_name = $order->payment->ewalletDetail->ewallet_provider_name;
                     }
                 }
 
                 $productList = $order->items->map(function($item) {
-                    return $item->produk ? $item->produk->nama_produk : 'Produk Dihapus';
+                    return $item->produk 
+                        ? $item->produk->nama_produk 
+                        : 'Produk Dihapus';
                 })->join('<br>');
 
                 return [
-                    'order_id' => $order->order_id,
-                    'order_date' => $order->created_at ? $order->created_at->format('Y-m-d H:i:s') : 'N/A',
+                    'order_id'   => $order->order_id,
+                    'order_date' => $order->order_date
+                        ? \Carbon\Carbon::parse($order->order_date)->format('Y-m-d H:i:s')
+                        : ($order->created_at
+                            ? $order->created_at->format('Y-m-d H:i:s')
+                            : '-'),
+
                     'total_price' => $order->grand_total ?? 0,
-                    'status' => ucfirst($order->status ?? 'pending'),
-                    'username' => $order->user ? $order->user->username : 'Guest',
+                    'status' => $order->status ?? 'pending',
+                    'username' => $order->user->username ?? 'Guest',
                     'metode_pembayaran' => $payment_method,
-                    'bank_name' => $bank_ewallet_info, 
-                    'ewallet_provider_name' => $bank_ewallet_info,
+                    'bank_name' => $bank_name,
+                    'ewallet_provider_name' => $ewallet_name,
                     'nama_produk_list' => $productList
                 ];
             });
@@ -48,36 +65,46 @@ class OrdersAdminController extends Controller
 
     public function show($order_id)
     {
-        $order = Order::with(['user', 'items.produk', 'payment.method', 'payment.bankDetail', 'payment.ewalletDetail'])->find($order_id);
+        $order = Order::with([
+            'user',
+            'items.produk',
+            'payment.method',
+            'payment.bankDetail',
+            'payment.ewalletDetail'
+        ])->find($order_id);
 
-        if(!$order) abort(404, "Order #{$order_id} tidak ditemukan.");
+        if (!$order) {
+            abort(404, "Order #{$order_id} tidak ditemukan.");
+        }
 
         $payment_method_name = '-';
         $bank_name = '-';
         $ewallet_name = '-';
 
-        if ($order->payment) {
-            $payment_method_name = $order->payment->method->method_name ?? '-';
+        if ($order->payment && $order->payment->method) {
+            $payment_method_name = $order->payment->method->method_name;
+
             if ($order->payment->bankDetail) {
                 $bank_name = $order->payment->bankDetail->bank_name;
-            } elseif ($order->payment->ewalletDetail) {
+            }
+
+            if ($order->payment->ewalletDetail) {
                 $ewallet_name = $order->payment->ewalletDetail->ewallet_provider_name;
             }
         }
 
-        // AMBIL TANGGAL YANG BENAR (Prioritaskan order_date, kalau gak ada baru created_at)
         $orderDate = $order->order_date 
             ? \Carbon\Carbon::parse($order->order_date)->format('Y-m-d H:i:s') 
             : ($order->created_at ? $order->created_at->format('Y-m-d H:i:s') : '-');
 
         $order_details = [
             'order_id' => $order->order_id,
-            'order_date' => $orderDate, // Pakai variabel yang sudah divalidasi di atas
+            'order_date' => $orderDate,
             'total_price' => $order->grand_total,
             'metode_pembayaran' => $payment_method_name,
             'bank_name' => $bank_name,
             'ewallet_provider_name' => $ewallet_name,
-            'status' => ucfirst($order->status),
+            'status' => ucfirst($order->status ?? 'pending'),
             'nama_penerima' => $order->nama_penerima ?? '-',
             'no_telepon' => $order->no_telepon ?? '-',
             'email' => $order->user->email ?? '-',
@@ -88,7 +115,7 @@ class OrdersAdminController extends Controller
             'kurir' => $order->shipping_method ?? 'Regular Shipping'
         ];
 
-        $order_items_data = $order->items->map(function($item){
+        $order_items_data = $order->items->map(function($item) {
             return [
                 'nama' => $item->produk->nama_produk ?? 'Produk Dihapus',
                 'qty' => $item->quantity,
@@ -98,31 +125,47 @@ class OrdersAdminController extends Controller
             ];
         });
 
-        $sub_total_calculated = $order->items->sum(fn($item) => $item->quantity * $item->price_at_purchase);
+        $sub_total_calculated = $order->items->sum(function($item) {
+            return $item->quantity * $item->price_at_purchase;
+        });
+
         $discount_amount = 0;
         $shipping_charge = $order->shipping_cost ?? 20000;
         $estimated_tax = 0;
 
         return view('admin.ordersAdmin.orderDetail', compact(
-            'order_details', 'order_items_data', 'sub_total_calculated',
-            'discount_amount','shipping_charge','estimated_tax'
+            'order_details',
+            'order_items_data',
+            'sub_total_calculated',
+            'discount_amount',
+            'shipping_charge',
+            'estimated_tax'
         ));
     }
-    
+
     public function updateStatus(Request $request)
     {
         $request->validate([
-            'order_id' => 'required|integer|exists:orders,order_id',
-            'status' => 'required|string|in:pending,prepared,shipped,completed'
+            'order_id' => 'required|exists:orders,order_id',
+            'status'   => 'required|in:pending,prepared,shipped,completed,success'
         ]);
 
-        $order = Order::find($request->order_id);
+        $order = Order::where('order_id', $request->order_id)->firstOrFail();
+
+        // Update orders.status
         $order->status = $request->status;
         $order->save();
 
+        // Update juga order_payment.transaction_status
+        if ($order->payment) {
+            $order->payment->transaction_status = $request->status;
+            $order->payment->save();
+        }
+
         return response()->json([
             'success' => true,
-            'message' => "Status order #{$order->order_id} berhasil diperbarui ke " . ucfirst($order->status)
+            'message' => 'Status berhasil diperbarui'
         ]);
     }
+
 }
