@@ -17,9 +17,9 @@ class FavoriteController extends Controller
 
         $user = Auth::user();
 
-        $existing = Favorite::where('id_user', $user->id)
-                            ->where('id_produk', $request->id_produk)
-                            ->first();
+        $existing = Favorite::where('user_id', $user->id)
+            ->where('id_produk', $request->id_produk)
+            ->first();
 
         if ($existing) {
             $existing->delete();
@@ -27,7 +27,7 @@ class FavoriteController extends Controller
         }
 
         Favorite::create([
-            'id_user' => $user->id,
+            'user_id' => $user->id,
             'id_produk' => $request->id_produk
         ]);
 
@@ -37,10 +37,12 @@ class FavoriteController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $favorite_products = Favorite::with('produk')
-            ->where('id_user', $user->id)
-            ->get();
 
-        return view('favorite.favorite', compact('favorite_products'));
+        // PAGINATION FIX
+        $favorite_products = Favorite::with('product')
+            ->where('user_id', $user->id)
+            ->paginate(8); // bebas 8 per halaman
+
+        return view('favorite.favorite', compact('favorite_products', 'user'));
     }
 }

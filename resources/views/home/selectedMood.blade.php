@@ -9,10 +9,12 @@
 <div class="body-mood">
     <div class="container-mood">
         <div class="offer">
-             <div class="small-container">
+            <div class="small-container">
                 <div class="row">
                     <div class="col-2">
-                        <h2>Products based on the selected mood: <span>{{ htmlspecialchars($mood) }}.</span></h2>
+                        <h2>Products based on the selected mood: 
+                            <span>{{ htmlspecialchars($mood) }}.</span>
+                        </h2>
                     </div>
                 </div>
             </div>
@@ -37,14 +39,25 @@
                 @forelse ($products as $p)
                     <div class="product-card">
                         <div class="product-image">
-                            <img src="{{ asset('storage/uploads/' . $p['gambar_produk']) }}" alt="{{ $p['nama_produk'] }}" onerror="this.onerror=null;this.src='https://placehold.co/200x200?text=No+Image';">
+                            <img 
+                                src="{{ asset('assets/images/produk-looksee/' . $p['gambar_produk']) }}"
+                                alt="{{ $p['nama_produk'] }}"
+                                onerror="this.onerror=null;this.src='https://placehold.co/200x200?text=No+Image';"
+                            >
                         </div>
+
                         <div class="product-details">
                             <h4>{{ $p['nama_produk'] }}</h4>
                             <p>Rp. {{ number_format($p['harga'], 0, ',', '.') }}</p>
+
                             <div class="actions">
-                                <button class="btn favorite-btn" onclick="addToFavorites({{ $p['id_produk'] }})">Add to Favorite</button>
-                                <button class="btn buy-now-btn" onclick="addToCart({{ $p['id_produk'] }})">Add to Cart</button>
+                                <button class="btn favorite-btn" onclick="addToFavorites({{ $p['id_produk'] }})">
+                                    Add to Favorite
+                                </button>
+
+                                <button class="btn buy-now-btn" onclick="addToCart({{ $p['id_produk'] }})">
+                                    Add to Cart
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -77,13 +90,12 @@
     // Submit form otomatis kalau user pilih filter
     document.querySelectorAll('#filterForm input[type=radio]').forEach(el => {
         el.addEventListener('change', () => {
-            // Saat filter radio button diubah, set halaman kembali ke 1
             document.getElementById('currentPage').value = 1;
             document.getElementById('filterForm').submit();
         });
     });
 
-    // Fungsi untuk navigasi halaman
+    // Fungsi navigasi halaman
     function goToPage(pageNumber) {
         document.getElementById('currentPage').value = pageNumber;
         document.getElementById('filterForm').submit();
@@ -99,11 +111,10 @@
         })
         .then(response => response.json())
         .then(data => {
-            alert(data.message); 
+            alert(data.message);
         })
-        .catch(err => {
-            console.error('Error:', err);
-            alert('Terjadi kesalahan.'); 
+        .catch(() => {
+            alert('Terjadi kesalahan.');
         });
     }
 
@@ -117,11 +128,10 @@
         })
         .then(response => response.json())
         .then(data => {
-            alert(data.message); 
+            alert(data.message);
         })
-        .catch(err => {
-            console.error('Error:', err);
-            alert('Terjadi kesalahan saat menambahkan ke keranjang.'); 
+        .catch(() => {
+            alert('Terjadi kesalahan saat menambahkan ke keranjang.');
         });
     }
 </script>

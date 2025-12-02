@@ -9,12 +9,15 @@
 @endsection
 
 @section('content')
-{{-- Tambahkan data-attributes untuk jembatan ke JS --}}
+
+{{-- Container utama untuk menampung semua data JS --}}
 <div class="product-detail-container"
      data-add-to-cart-url="{{ route('products.addToCart') }}"
      data-add-to-favorite-url="{{ route('products.addToFavorite') }}"
-     data-csrf-token="{{ csrf_token() }}">
+     data-csrf-token="{{ csrf_token() }}"
+     data-product-id="{{ $product['id_produk'] }}">
 
+    {{-- GAMBAR PRODUK --}}
     <div class="product-image-section">
         <img src="{{ asset('assets/images/produk-looksee/' . ($product['gambar_produk'] ?? 'placeholder.jpg')) }}"
              alt="{{ $product['nama_produk'] }}"
@@ -22,6 +25,7 @@
              class="main-product-image">
     </div>
 
+    {{-- INFORMASI PRODUK --}}
     <div class="product-info-section">
         <h1 class="product-name">{{ $product['nama_produk'] }}</h1>
         <p class="product-price">Rp {{ number_format($product['harga'], 0, ',', '.') }}</p>
@@ -31,20 +35,22 @@
             <p>{!! nl2br(e($product['deskripsi'])) !!}</p>
         </div>
 
-        {{-- INI BAGIAN YANG DIPERBARUI --}}
+        {{-- TOMBOL AKSI --}}
         <div class="product-actions">
             <button class="action-btn add-to-cart-btn" data-product-id="{{ $product['id_produk'] }}">
                 <i class='bx bx-cart-add'></i> Add to Cart
             </button>
+
+            {{-- tombol favorite pakai satu fungsi saja: addToFavorites --}}
             <button class="action-btn add-to-favorite-btn" data-product-id="{{ $product['id_produk'] }}">
                 <i class='bx bx-heart'></i> Favorite
             </button>
         </div>
     </div>
+
 </div>
 @endsection
 
 @section('footer_scripts')
     <script src="{{ asset('assets/js/product_detail.js') }}"></script>
 @endsection
-

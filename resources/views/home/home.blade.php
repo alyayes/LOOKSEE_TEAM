@@ -51,7 +51,7 @@
         @foreach($produk_woman as $row)
             <div class="product-card">
                 <div class="product-image">
-                <img src="{{ asset('storage/uploads/'.$row->gambar_produk) }}" alt="{{ $row->nama_produk }}">                </div>
+<img src="{{ asset('storage/uploads/'.$row->gambar_produk) }}" alt="{{ $row->nama_produk }}">                </div>
                 <div class="product-details">
                     <h4>{{ $row->nama_produk }}</h4>
                     <p>Rp. {{ number_format($row->harga, 0, ',', '.') }}</p>
