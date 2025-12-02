@@ -12,7 +12,7 @@ class FavoriteController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_produk' => 'required|exists:produk,id_produk'
+            'id_produk' => 'required|exists:produk_looksee,id_produk'
         ]);
 
         $user = Auth::user();

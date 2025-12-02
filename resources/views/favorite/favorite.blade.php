@@ -19,9 +19,7 @@
         <div class="tab" onclick="showTab('products', this)">Products</div>
     </div>
 
-    {{-- =======================
-         TAB: STYLE
-       ======================= --}}
+    
     <div id="style" class="content">
         <div class="gallery">
             @forelse ($liked_posts as $post)
@@ -53,9 +51,7 @@
         </div>
     </div>
 
-    {{-- =======================
-         TAB: PRODUCTS
-       ======================= --}}
+   
     <div id="products" class="content" style="display: none;">
         <div class="product-grid">
 

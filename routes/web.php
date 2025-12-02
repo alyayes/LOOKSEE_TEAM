@@ -15,7 +15,6 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ProductController;
 
-// Admin Controllers
 use App\Http\Controllers\OrdersAdminController;
 use App\Http\Controllers\ProductsAdminController;
 use App\Http\Controllers\StyleJournalAdminController;
@@ -64,7 +63,7 @@ Route::get('/mood', [HomeController::class, 'showMoodProducts'])->name('mood.pro
 
 // Profile settings
 Route::get('/settings/profile', [ProfileController::class, 'showSettings'])->name('profile.settings');
-Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+Route::post('/profile/update', [ProfileController::class, 'updateSettings'])->name('profile.update');
 
 
 /*
@@ -100,6 +99,7 @@ Route::prefix('community')->name('community.')->group(function () {
 | PROFILE MODULE
 |--------------------------------------------------------------------------
 */
+Route::middleware('auth')->group(function () {
 
 Route::prefix('profile')->name('profile.')->group(function () {
     
@@ -109,6 +109,7 @@ Route::prefix('profile')->name('profile.')->group(function () {
 
     Route::get('/post/create', [ProfileController::class, 'showCreatePostForm'])->name('post.create');
     Route::post('/post', [ProfileController::class, 'storePost'])->name('post.store');
+});
 });
 
 Route::middleware('auth')->group(function () {
@@ -143,6 +144,7 @@ Route::get('/orders/details/{order_id}', [OrderController::class, 'getOrderDetai
 | FAVORITES
 |--------------------------------------------------------------------------
 */
+Route::middleware('auth')->group(function () {
 
 Route::prefix('favorites')->name('favorites.')->group(function () {
 
@@ -151,6 +153,7 @@ Route::prefix('favorites')->name('favorites.')->group(function () {
     Route::post('/delete', [FavoriteController::class, 'deleteFavorite'])->name('delete');
 
     Route::post('/add-to-cart', [FavoriteController::class, 'addToCart'])->name('addToCart');
+});
 });
 
 
@@ -213,4 +216,3 @@ Route::get('/onboarding/personalize', [PersonalizationController::class, 'showOn
 Route::post('/onboarding/process', [PersonalizationController::class, 'processOnboarding'])->name('onboarding.process');
 
 Route::get('/homepage', [HomeController::class, 'index'])->name('persona');
-
