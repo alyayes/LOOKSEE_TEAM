@@ -170,10 +170,11 @@
             }
 
             function addToFavorites(idProduk) {
-                fetch('add_to_favorite.php', {
+                fetch("{{ route('products.addToFavorite') }}", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
+                            'X-CSRF-TOKEN': "{{ csrf_token() }}"
                         },
                         body: 'id_produk=' + idProduk
                     })
@@ -188,20 +189,17 @@
             }
 
             function addToCart(idProduk) {
-                fetch('add_to_cart.php', {
+                fetch("{{ route('products.addToCart') }}", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
+                            'X-CSRF-TOKEN': "{{ csrf_token() }}"
                         },
                         body: 'id_produk=' + idProduk
                     })
                     .then(response => response.json())
                     .then(data => {
                         alert(data.message);
-                        // Opsional: perbarui tampilan jumlah item di keranjang (misal di ikon keranjang navbar)
-                        // if (data.cart_item_count) {
-                        //     updateCartIcon(data.cart_item_count);
-                        // }
                     })
                     .catch(err => {
                         console.error('Error:', err);

@@ -44,7 +44,7 @@ class ProductController extends Controller
     public function addToFavorite(Request $request)
     {
         $request->validate([
-'id_produk' => 'required|exists:produk_looksee,id_produk'
+            'id_produk' => 'required|exists:produk_looksee,id_produk'
         ]);
 
         if (!Auth::check()) {
@@ -57,7 +57,7 @@ class ProductController extends Controller
         $userId = Auth::id();
         $productId = $request->id_produk;
 
-        $favorite = Favorite::where('id_user', $userId)
+        $favorite = Favorite::where('user_id', $userId)
             ->where('id_produk', $productId)
             ->first();
 
@@ -72,7 +72,7 @@ class ProductController extends Controller
         }
 
         Favorite::create([
-            'id_user' => $userId,
+            'user_id' => $userId,
             'id_produk' => $productId
         ]);
 
