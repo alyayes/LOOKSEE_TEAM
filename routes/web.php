@@ -88,6 +88,17 @@ Route::prefix('profile')->name('profile.')->group(function () {
     Route::post('/post', [ProfileController::class, 'storePost'])->name('post.store');
 });
 
+// Rute untuk Edit dan Hapus Postingan
+Route::middleware(['auth'])->group(function () {
+    // Menampilkan form edit
+    Route::get('/profile/post/{id}/edit', [ProfileController::class, 'showEditPostForm'])->name('profile.post.edit');
+    
+    // Menyimpan hasil edit
+    Route::put('/profile/post/{id}', [ProfileController::class, 'updatePost'])->name('profile.post.update');
+    
+    // Menghapus postingan
+    Route::delete('/profile/post/{id}', [ProfileController::class, 'destroyPost'])->name('profile.post.destroy');
+});
 
 // --- ALUR CHECKOUT ---
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
