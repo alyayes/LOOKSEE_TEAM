@@ -10,9 +10,6 @@ class HomeController extends Controller
     private $limit = 5; 
     private $moodLimit = 10;
 
-    // ================================
-    //  HOME PAGE
-    // ================================
     public function index(Request $request)
     {
         // AMBIL DATA REAL DARI DATABASE
