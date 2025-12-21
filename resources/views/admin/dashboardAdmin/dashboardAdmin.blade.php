@@ -19,6 +19,33 @@
     margin-bottom: 50px;
 }
 
+<style>
+        /* CSS Anda tetap sama, tidak ada perubahan yang substansial diperlukan */
+        * {
+            box-sizing: border-box;
+        }
+
+        #myInput {
+            background-image: url('/css/searchicon.png'); /* Pastikan path ini benar atau ganti dengan ikon Font Awesome jika digunakan */
+            background-position: 10px 10px;
+            background-repeat: no-repeat;
+            width: 45%;
+            font-size: 16px;
+            padding: 12px 20px 12px 40px;
+            border: 1px solid #ddd;
+            margin-bottom: 5px;
+            margin-top: 20px;
+        }
+
+        /* CSS untuk myTable (Pastikan ini adalah styling global untuk tabel) */
+        #myTable {
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid #ddd;
+            font-size: 18px;
+            margin-bottom: 50px;
+        }
+
 #myTable th,
 #myTable td {
     text-align: left;
@@ -41,6 +68,20 @@ table {
     background-color: #ffc107;
     color: #333;
 }
+        /* CSS untuk badge status */
+        .status-badge {
+            display: inline-block;
+            padding: .35em .65em;
+            font-size: .75em;
+            font-weight: 700;
+            line-height: 1;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            border-radius: .375rem;
+            cursor: pointer;
+            transition: background-color .15s ease-in-out, color .15s ease-in-out;
+        }
 
 .status-prepared {
     background-color: #17a2b8;
@@ -63,6 +104,11 @@ table {
 @section('content')
 <div class="page-wrapper">
     <div class="page-content">
+        /* CSS untuk dropdown status */
+        .status-container {
+            position: relative;
+            display: inline-block;
+        }
 
         <!-- ===== CARDS ===== -->
         <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4">
@@ -70,6 +116,46 @@ table {
             <!-- Total User -->
             <div class="col">
                 <div class="card radius-10 border-start border-0 border-info">
+        .custom-dropdown-menu.show {
+            display: block;
+        }
+
+        .custom-dropdown-item {
+            display: block;
+            padding: .25rem 1rem;
+            clear: both;
+            font-weight: 400;
+            color: #212529;
+            text-align: inherit;
+            text-decoration: none;
+            white-space: nowrap;
+            background-color: transparent;
+            border: 0;
+            cursor: pointer;
+        }
+
+        .custom-dropdown-item:hover,
+        .custom-dropdown-item:focus {
+            color: #1e2125;
+            background-color: #e9ecef;
+        }
+
+        .custom-dropdown-item.active-option {
+            background-color: rgb(255, 161, 200);
+            color: #fff;
+        }
+    </style>
+    
+@endsection
+
+@section('content')
+<div class="page-wrapper">
+    <div class="page-content">
+        {{-- Card Dashboard --}}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4">
+            {{-- Card 1 --}}
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-4 border-info">
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div>
@@ -87,11 +173,99 @@ table {
             <!-- Total Product -->
             <div class="col">
                 <div class="card radius-10 border-start border-0 border-danger">
+            {{-- Card 2 --}}
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-4 border-danger">
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div>
                                 <h3 class="my-1 text-danger">{{ number_format($product_count, 0, ',', '.') }}</h3>
                                 <p class="mb-0 text-secondary">Total Products</p>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-burning text-white ms-auto">
+                                <i class='bx bx-package'></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Card 3 --}}
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-4 border-success">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <h3 class="my-1 text-success">{{ number_format($order_count, 0, ',', '.') }}</h3>
+                                <p class="mb-0 text-secondary">Total Orders</p>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-ohhappiness text-white ms-auto">
+                                <i class='bx bx-line-chart'></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Card 4 --}}
+            <div class="col">
+                <div class="card radius-10 border-start border-0 border-4 border-warning">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <h3 class="my-1 text-warning">Rp {{ number_format($total_sales, 2, ',', '.') }}</h3>
+                                <p class="mb-0 text-secondary">Total Sales</p>
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-orange text-white ms-auto">
+                                <i class='bx bx-dollar-circle'></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+        <h5>Recent Orders</h5>
+
+        <table id="myTable">
+            <tr class="header">
+                <th style="width:10%;">ORDER ID</th>
+                <th style="width:15%;">CUSTOMER</th>
+                <th style="width:20%;">PRODUCT</th>
+                <th style="width:15%;">ORDER DATE</th>
+                <th style="width:12%;">AMOUNT</th>
+                <th style="width:13%;">PAYMENT METHOD</th>
+                <th style="width:10%;">STATUS</th>
+                <th style="width:5%;">ACTION</th>
+            </tr>
+
+            @forelse ($latest_orders as $row)
+            <tr>
+                <td>#{{ $row["order_id"] }}</td>
+                <td>{{ $row["username"] }}</td>
+                <td>{!! $row["nama_produk_list"] !!}</td>
+                <td>{{ $row["order_date"] }}</td>
+                <td>Rp {{ number_format($row["total_price"], 2, ',', '.') }}</td>
+                <td>{{ $row["metode_pembayaran"] }}</td>
+                <td>
+                    <div class="status-container">
+                        <span class="status-badge {{ strtolower($row['status']) }}">
+                            {{ ucfirst($row['status']) }} <i class="fa fa-caret-down"></i>
+                        </span>
+
+                                <div class="custom-dropdown-menu" id="dropdown-{{ $row['order_id'] }}">
+                                    @php
+                                        $statuses = ['pending', 'prepared', 'shipped', 'completed'];
+                                        $currentStatus = strtolower($row['status']);
+                                    @endphp
+                                    @foreach ($statuses as $status)
+                                        <a class="custom-dropdown-item {{ ($currentStatus == $status) ? 'active-option' : '' }}"
+                                            href="#" data-status="{{ $status }}">
+                                            {{ ucfirst($status) }}
+                                        </a>
+                                    @endforeach
+                                </div>
                             </div>
                             <div class="widgets-icons-2 rounded-circle bg-gradient-burning text-white ms-auto">
                                 <i class='bx bx-package'></i>
@@ -262,6 +436,38 @@ document.addEventListener('DOMContentLoaded', function() {
 
     });
 
+});
+</script>
+@endsection
+                            dropdownMenu.classList.toggle('show');
+                        });
+                    });
+
+    // Klik status → ubah badge
+    document.querySelectorAll('.custom-dropdown-item').forEach(item => {
+        item.addEventListener('click', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const newStatus = this.dataset.status;
+            const dropdownMenu = this.closest('.custom-dropdown-menu');
+            const badgeElement = dropdownMenu.previousElementSibling;
+
+            badgeElement.classList.remove('pending', 'prepared', 'shipped', 'completed');
+            badgeElement.classList.add(newStatus);
+            badgeElement.innerHTML = newStatus.charAt(0).toUpperCase() + newStatus.slice(1) + ' <i class="fa fa-caret-down"></i>';
+
+            dropdownMenu.querySelectorAll('.custom-dropdown-item').forEach(option => option.classList.remove('active-option'));
+            this.classList.add('active-option');
+
+            dropdownMenu.classList.remove('show');
+        });
+    });
+
+    // Klik di luar → tutup dropdown
+    document.addEventListener('click', function () {
+        document.querySelectorAll('.custom-dropdown-menu').forEach(menu => menu.classList.remove('show'));
+    });
 });
 </script>
 @endsection

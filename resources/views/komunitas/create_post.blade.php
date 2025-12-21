@@ -1,4 +1,4 @@
-@extends('layouts.main') {{-- Menggunakan layout utama --}}
+@extends('layouts.main')
 
 @section('title', 'Post My Style | LOOKSEE')
 
@@ -19,20 +19,16 @@
     <form class="post-content" action="{{ route('profile.post.store') }}" method="post">
         @csrf
         
-        {{-- KRUSIAL: Hidden input untuk menyimpan nama file gambar yang diunggah sementara --}}
-        {{-- Variabel $imageFilename dikirim dari ProfileController@showCreatePostForm --}}
         <input type="hidden" name="imageFilename" value="{{ $imageFilename ?? '' }}">
         
         <div class="post-layout-columns">
             <div class="image-section">
-                {{-- Menampilkan gambar. Menggunakan null check untuk $imagePath --}}
                 <img src="{{ $imagePath ?? asset('assets/images/placeholder.jpg') }}" alt="Uploaded Outfit" class="main-image">
             </div>
 
             <div class="details-section">
                 <textarea name="caption" placeholder="Tulis caption..." class="caption-input" rows="4" required></textarea>
                 
-                {{-- Perbaikan Placeholder Hashtags --}}
                 <input type="text" name="hashtags" placeholder="Hashtags (pisahkan dengan koma, cth: #ootd, #fashion)" class="caption-input">
                 
                 <div class="add-mood">
@@ -52,7 +48,6 @@
                         <button class="add-btn" id="openProductModalBtn" type="button">+</button>
                     </div>
                     <div id="selectedProductsDisplay">
-                        {{-- Produk yang dipilih akan muncul di sini via JS --}}
                     </div>
                 </div>
             </div>
