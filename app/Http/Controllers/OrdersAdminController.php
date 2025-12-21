@@ -7,7 +7,6 @@ use App\Models\Order;
 
 class OrdersAdminController extends Controller
 {
-    // Tampilkan dashboard orders
     public function index()
     {
         $latest_orders = Order::with(['user', 'items.produk', 'payment.method'])
@@ -38,7 +37,6 @@ class OrdersAdminController extends Controller
         return view('admin.ordersAdmin.ordersAdmin', compact('latest_orders'));
     }
 
-    // Update status order via AJAX
     public function updateStatus(Request $request)
     {
         $request->validate([
@@ -57,7 +55,6 @@ class OrdersAdminController extends Controller
         }
     }
 
-    // Show detail order
     public function show($order_id)
     {
         $order = Order::with(['user', 'items.produk', 'payment.method'])->findOrFail($order_id);

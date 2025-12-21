@@ -147,11 +147,7 @@ Route::prefix('products')->name('products.')->group(function () {
     Route::get('/{id}', [ProductController::class, 'show'])->name('detail');
 });
 
-// =========================================================
-//  USER ROUTES (REQURE LOGIN)
-// =========================================================
 Route::middleware(['auth'])->group(function () {
-
     // --- CART ---
     Route::get('/cart', [CartController::class, 'index'])->name('cart');
     Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
@@ -218,20 +214,14 @@ Route::get('/products/add', [ProductsAdminController::class, 'add'])->name('prod
 });
 
 
-// =========================================================
-//  ADMIN ROUTES
-// =========================================================
-
 Route::get('/dashboard', [DashboardAdminController::class, 'index'])->name('dashboard.dashboardAdmin');
 
     Route::prefix('admin')->group(function () {
         
-        // Orders Admin
         Route::get('/orders', [OrdersAdminController::class, 'index'])->name('admin.orders.index');
         Route::post('/orders/update-status', [OrdersAdminController::class, 'updateStatus'])->name('admin.order.updateStatus');
         Route::get('/orders/{order_id}', [OrdersAdminController::class, 'show'])->name('admin.order.detail');
 
-        // Products Admin
         Route::get('/products', [ProductsAdminController::class, 'index'])->name('products.index'); 
         Route::get('/products/add', [ProductsAdminController::class, 'add'])->name('products.add');
         Route::post('/products', [ProductsAdminController::class, 'store'])->name('products.store');
@@ -290,3 +280,4 @@ Route::get('/homepage', [HomeController::class, 'index'])->name('persona');
 Route::get('/onboarding/personalize', [PersonalizationController::class, 'showOnboarding'])->name('onboarding.show');
 Route::post('/onboarding/process', [PersonalizationController::class, 'processOnboarding'])->name('onboarding.process');
 });
+Route::resource('stylejournalAdmin', StyleJournalAdminController::class);

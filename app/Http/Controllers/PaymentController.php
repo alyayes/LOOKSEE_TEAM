@@ -9,7 +9,7 @@ use App\Models\OrderPayment;
 
 class PaymentController extends Controller {
     
-    private $userId = 33; // ID Dummy
+    private $userId = 33; 
 
     private function formatRupiah($angka) {
         return 'Rp ' . number_format($angka ?? 0, 0, ',', '.');
@@ -17,8 +17,7 @@ class PaymentController extends Controller {
 
     public function showPaymentDetails(Request $request)
     {
-        // 1. Ambil Order Terakhir milik User ini
-        // (Atau ambil spesifik dari URL ?order_id=5 jika ada)
+
         if ($request->has('order_id')) {
             $order = Order::where('user_id', $this->userId)
                           ->where('order_id', $request->order_id)
@@ -26,31 +25,26 @@ class PaymentController extends Controller {
                           ->first();
         } else {
             $order = Order::where('user_id', $this->userId)
-                          ->latest() // Ambil yang paling baru dibuat
+                          ->latest() 
                           ->first();
         }
 
-        // Jika tidak ada order sama sekali
         if (!$order) {
             return redirect()->route('homepage')->with('error', 'Belum ada tagihan pembayaran.');
         }
 
-        // 2. Ambil Data Pembayaran dari Relasi
-        $payment = $order->payment; // Mengambil dari relasi hasOne di Model Order
+        $payment = $order->payment; 
 
         if (!$payment) {
-            // Jika data pembayaran belum terbuat (kasus aneh, tapi jaga-jaga)
             return redirect()->route('orders.list')->with('error', 'Data pembayaran tidak ditemukan.');
         }
 
-        // 3. Siapkan Data untuk View
         $order_id = $order->order_id;
         $payment_code = $payment->transaction_code;
         $payment_expiration_time = Carbon::parse($order->order_date)->addHours(24);
         
         $total_amount_display = $this->formatRupiah($order->grand_total);
 
-        // Tentukan Jenis Metode Pembayaran (Bank / E-Wallet / COD)
         $payment_method_display = 'Unknown';
         $bank_choice_display = '';
         $ewallet_provider_display = '';
@@ -59,14 +53,12 @@ class PaymentController extends Controller {
             $payment_method_display = $payment->method->method_name;
         }
 
-        // Ambil Detail Bank/E-Wallet
         if ($payment_method_display === 'Bank Transfer') {
             $bank_choice_display = $payment->bankDetail ? $payment->bankDetail->bank_name : 'Bank';
         } elseif ($payment_method_display === 'E-Wallet') {
             $ewallet_provider_display = $payment->ewalletDetail ? $payment->ewalletDetail->ewallet_provider_name : 'E-Wallet';
         }
 
-        // 4. Siapkan Instruksi Pembayaran
         $payment_instructions = [ 'title' => 'Payment Method', 'steps' => ['No instructions available.'] ];
 
         if ($payment_method_display === 'Bank Transfer') {
@@ -84,7 +76,7 @@ class PaymentController extends Controller {
                 "3. Pembayaran akan dicek otomatis.",
             ];
         } elseif ($payment_method_display === 'E-Wallet') {
-            $no_hp = $payment->ewalletDetail ? $payment->ewalletDetail->account_number : '081234567890'; // Asumsi kolom account_number ada di tabel ewallet
+            $no_hp = $payment->ewalletDetail ? $payment->ewalletDetail->account_number : '081234567890';
             $an    = $payment->ewalletDetail ? $payment->ewalletDetail->account_name : 'LOOKSEE Official';
 
             $payment_instructions['title'] = $ewallet_provider_display;
