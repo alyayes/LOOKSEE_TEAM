@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
@@ -12,6 +14,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ProductController;
+
 use App\Http\Controllers\OrdersAdminController;
 use App\Http\Controllers\ProductsAdminController;
 use App\Http\Controllers\StyleJournalAdminController;
@@ -20,31 +23,63 @@ use App\Http\Controllers\AnalyticsAdminController;
 use App\Http\Controllers\UsersAdminController;
 use App\Http\Controllers\TodaysOutfitAdminController;
 use App\Http\Controllers\PersonalizationController;
-use Illuminate\Support\Facades\Auth;
 
 
+/*
+|--------------------------------------------------------------------------
+| AUTH ROUTES
+|--------------------------------------------------------------------------
+*/
+
+// Login
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+
+// Register
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-// register POST
 Route::post('/register', [AuthController::class, 'register']);
 
+// Logout (final)
+Route::get('/logout', function () {
+    Auth::logout();
+    return redirect()->route('login')->with('info', 'Anda berhasil logout.');
+})->name('logout');
+
+
+/*
+|--------------------------------------------------------------------------
+| USER PAGES
+|--------------------------------------------------------------------------
+*/
+
+// Root redirect → Community Trends
+Route::get('/', function () {
+    return redirect()->route('community.trends');
+})->name('home');
 Route::get('/check-auth', function () {
     dd(Auth::id());
 });
 
 // Home
-// 1. HOME PAGE 
 Route::get('/home', [HomeController::class, 'index'])->name('homepage');
-// 2. ROOT (/) - Mengalihkan ke Home Page
-
-// 3. Home Selected Mood
 Route::get('/mood', [HomeController::class, 'showMoodProducts'])->name('mood.products');
 
-// 3. HOME SELECTED MOOD
-Route::get('/mood', [HomeController::class, 'showMoodProducts'])->name('mood.products');
-// Profile setting
+// Profile settings
 Route::get('/settings/profile', [ProfileController::class, 'showSettings'])->name('profile.settings');
+Route::post('/profile/update', [ProfileController::class, 'updateSettings'])->name('profile.update');
+
+
+/*
+|--------------------------------------------------------------------------
+| STYLE JOURNAL
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/style-journal', [StyleJournalController::class, 'index'])->name('journal.index');
+Route::get('/style-journal/{id}', [StyleJournalController::class, 'show'])->name('journal.show');
+
 Route::post('/update-profile', [ProfileController::class, 'updateSettings'])->name('profile.update');
 // Route untuk LOGOUT (Perlu Controller tersendiri di proyek nyata)
 Route::get('/logout', function () {
@@ -70,11 +105,17 @@ Route::get('/', function () {
     return redirect()->route('community.trends');
 })->name('home');
 
+/*
+|--------------------------------------------------------------------------
+| COMMUNITY MODULE
+|--------------------------------------------------------------------------
+*/
 
-// --- MODUL KOMUNITAS ---
 Route::prefix('community')->name('community.')->group(function () {
+
     Route::get('/trends', [CommunityController::class, 'trends'])->name('trends');
     Route::get('/todays-outfit', [CommunityController::class, 'todaysOutfit'])->name('todays-outfit');
+
     Route::get('/post/{id}', [CommunityController::class, 'showPostDetail'])->name('post.detail');
     Route::post('/post/{id}/like', [CommunityController::class, 'likePost'])->name('post.like');
     Route::post('/post/{id}/comment', [CommunityController::class, 'addComment'])->name('post.comment');
@@ -82,14 +123,25 @@ Route::prefix('community')->name('community.')->group(function () {
 });
 
 
-// --- MODUL PROFILE PENGGUNA ---
+/*
+|--------------------------------------------------------------------------
+| PROFILE MODULE
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth')->group(function () {
+
 Route::prefix('profile')->name('profile.')->group(function () {
+    
     Route::get('/', [ProfileController::class, 'index'])->name('index');
+
     Route::post('/upload', [ProfileController::class, 'uploadImage'])->name('upload');
+
     Route::get('/post/create', [ProfileController::class, 'showCreatePostForm'])->name('post.create');
     Route::post('/post', [ProfileController::class, 'storePost'])->name('post.store');
 });
+});
 
+Route::middleware('auth')->group(function () {
     Route::get('/settings/profile', [ProfileController::class, 'showSettings'])->name('profile.settings');
     Route::post('/update-profile', [ProfileController::class, 'updateSettings'])->name('profile.update');
 
@@ -98,22 +150,28 @@ Route::prefix('profile')->name('profile.')->group(function () {
 Route::middleware(['auth'])->group(function () {
     // Menampilkan form edit
     Route::get('/profile/post/{id}/edit', [ProfileController::class, 'showEditPostForm'])->name('profile.post.edit');
-    
-    // Menyimpan hasil edit
     Route::put('/profile/post/{id}', [ProfileController::class, 'updatePost'])->name('profile.post.update');
-    
-    // Menghapus postingan
     Route::delete('/profile/post/{id}', [ProfileController::class, 'destroyPost'])->name('profile.post.destroy');
 });
 
-// --- ALUR CHECKOUT ---
+
+/*
+|--------------------------------------------------------------------------
+| CHECKOUT / CART / PAYMENT
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
 Route::post('/cart/delete', [CartController::class, 'delete'])->name('cart.delete');
+
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/checkout', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
 Route::post('/checkout/save-address', [CheckoutController::class, 'saveTemporaryAddress'])->name('checkout.saveAddress');
+
 Route::get('/payment/details', [PaymentController::class, 'showPaymentDetails'])->name('payment.details');
+
+Route::get('/my-orders', [OrderController::class, 'listOrders'])->name('orders.list');
 Route::get('/my-orders', [OrderController::class, 'list'])->name('orders.list');
 Route::get('/orders/details/{order_id}', [OrderController::class, 'getOrderDetailsAjax'])->name('orders.details.ajax');
 
@@ -124,6 +182,13 @@ Route::put('/checkout/address/update/{id}', [CheckoutController::class, 'updateA
 Route::delete('/checkout/address/delete/{id}', [CheckoutController::class, 'deleteAddress'])
     ->name('checkout.address.delete');
 
+
+/*
+|--------------------------------------------------------------------------
+| FAVORITES
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth')->group(function () {
 
 // --- ROUTE DUMMY LAIN & REDIRECT ---
 // Redirect URL lama dari header ke URL baru yang lebih rapi
@@ -148,8 +213,14 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // --- HALAMAN FAVORIT ---
 Route::prefix('favorites')->name('favorites.')->group(function () {
-    // Menampilkan halaman utama My Favorites
+
     Route::get('/', [FavoriteController::class, 'index'])->name('index');
+
+    Route::post('/delete', [FavoriteController::class, 'deleteFavorite'])->name('delete');
+
+    Route::post('/add-to-cart', [FavoriteController::class, 'addToCart'])->name('addToCart');
+});
+});
 
     // Endpoint AJAX untuk menghapus produk dari favorit
     Route::post('/delete', [FavoriteController::class, 'deleteFavorite'])->name('delete');
@@ -191,18 +262,47 @@ Route::prefix('admin')->group(function () {
     // URI: /admin/products
     Route::post('/products', [ProductsAdminController::class, 'store'])->name('products.store');
 
-    // 4. [GET] Edit: Menampilkan form edit produk berdasarkan ID
-    // URI: /admin/products/{id}/edit
-    Route::get('/products/{id}/edit', [ProductsAdminController::class, 'edit'])->name('products.edit');
+/*
+|--------------------------------------------------------------------------
+| PRODUCTS
+|--------------------------------------------------------------------------
+*/
 
-    // 5. [PUT/PATCH] Update: Memproses data form edit
-    // URI: /admin/products/{id}
-    Route::put('/products/{id}', [ProductsAdminController::class, 'update'])->name('products.update');
+Route::prefix('products')->name('products.')->group(function () {
 
-    // 6. [DELETE] Destroy: Menghapus produk
-    Route::delete('/products/{id}', [ProductsAdminController::class, 'destroy'])->name('products.destroy');
+    Route::get('/{id}', [ProductController::class, 'show'])->name('detail');
+
+    Route::middleware('auth')->group(function () {
+        Route::post('/add-to-cart', [ProductController::class, 'addToCart'])->name('addToCart');
+        Route::post('/add-to-favorite', [ProductController::class, 'addToFavorite'])->name('addToFavorite');
+    });
 });
 
+
+/*
+|--------------------------------------------------------------------------
+| ADMIN ROUTES
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('admin')->group(function () {
+
+    // Dashboard
+    Route::get('/dashboard', [DashboardAdminController::class, 'index'])->name('dashboard.dashboardAdmin');
+
+    // Orders
+    Route::get('/orders', [OrdersAdminController::class, 'index'])->name('admin.orders.index');
+    Route::post('/orders/update-status', [OrdersAdminController::class, 'updateStatus'])->name('admin.order.updateStatus');
+    Route::get('/orders/{order_id}', [OrdersAdminController::class, 'show'])->name('admin.order.detail');
+
+    // Products
+    Route::get('/products', [ProductsAdminController::class, 'index'])->name('products.index');
+    Route::get('/products/add', [ProductsAdminController::class, 'add'])->name('products.add');
+    Route::post('/products', [ProductsAdminController::class, 'store'])->name('products.store');
+    Route::get('/products/{id}/edit', [ProductsAdminController::class, 'edit'])->name('products.edit');
+    Route::put('/products/{id}', [ProductsAdminController::class, 'update'])->name('products.update');
+    Route::delete('/products/{id}', [ProductsAdminController::class, 'destroy'])->name('products.destroy');
+});
 // logout
 Route::post('/logout', function () {
     return redirect()->route('products.productsAdmin');
@@ -235,16 +335,21 @@ Route::prefix('admin')->group(function () {
 });
 
 
+// Other admin pages
 Route::get('/users-admin', [UsersAdminController::class, 'index'])->name('users-admin.usersAdmin');
 Route::get('/toAdmin', [TodaysOutfitAdminController::class, 'index'])->name('toAdmin.toAdmin');
 
-// Rute utama (/) akan mengecek status onboarding
-Route::get('/', [PersonalizationController::class, 'showOnboarding']); 
-// Route ini men-serve halaman Home jika onboarding sudah selesai
-Route::get('/homepage', [HomeController::class, 'index'])->name('persona');
+Route::resource('stylejournalAdmin', StyleJournalAdminController::class);
 
-// ONBOARDING ROUTES
+
+/*
+|--------------------------------------------------------------------------
+| PERSONALIZATION / ONBOARDING
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/onboarding/personalize', [PersonalizationController::class, 'showOnboarding'])->name('onboarding.show');
 Route::post('/onboarding/process', [PersonalizationController::class, 'processOnboarding'])->name('onboarding.process');
 
+Route::get('/homepage', [HomeController::class, 'index'])->name('persona');
 Route::get('/toAdmin', [TodaysOutfitAdminController::class, 'index'])->name('toAdmin.toAdmin');

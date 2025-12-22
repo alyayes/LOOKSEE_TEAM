@@ -21,16 +21,16 @@ class ProductsAdminController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'nama_produk' => 'required',
-            'kategori' => 'required',
-            'harga' => 'required|numeric',
-            'deskripsi' => 'nullable',
-            'mood' => 'nullable',
-            'preferensi' => 'nullable',
-            'stock' => 'nullable|integer',
-            'gambar_produk' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
+        // // $request->validate([
+        // //     'nama_produk' => 'required',
+        // //     'kategori' => 'required',
+        // //     'harga' => 'required|numeric',
+        // //     'deskripsi' => 'nullable',
+        // //     'mood' => 'nullable',
+        // //     'preferensi' => 'nullable',
+        // //     'stock' => 'nullable|integer',
+        // //     'gambar_produk' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+        // ]);
 
         $file = $request->file('gambar_produk');
         $folder = public_path('assets/images/produk-looksee');

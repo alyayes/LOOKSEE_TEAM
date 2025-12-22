@@ -10,9 +10,6 @@ class HomeController extends Controller
     private $limit = 5; 
     private $moodLimit = 10;
 
-    // ================================
-    //  HOME PAGE
-    // ================================
     public function index(Request $request)
     {
         // AMBIL DATA REAL DARI DATABASE
@@ -58,7 +55,7 @@ class HomeController extends Controller
         // AMBIL DATA REAL DARI DATABASE
         $allProducts = Produk::orderByDesc('id_produk')->get();
 
-        $mood = strtolower($request->query('mood', 'netral'));
+        $mood = strtolower($request->query('mood', 'neutral'));
         $gender = strtolower($request->query('gender', ''));
         $currentPage = $request->query('page', 1);
 
