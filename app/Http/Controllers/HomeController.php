@@ -37,7 +37,7 @@ class HomeController extends Controller
         $productsManPage = array_slice($productsMan, $offsetMan, $this->limit);
         $totalPagesMan = ceil(count($productsMan) / $this->limit);
 
-        return view('home.index', [
+        return view('home.home', [
             'productsWoman' => $productsWomanPage,
             'productsMan' => $productsManPage,
             'pageWoman' => $pageWoman,
