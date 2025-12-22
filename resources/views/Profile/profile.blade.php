@@ -33,7 +33,17 @@
 
     {{-- Konten TAB: My Style --}}
     <div id="myStyle" class="content">
-        @forelse ($posts as $post)
+        {{-- PENGURUTAN POSTINGAN UNTUK TAB MY STYLE --}}
+        @php
+            if (isset($posts) && (is_array($posts) || $posts instanceof \Illuminate\Support\Collection)) {
+                // Mengurutkan postingan berdasarkan 'created_at' secara descending (terbaru di atas)
+                $sortedPosts = collect($posts)->sortByDesc('created_at');
+            } else {
+                $sortedPosts = [];
+            }
+        @endphp
+
+        @forelse ($sortedPosts as $post)
             <div class="posting">
                 <div class="post-header">
                     <a href="#">
@@ -107,8 +117,17 @@
 
     {{-- Konten TAB: My Gallery --}}
     <div id="myGallery" class="content" style="display: none;">
+        {{-- PENGURUTAN POSTINGAN UNTUK TAB MY GALLERY --}}
+        @php
+            if (isset($gallery_posts) && (is_array($gallery_posts) || $gallery_posts instanceof \Illuminate\Support\Collection)) {
+                // Mengurutkan postingan galeri berdasarkan 'created_at' secara descending (terbaru di atas)
+                $sortedGalleryPosts = collect($gallery_posts)->sortByDesc('created_at');
+            } else {
+                $sortedGalleryPosts = [];
+            }
+        @endphp
         <div class="gallery">
-            @forelse($gallery_posts as $post)
+            @forelse($sortedGalleryPosts as $post)
                 <div class="image-placeholder">
                     <a href="{{ route('community.post.detail', ['id' => $post['id_post']]) }}">
                         <img src="{{ asset('assets/images/todays outfit/' . ($post['image_post'] ?? 'placeholder.jpg')) }}"

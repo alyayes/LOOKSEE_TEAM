@@ -13,8 +13,7 @@ class StyleJournalAdminController extends Controller
 
     public function index()
     {
-        $journals = StyleJournal::orderBy('id_journal', 'desc')->get();
-
+        $journals = StyleJournal::orderBy('publication_date', 'desc')->get();
         return view('admin.StyleJournalAdmin.stylejournalAdmin', compact('journals'));
     }
 
@@ -32,7 +31,7 @@ class StyleJournalAdminController extends Controller
             'publication_date' => 'required|date',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-
+ 
         $imageName = null;
 
         if ($request->hasFile('image')) {
