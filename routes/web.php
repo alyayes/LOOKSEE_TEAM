@@ -261,7 +261,7 @@ Route::prefix('admin')->group(function () {
     // 3. [POST] Store: Memproses data form tambah
     // URI: /admin/products
     Route::post('/products', [ProductsAdminController::class, 'store'])->name('products.store');
-
+});
 /*
 |--------------------------------------------------------------------------
 | PRODUCTS
