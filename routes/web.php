@@ -156,6 +156,46 @@ Route::prefix('favorites')->name('favorites.')->group(function () {
 });
 });
 
+    // Endpoint AJAX untuk menghapus produk dari favorit
+    Route::post('/delete', [FavoriteController::class, 'deleteFavorite'])->name('delete');
+
+    // Endpoint AJAX untuk menambah produk ke keranjang dari halaman favorit
+    Route::post('/add-to-cart', [FavoriteController::class, 'addToCart'])->name('addToCart');
+
+Route::post('/cart/add/', [CartController::class, 'addToCart'])->name('cart.add');
+
+
+// --- HALAMAN PRODUK ---
+Route::prefix('products')->name('products.')->group(function () {
+    // Halaman detail untuk satu produk
+    Route::get('/{id}', [ProductController::class, 'show'])->name('detail');
+
+    // Endpoint AJAX untuk menambah ke keranjang dari halaman detail
+    Route::post('/add-to-cart', [ProductController::class, 'addToCart'])->name('addToCart');
+
+    // Endpoint AJAX untuk menambah/menghapus favorit
+    Route::post('/add-to-favorite', [ProductController::class, 'addToFavorite'])->name('addToFavorite');
+});
+
+// FAVORITE
+Route::post('/favorite/add', [FavoriteController::class, 'store'])->name('favorite.add');
+
+// CART
+Route::post('/cart/add', [CartController::class, 'store'])->name('cart.add');
+
+/* --- RUTE PRODUK ADMIN (CRUD) --- */
+Route::prefix('admin')->group(function () {
+
+    // 1. [GET] Index: Menampilkan daftar produk
+    // URI: /admin/products
+    Route::get('/products', [ProductsAdminController::class, 'index'])->name('products.index');
+    // 2. [GET] Create: Menampilkan form tambah produk
+    // URI: /admin/products/add
+    Route::get('/products/add', [ProductsAdminController::class, 'add'])->name('products.add');
+    // 3. [POST] Store: Memproses data form tambah
+    // URI: /admin/products
+    Route::post('/products', [ProductsAdminController::class, 'store'])->name('products.store');
+});
 
 /*
 |--------------------------------------------------------------------------

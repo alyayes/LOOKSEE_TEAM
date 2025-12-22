@@ -1,355 +1,204 @@
-@extends('layouts.mainAdmin') 
+@extends('layouts.mainAdmin')
 
-@section('title', 'Dashboard')
+@section('title', 'Dashboard Admin')
 
 @section('styles')
+<link rel="stylesheet" href="{{ asset('assets/css/dashboardAdmin.css') }}">
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 <style>
-        /* CSS Anda tetap sama, tidak ada perubahan yang substansial diperlukan */
-        * {
-            box-sizing: border-box;
-        }
+* {
+    box-sizing: border-box;
+}
 
-        #myInput {
-            background-image: url('/css/searchicon.png'); /* Pastikan path ini benar atau ganti dengan ikon Font Awesome jika digunakan */
-            background-position: 10px 10px;
-            background-repeat: no-repeat;
-            width: 45%;
-            font-size: 16px;
-            padding: 12px 20px 12px 40px;
-            border: 1px solid #ddd;
-            margin-bottom: 5px;
-            margin-top: 20px;
-        }
+#myTable {
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid #ddd;
+    font-size: 15px;
+}
 
-        /* CSS untuk myTable (Pastikan ini adalah styling global untuk tabel) */
-        #myTable {
-            border-collapse: collapse;
-            width: 100%;
-            border: 1px solid #ddd;
-            font-size: 18px;
-            margin-bottom: 50px;
-        }
+#myTable th, #myTable td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
 
-        #myTable th,
-        #myTable td {
-            text-align: left;
-            padding: 12px;
-            border: 1px solid #ddd;
-        }
+#myTable tr.header,
+#myTable tr:hover {
+    background-color: rgb(255, 234, 247);
+}
 
-        #myTable tr {
-            border-bottom: 1px solid #ddd;
-        }
+.status-select {
+    font-weight: 600;
+}
 
-        #myTable tr.header,
-        #myTable tr:hover {
-            background-color: rgb(255, 234, 247);
-        }
-
-        /* CSS untuk badge status */
-        .status-badge {
-            display: inline-block;
-            padding: .35em .65em;
-            font-size: .75em;
-            font-weight: 700;
-            line-height: 1;
-            text-align: center;
-            white-space: nowrap;
-            vertical-align: middle;
-            border-radius: .375rem;
-            cursor: pointer;
-            transition: background-color .15s ease-in-out, color .15s ease-in-out;
-        }
-
-        .status-badge.pending {
-            background-color: rgba(255, 193, 7, .8);
-            color: #fff;
-        }
-
-        .status-badge.prepared {
-            background-color: rgb(253, 152, 0);
-            color: #fff;
-        }
-
-        .status-badge.shipped {
-            background-color: rgb(148, 190, 253);
-            color: #fff;
-        }
-
-        .status-badge.completed {
-            background-color: rgb(60, 199, 134);
-            color: #fff;
-        }
-
-        /* CSS untuk dropdown status */
-        .status-container {
-            position: relative;
-            display: inline-block;
-        }
-
-        .custom-dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            z-index: 1000;
-            min-width: 10rem;
-            padding: .5rem 0;
-            margin: .125rem 0 0;
-            font-size: 1rem;
-            color: #212529;
-            text-align: left;
-            list-style: none;
-            background-color: #fff;
-            background-clip: padding-box;
-            border: 1px solid rgba(0, 0, 0, .15);
-            border-radius: .25rem;
-            box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .175);
-        }
-
-        .custom-dropdown-menu.show {
-            display: block;
-        }
-
-        .custom-dropdown-item {
-            display: block;
-            padding: .25rem 1rem;
-            clear: both;
-            font-weight: 400;
-            color: #212529;
-            text-align: inherit;
-            text-decoration: none;
-            white-space: nowrap;
-            background-color: transparent;
-            border: 0;
-            cursor: pointer;
-        }
-
-        .custom-dropdown-item:hover,
-        .custom-dropdown-item:focus {
-            color: #1e2125;
-            background-color: #e9ecef;
-        }
-
-        .custom-dropdown-item.active-option {
-            background-color: rgb(255, 161, 200);
-            color: #fff;
-        }
-    </style>
-    
+.status-pending { background-color: #ffc107; }
+.status-prepared { background-color: #17a2b8; color: white; }
+.status-shipped { background-color: #007bff; color: white; }
+.status-completed { background-color: #28a745; color: white; }
+</style>
 @endsection
 
 @section('content')
 <div class="page-wrapper">
     <div class="page-content">
-        {{-- Card Dashboard --}}
-        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4">
-            {{-- Card 1 --}}
+
+        <!-- ===== DASHBOARD CARDS ===== -->
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 mb-4">
+
             <div class="col">
-                <div class="card radius-10 border-start border-0 border-4 border-info">
+                <div class="card radius-10 border-start border-info border-4">
                     <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div>
-                                <h3 class="my-1 text-info">{{ number_format($user_count, 0, ',', '.') }}</h3>
-                                <p class="mb-0 text-secondary">Total Users</p>
-                            </div>
-                            <div class="widgets-icons-2 rounded-circle bg-gradient-blues text-white ms-auto">
-                                <i class='bx bxs-user-circle'></i>
-                            </div>
-                        </div>
+                        <h3 class="text-info">{{ number_format($user_count) }}</h3>
+                        <p>Total Users</p>
                     </div>
                 </div>
             </div>
 
-            {{-- Card 2 --}}
             <div class="col">
-                <div class="card radius-10 border-start border-0 border-4 border-danger">
+                <div class="card radius-10 border-start border-danger border-4">
                     <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div>
-                                <h3 class="my-1 text-danger">{{ number_format($product_count, 0, ',', '.') }}</h3>
-                                <p class="mb-0 text-secondary">Total Products</p>
-                            </div>
-                            <div class="widgets-icons-2 rounded-circle bg-gradient-burning text-white ms-auto">
-                                <i class='bx bx-package'></i>
-                            </div>
-                        </div>
+                        <h3 class="text-danger">{{ number_format($product_count) }}</h3>
+                        <p>Total Products</p>
                     </div>
                 </div>
             </div>
 
-            {{-- Card 3 --}}
             <div class="col">
-                <div class="card radius-10 border-start border-0 border-4 border-success">
+                <div class="card radius-10 border-start border-success border-4">
                     <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div>
-                                <h3 class="my-1 text-success">{{ number_format($order_count, 0, ',', '.') }}</h3>
-                                <p class="mb-0 text-secondary">Total Orders</p>
-                            </div>
-                            <div class="widgets-icons-2 rounded-circle bg-gradient-ohhappiness text-white ms-auto">
-                                <i class='bx bx-line-chart'></i>
-                            </div>
-                        </div>
+                        <h3 class="text-success">{{ number_format($order_count) }}</h3>
+                        <p>Total Orders</p>
                     </div>
                 </div>
             </div>
 
-            {{-- Card 4 --}}
             <div class="col">
-                <div class="card radius-10 border-start border-0 border-4 border-warning">
+                <div class="card radius-10 border-start border-warning border-4">
                     <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div>
-                                <h3 class="my-1 text-warning">Rp {{ number_format($total_sales, 2, ',', '.') }}</h3>
-                                <p class="mb-0 text-secondary">Total Sales</p>
-                            </div>
-                            <div class="widgets-icons-2 rounded-circle bg-gradient-orange text-white ms-auto">
-                                <i class='bx bx-dollar-circle'></i>
-                            </div>
-                        </div>
+                        <h3 class="text-warning">
+                            Rp {{ number_format($total_sales, 2, ',', '.') }}
+                        </h3>
+                        <p>Total Sales</p>
                     </div>
                 </div>
             </div>
+
         </div>
 
-        <hr>
-        <h5>Recent Orders</h5>
+        <!-- ===== RECENT ORDERS ===== -->
+        <h5 class="mb-3">Recent Orders</h5>
 
         <table id="myTable">
             <tr class="header">
-                <th style="width:10%;">ORDER ID</th>
-                <th style="width:15%;">CUSTOMER</th>
-                <th style="width:20%;">PRODUCT</th>
-                <th style="width:15%;">ORDER DATE</th>
-                <th style="width:12%;">AMOUNT</th>
-                <th style="width:13%;">PAYMENT METHOD</th>
-                <th style="width:10%;">STATUS</th>
-                <th style="width:5%;">ACTION</th>
+                <th>ORDER ID</th>
+                <th>CUSTOMER</th>
+                <th>PRODUCT</th>
+                <th>DATE</th>
+                <th>AMOUNT</th>
+                <th>PAYMENT</th>
+                <th>STATUS</th>
+                <th>ACTION</th>
             </tr>
 
             @forelse ($latest_orders as $row)
             <tr>
-                <td>#{{ $row["order_id"] }}</td>
-                <td>{{ $row["username"] }}</td>
-                <td>{!! $row["nama_produk_list"] !!}</td>
-                <td>{{ $row["order_date"] }}</td>
-                <td>Rp {{ number_format($row["total_price"], 2, ',', '.') }}</td>
-                <td>{{ $row["metode_pembayaran"] }}</td>
+                <td>#{{ $row['order_id'] }}</td>
+                <td>{{ $row['username'] }}</td>
+                <td>{!! $row['nama_produk_list'] !!}</td>
+                <td>{{ $row['order_date'] }}</td>
+                <td>Rp {{ number_format($row['total_price'], 2, ',', '.') }}</td>
+                <td>{{ $row['metode_pembayaran'] }}</td>
+
                 <td>
-                    <div class="status-container">
-                        <span class="status-badge {{ strtolower($row['status']) }}">
-                            {{ ucfirst($row['status']) }} <i class="fa fa-caret-down"></i>
-                        </span>
+                    <select
+                        class="form-select status-select status-{{ strtolower($row['status']) }}"
+                        data-order-id="{{ $row['order_id'] }}"
+                        data-original-status="{{ strtolower($row['status']) }}"
+                    >
+                        @php
+                            $statuses = ['pending', 'prepared', 'shipped', 'completed'];
+                        @endphp
 
-                                <div class="custom-dropdown-menu" id="dropdown-{{ $row['order_id'] }}">
-                                    @php
-                                        $statuses = ['pending', 'prepared', 'shipped', 'completed'];
-                                        $currentStatus = strtolower($row['status']);
-                                    @endphp
-                                    @foreach ($statuses as $status)
-                                        <a class="custom-dropdown-item {{ ($currentStatus == $status) ? 'active-option' : '' }}"
-                                            href="#" data-status="{{ $status }}">
-                                            {{ ucfirst($status) }}
-                                        </a>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <a href="{{ route('admin.order.detail', ['order_id' => $row['order_id']]) }}">
-                                <i class='bx bx-show-alt'></i>
-                            </a>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="8">Tidak ada data order terbaru yang tersedia.</td>
-                    </tr>
-                @endforelse
-            </table>
+                        @foreach ($statuses as $status)
+                            <option value="{{ $status }}"
+                                {{ strtolower($row['status']) == $status ? 'selected' : '' }}>
+                                {{ ucfirst($status) }}
+                            </option>
+                        @endforeach
+                    </select>
+                </td>
 
-            {{-- --- JAVASCRIPT LOGIC --- --}}
-            <script>
-                // Fungsi pencarian JavaScript
-                function myFunction() {
-                    var input, filter, table, tr, td, i, j, txtValue, found;
-                    input = document.getElementById("myInput");
-                    filter = input.value.toUpperCase();
-                    table = document.getElementById("myTable");
-                    tr = table.getElementsByTagName("tr");
+                <td>
+                    <a href="{{ route('admin.order.detail', ['order_id' => $row['order_id']]) }}">
+                        <i class='bx bx-show-alt'></i>
+                    </a>
+                </td>
+            </tr>
 
-                    for (i = 1; i < tr.length; i++) { // Mulai dari 1 untuk melewatkan header
-                        found = false;
-                        td = tr[i].getElementsByTagName("td");
-                        const searchableColumns = [0, 1, 2, 5, 6];
+            @empty
+            <tr>
+                <td colspan="8" class="text-center">Tidak ada order terbaru.</td>
+            </tr>
+            @endforelse
+        </table>
 
-                        for (j = 0; j < td.length; j++) {
-                            if (searchableColumns.includes(j) && td[j]) {
-                                // Ambil teks dari badge status untuk pencarian kolom Status
-                                let cellText = td[j].querySelector('.status-badge') ? td[j].querySelector('.status-badge').textContent.replace(' ▾', '').trim() : td[j].textContent || td[j].innerText;
-                                txtValue = cellText;
-                                
-                                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                                    found = true;
-                                    break;
-                                }
-                            }
-                        }
-                        tr[i].style.display = found ? "" : "none";
-                    }
+    </div>
+</div>
+@endsection
+
+@section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+    const updateStatusUrl = "{{ route('admin.order.updateStatus') }}";
+
+    function updateColor(select, status) {
+        select.className = 'form-select status-select';
+        select.classList.add('status-' + status);
+    }
+
+    document.querySelectorAll('.status-select').forEach(select => {
+
+        updateColor(select, select.value);
+
+        select.addEventListener('change', function () {
+
+            const orderId = this.dataset.orderId;
+            const newStatus = this.value;
+            const oldStatus = this.dataset.originalStatus;
+
+            fetch(updateStatusUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({
+                    order_id: orderId,
+                    status: newStatus
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    this.dataset.originalStatus = newStatus;
+                    updateColor(this, newStatus);
+                } else {
+                    alert('Gagal update status');
+                    this.value = oldStatus;
+                    updateColor(this, oldStatus);
                 }
-
-                document.addEventListener('DOMContentLoaded', function () {
-                    // Ambil CSRF token dari meta tag
-                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                    // URL untuk AJAX update status (Pastikan route ini sudah didefinisikan)
-                    const updateStatusUrl = '{{ route('admin.order.updateStatus') }}';
-
-                    // 1. Toggle Dropdown Status
-                    document.querySelectorAll('.status-badge').forEach(badge => {
-                        badge.addEventListener('click', function (event) {
-                            event.stopPropagation();
-                            const orderId = this.dataset.orderId;
-                            const dropdownMenu = document.getElementById('dropdown-' + orderId);
-
-                            // Sembunyikan semua dropdown lain
-                            document.querySelectorAll('.custom-dropdown-menu').forEach(menu => {
-                                if (menu !== dropdownMenu) {
-                                    menu.classList.remove('show');
-                                }
-                            });
-
-                            dropdownMenu.classList.toggle('show');
-                        });
-                    });
-
-    // Klik status → ubah badge
-    document.querySelectorAll('.custom-dropdown-item').forEach(item => {
-        item.addEventListener('click', function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-
-            const newStatus = this.dataset.status;
-            const dropdownMenu = this.closest('.custom-dropdown-menu');
-            const badgeElement = dropdownMenu.previousElementSibling;
-
-            badgeElement.classList.remove('pending', 'prepared', 'shipped', 'completed');
-            badgeElement.classList.add(newStatus);
-            badgeElement.innerHTML = newStatus.charAt(0).toUpperCase() + newStatus.slice(1) + ' <i class="fa fa-caret-down"></i>';
-
-            dropdownMenu.querySelectorAll('.custom-dropdown-item').forEach(option => option.classList.remove('active-option'));
-            this.classList.add('active-option');
-
-            dropdownMenu.classList.remove('show');
+            })
+            .catch(() => {
+                alert('Kesalahan jaringan');
+                this.value = oldStatus;
+                updateColor(this, oldStatus);
+            });
         });
     });
 
-    // Klik di luar → tutup dropdown
-    document.addEventListener('click', function () {
-        document.querySelectorAll('.custom-dropdown-menu').forEach(menu => menu.classList.remove('show'));
-    });
 });
 </script>
 @endsection
