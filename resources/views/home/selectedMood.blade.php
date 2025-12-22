@@ -102,37 +102,41 @@
     }
 
     function addToFavorites(idProduk) {
-        fetch('add_to_favorite.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'id_produk=' + idProduk
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message);
-        })
-        .catch(() => {
-            alert('Terjadi kesalahan.');
-        });
-    }
+                fetch("{{ route('products.addToFavorite') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                        },
+                        body: 'id_produk=' + idProduk
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message);
+                    })
+                    .catch(err => {
+                        console.error('Error:', err);
+                        alert('Terjadi kesalahan.');
+                    });
+            }
 
-    function addToCart(idProduk) {
-        fetch('add_to_cart.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'id_produk=' + idProduk
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message);
-        })
-        .catch(() => {
-            alert('Terjadi kesalahan saat menambahkan ke keranjang.');
-        });
-    }
+            function addToCart(idProduk) {
+                fetch("{{ route('products.addToCart') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                        },
+                        body: 'id_produk=' + idProduk
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message);
+                    })
+                    .catch(err => {
+                        console.error('Error:', err);
+                        alert('Terjadi kesalahan saat menambahkan ke keranjang.');
+                    });
+            }
 </script>
 @endsection

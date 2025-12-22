@@ -32,7 +32,7 @@
                     <div class="mood-labels">
                         <div class="mood very-sad" data-mood="Very Sad">😢</div>
                         <div class="mood sad" data-mood="Sad">☹️</div>
-                        <div class="mood netral" data-mood="Netral">😐</div>
+                        <div class="mood netral" data-mood="Neutral">😐</div>
                         <div class="mood happy" data-mood="Happy">😊</div>
                         <div class="mood very-happy" data-mood="Very Happy">😁</div>
                     </div>

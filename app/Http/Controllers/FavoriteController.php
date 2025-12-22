@@ -14,7 +14,7 @@ class FavoriteController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_produk' => 'required|exists:produk,id_produk'
+            'id_produk' => 'required|exists:produk_looksee,id_produk'
         ]);
 
         $user = Auth::user();
@@ -40,11 +40,19 @@ class FavoriteController extends Controller
     {
         $user = Auth::user();
 
-        // PAGINATION FIX
+        // FAVORITE PRODUCTS
         $favorite_products = Favorite::with('product')
             ->where('user_id', $user->id)
-            ->paginate(8); // bebas 8 per halaman
+            ->paginate(8);
 
+        // STYLE FAVORITES (sementara kosong)
+        $liked_posts = collect(); // FIX ERROR Undefined variable
+
+        return view('favorite.favorite', [
+            'favorite_products' => $favorite_products,
+            'liked_posts' => $liked_posts,
+            'user' => $user
+        ]);
     // --- PENAMBAHAN LOGIKA UNTUK $liked_posts ---
         
         // Dapatkan ID post yang di-like (favorit) oleh user saat ini
@@ -70,4 +78,5 @@ class FavoriteController extends Controller
         // $favorite_products dan $user sudah ada, TAMBAHKAN $liked_posts
         return view('favorite.favorite', compact('favorite_products', 'user', 'liked_posts'));
     }
+
 }
