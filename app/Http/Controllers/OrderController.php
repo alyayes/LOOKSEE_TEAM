@@ -7,15 +7,19 @@ use App\Models\OrderItem;
 use App\Models\Produk;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth; // Tambahkan ini buat ambil ID user login
 
 class OrderController extends Controller
 {
-    private $userId = 33;
+    // Hapus variable $userId = 33 biar gak hardcode
 
-    public function list(Request $request)
+    // GANTI NAMA FUNCTION DARI 'list' KE 'listOrders' (Sesuai web.php)
+    public function listOrders(Request $request)
     {
         $status_filter = $request->status ?? 'all';
-        $userId = $this->userId;
+        
+        // AMBIL ID USER YANG SEDANG LOGIN (Biar gak error kalau user lain login)
+        $userId = Auth::id(); 
 
         $order_counts = [
             'all'       => Order::where('user_id', $userId)->count(),
@@ -33,7 +37,6 @@ class OrderController extends Controller
         }
 
         $orders = $orders_query->get()->map(function ($order) {
-            // PERBAIKAN JOIN: ganti 'order_items.product_id' jadi 'order_items.id_produk'
             $items = OrderItem::where('order_id', $order->order_id)
                 ->join('produk_looksee', 'order_items.id_produk', '=', 'produk_looksee.id_produk')
                 ->select(
@@ -57,13 +60,16 @@ class OrderController extends Controller
 
     public function getOrderDetailsAjax($order_id)
     {
-        $order = Order::where('order_id', $order_id)->first();
+        // Pastikan order milik user yang login (Security Check)
+        $userId = Auth::id();
+        $order = Order::where('order_id', $order_id)
+                      ->where('user_id', $userId) // Tambahan security
+                      ->first();
 
         if (!$order) {
-            return response('Order not found', 404);
+            return response('Order not found or unauthorized', 404);
         }
 
-        // PERBAIKAN JOIN DISINI JUGA
         $items = OrderItem::where('order_id', $order->order_id)
             ->join('produk_looksee', 'order_items.id_produk', '=', 'produk_looksee.id_produk')
             ->select(
@@ -108,6 +114,7 @@ class OrderController extends Controller
 
     public function updateStatus(Request $request)
     {
+        // Validasi admin biasanya di sini, tapi oke kita keep logic lama dulu
         $order = Order::find($request->order_id);
         if ($order) {
             $order->status = $request->status;

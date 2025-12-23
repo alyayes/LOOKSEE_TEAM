@@ -20,7 +20,7 @@ class CommunityController extends Controller
     {
         $posts = Post::with('user')->orderByDesc('created_at')->get();
 
-        return view('komunitas.todaysOutfit', compact('posts'));
+        return view('komunitas.todays_outfit', compact('posts'));
     }
 
     public function showPostDetail($id)
