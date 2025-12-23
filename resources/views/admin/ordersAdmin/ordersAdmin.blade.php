@@ -24,7 +24,6 @@
 .status-prepared { background-color: #17a2b8; color: white; }
 .status-shipped { background-color: #007bff; color: white; }
 .status-completed { background-color: #28a745; color: white; }
-.status-cancelled { background-color: #dc3545; color: white; }
 </style>
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
@@ -74,7 +73,6 @@
                     <option value="prepared" {{ strtolower($row['status']) == 'prepared' ? 'selected' : '' }}>Prepared</option>
                     <option value="shipped" {{ strtolower($row['status']) == 'shipped' ? 'selected' : '' }}>Shipped</option>
                     <option value="completed" {{ strtolower($row['status']) == 'completed' ? 'selected' : '' }}>Completed</option>
-                    <option value="cancelled" {{ strtolower($row['status']) == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                 </select>
             </td>
             <td style="text-align: center;">

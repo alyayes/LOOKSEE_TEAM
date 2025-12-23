@@ -50,7 +50,7 @@ class OrdersAdminController extends Controller
     {
         $request->validate([
             'order_id' => 'required|exists:orders,order_id',
-            'status' => 'required|in:pending,prepared,shipped,completed,cancelled'
+            'status' => 'required|in:pending,prepared,shipped,completed'
         ]);
 
         try {
