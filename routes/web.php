@@ -24,6 +24,8 @@ use App\Http\Controllers\UsersAdminController;
 use App\Http\Controllers\TodaysOutfitAdminController;
 use App\Http\Controllers\PersonalizationController;
 
+use App\Http\Controllers\Api\ApiOrderController;
+use App\Http\Controllers\Api\ApiPaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -261,7 +263,7 @@ Route::resource('stylejournalAdmin', StyleJournalAdminController::class);
 |--------------------------------------------------------------------------
 */
 
-Route::get('/onboarding/personalize', [PersonalizationController::class, 'showOnboarding'])->name('onboarding.show');
-Route::post('/onboarding/process', [PersonalizationController::class, 'processOnboarding'])->name('onboarding.process');
+// Route::get('/onboarding/personalize', [PersonalizationController::class, 'showOnboarding'])->name('onboarding.show');
+// Route::post('/onboarding/process', [PersonalizationController::class, 'processOnboarding'])->name('onboarding.process');
 
 Route::get('/homepage', [HomeController::class, 'index'])->name('persona');
