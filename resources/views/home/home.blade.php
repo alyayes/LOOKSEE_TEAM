@@ -188,23 +188,46 @@
                     });
             }
 
-            function addToCart(idProduk) {
-                fetch("{{ route('products.addToCart') }}", {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                            'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                        },
-                        body: 'id_produk=' + idProduk
+            function addToCart(productId) {
+                // Ambil CSRF Token (Wajib di Laravel buat POST)
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                fetch("{{ route('cart.add') }}", { // Pastikan route ini benar mengarah ke /cart/add
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": csrfToken
+                    },
+                    body: JSON.stringify({
+                        id_produk: productId, // Harus sesuai dengan controller: $request->input('id_produk')
+                        quantity: 1
                     })
-                    .then(response => response.json())
-                    .then(data => {
-                        alert(data.message);
-                    })
-                    .catch(err => {
-                        console.error('Error:', err);
-                        alert('Terjadi kesalahan saat menambahkan ke keranjang.');
-                    });
+                })
+                .then(response => {
+                    // Cek jika user belum login (Error 401)
+                    if (response.status === 401) {
+                        alert("Silakan login terlebih dahulu!");
+                        window.location.href = "{{ route('login') }}";
+                        throw new Error("Unauthorized");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert(data.message); // "Berhasil masuk keranjang!"
+                        // Opsional: Reload halaman atau update angka di icon cart
+                        // location.reload(); 
+                    } else {
+                        alert("Gagal: " + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Jangan tampilkan alert jika errornya karena redirect login tadi
+                    if (error.message !== "Unauthorized") {
+                        alert("Terjadi kesalahan sistem. Cek Console (F12) untuk detail.");
+                    }
+                });
             }
         </script>
 

@@ -121,7 +121,7 @@ Route::middleware('auth')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| CHECKOUT / CART / PAYMENT
+| CHECKOUT / CART / PAYMENT / ORDERS
 |--------------------------------------------------------------------------
 */
 
@@ -133,11 +133,20 @@ Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.in
 Route::post('/checkout', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
 Route::post('/checkout/save-address', [CheckoutController::class, 'saveTemporaryAddress'])->name('checkout.saveAddress');
 
+Route::middleware(['auth'])->group(function () {
+    Route::delete('/checkout/address/{id}', [CheckoutController::class, 'deleteAddress'])->name('checkout.address.delete');
+    
+    Route::post('/checkout/address/add', [CheckoutController::class, 'addAddress'])->name('checkout.address.add');
+    Route::put('/checkout/address/update/{id}', [CheckoutController::class, 'updateAddress']);
+});
+
 Route::get('/payment/details', [PaymentController::class, 'showPaymentDetails'])->name('payment.details');
 
-Route::get('/my-orders', [OrderController::class, 'listOrders'])->name('orders.list');
-Route::get('/orders/details/{order_id}', [OrderController::class, 'getOrderDetailsAjax'])->name('orders.details.ajax');
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/my-orders', [OrderController::class, 'listOrders'])->name('orders.list');
+    Route::get('/orders/details/{order_id}', [OrderController::class, 'getOrderDetailsAjax'])->name('orders.details.ajax');
+});
 
 /*
 |--------------------------------------------------------------------------

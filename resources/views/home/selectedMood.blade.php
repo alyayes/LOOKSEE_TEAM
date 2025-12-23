@@ -120,23 +120,60 @@
                     });
             }
 
-            function addToCart(idProduk) {
-                fetch("{{ route('products.addToCart') }}", {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                            'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                        },
-                        body: 'id_produk=' + idProduk
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        alert(data.message);
-                    })
-                    .catch(err => {
-                        console.error('Error:', err);
-                        alert('Terjadi kesalahan saat menambahkan ke keranjang.');
-                    });
+            function addToCart(productId) {
+        // Cek apakah meta token ada
+        const csrfTokenMeta = document.querySelector('meta[name="csrf-token"]');
+        if (!csrfTokenMeta) {
+            alert("Error: CSRF Token tidak ditemukan. Pastikan ada tag meta csrf di head.");
+            return;
+        }
+        const csrfToken = csrfTokenMeta.getAttribute('content');
+
+        // Tampilkan loading (opsional, biar user tau tombol kepencet)
+        // document.body.style.cursor = 'wait'; 
+
+        fetch("{{ route('cart.add') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": csrfToken
+            },
+            body: JSON.stringify({
+                id_produk: productId,
+                quantity: 1
+            })
+        })
+        .then(response => {
+            if (response.status === 401) {
+                alert("Silakan login terlebih dahulu!");
+                window.location.href = "{{ route('login') }}";
+                throw new Error("Unauthorized");
             }
+            if (!response.ok) {
+                throw new Error("HTTP error " + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // document.body.style.cursor = 'default'; // Balikin kursor
+            
+            if (data.status === 'success') {
+                // INI AKAN MUNCUL ALERT SESUAI PESAN DARI CONTROLLER DI ATAS
+                alert(data.message); 
+                
+                // Opsional: Refresh halaman biar keranjang update
+                // location.reload(); 
+            } else {
+                alert("Gagal: " + data.message);
+            }
+        })
+        .catch(error => {
+            // document.body.style.cursor = 'default';
+            console.error('Error:', error);
+            if (error.message !== "Unauthorized") {
+                alert("Terjadi kesalahan sistem. Cek Console.");
+            }
+        });
+    }
 </script>
 @endsection
