@@ -18,6 +18,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/profile', [UsersController::class, 'updateProfile']);
 
     // Products CRUD
-    Route::apiResource('produk', ProductController::class);
+    Route::apiResource('products', ProductController::class);
 
+    // Admin only routes
+    Route::middleware('role:admin')->group(function () {
+        Route::apiResource('users', UsersController::class)->except(['store']);
+        Route::post('/users', [UsersController::class, 'store']); // Admin can create users
+    });
 });

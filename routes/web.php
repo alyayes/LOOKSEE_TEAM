@@ -153,15 +153,15 @@ Route::middleware(['auth'])->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth')->group(function () {
-
-Route::prefix('favorites')->name('favorites.')->group(function () {
-
-    Route::get('/', [FavoriteController::class, 'index'])->name('index');
-
-    Route::post('/delete', [FavoriteController::class, 'deleteFavorite'])->name('delete');
-
-    Route::post('/add-to-cart', [FavoriteController::class, 'addToCart'])->name('addToCart');
-});
+    Route::prefix('favorites')->name('favorites.')->group(function () {
+        Route::get('/', [FavoriteController::class, 'index'])->name('index');
+        
+        // TAMBAHKAN BARIS INI
+        Route::post('/', [FavoriteController::class, 'store'])->name('store');
+        
+        Route::post('/delete', [FavoriteController::class, 'deleteFavorite'])->name('delete');
+        Route::post('/add-to-cart', [FavoriteController::class, 'addToCart'])->name('addToCart');
+    });
 });
 
     // Endpoint AJAX untuk menghapus produk dari favorit
