@@ -6,19 +6,15 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Produk;
 use App\Models\User;
+use App\Models\UserAddress; 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; // Tambahkan ini buat ambil ID user login
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
-    // Hapus variable $userId = 33 biar gak hardcode
-
-    // GANTI NAMA FUNCTION DARI 'list' KE 'listOrders' (Sesuai web.php)
     public function listOrders(Request $request)
     {
         $status_filter = $request->status ?? 'all';
-        
-        // AMBIL ID USER YANG SEDANG LOGIN (Biar gak error kalau user lain login)
         $userId = Auth::id(); 
 
         $order_counts = [
@@ -60,15 +56,17 @@ class OrderController extends Controller
 
     public function getOrderDetailsAjax($order_id)
     {
-        // Pastikan order milik user yang login (Security Check)
         $userId = Auth::id();
         $order = Order::where('order_id', $order_id)
-                      ->where('user_id', $userId) // Tambahan security
+                      ->where('user_id', $userId)
                       ->first();
 
         if (!$order) {
             return response('Order not found or unauthorized', 404);
         }
+
+        // --- PERBAIKAN: AMBIL DATA ALAMAT MANUAL ---
+        $addr = UserAddress::find($order->address_id);
 
         $items = OrderItem::where('order_id', $order->order_id)
             ->join('produk_looksee', 'order_items.id_produk', '=', 'produk_looksee.id_produk')
@@ -96,12 +94,16 @@ class OrderController extends Controller
             'order_date'       => $order->order_date,
             'status'           => $order->status,
             'total_price'      => $order->grand_total,
-            'nama_penerima'    => $order->nama_penerima,
-            'no_telepon'       => $order->no_telepon,
-            'alamat_lengkap'   => $order->alamat_lengkap,
-            'kota'             => $order->kota,
-            'provinsi'         => $order->provinsi,
-            'kode_pos'         => $order->kode_pos,
+            
+            // --- DATA ALAMAT DIAMBIL DARI VARIABLE $addr ---
+            'nama_penerima'    => $addr ? $addr->receiver_name : 'N/A',
+            'no_telepon'       => $addr ? $addr->phone_number : 'N/A',
+            'alamat_lengkap'   => $addr ? $addr->full_address : '',
+            'kota'             => $addr ? $addr->city : '',
+            'provinsi'         => $addr ? $addr->province : '',
+            'kode_pos'         => $addr ? $addr->postal_code : '',
+            // ------------------------------------------------
+            
             'kurir'            => $order->shipping_method,
             'items'            => $items,
             'payment_method'   => $payment_method,
@@ -114,7 +116,6 @@ class OrderController extends Controller
 
     public function updateStatus(Request $request)
     {
-        // Validasi admin biasanya di sini, tapi oke kita keep logic lama dulu
         $order = Order::find($request->order_id);
         if ($order) {
             $order->status = $request->status;

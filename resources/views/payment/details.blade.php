@@ -58,11 +58,6 @@
                 <div style="text-align: center; margin-bottom: 20px;">
                     <p style="margin-bottom: 5px; color: #888; font-size: 0.9em;">Nomor / Kode Bayar:</p>
                     <div class="payment-code" id="codeToCopy">{{ $payment_code }}</div>
-                    
-                    <button onclick="copyToClipboard('{{ $payment_code }}')" 
-                            style="margin-top: 10px; background: none; border: 1px solid #FF69B4; color: #FF69B4; padding: 5px 15px; border-radius: 20px; cursor: pointer; font-size: 0.85em;">
-                        <i class='bx bx-copy'></i> Copy Code
-                    </button>
                 </div>
             @endif
 
@@ -79,14 +74,19 @@
             </div>
         </div>
 
-        {{-- ACTION BUTTONS --}}
+        {{-- ACTION BUTTONS (BAGIAN YANG DIUBAH) --}}
         <div class="payment-actions">
+            {{-- Tombol Back Selalu Ada --}}
             <a href="{{ route('orders.list') }}" class="btn-secondary">
                 Back to My Orders
             </a>
-            <a href="https://wa.me/6282123456789" target="_blank" class="btn-primary">
-                <i class='bx bxl-whatsapp'></i> Contact Admin
-            </a>
+
+            {{-- Tombol Copy Hanya Muncul Jika BUKAN COD --}}
+            @if($payment_method_display !== 'COD')
+                <button type="button" onclick="copyToClipboard('{{ $payment_code }}')" class="btn-primary">
+                    <i class='bx bx-copy'></i> Copy Payment Code
+                </button>
+            @endif
         </div>
 
     </div>
@@ -95,12 +95,32 @@
 {{-- SCRIPT COPY TO CLIPBOARD --}}
 <script>
     function copyToClipboard(text) {
-        navigator.clipboard.writeText(text).then(function() {
-            // Kita pakai alert bawaan browser dulu biar simpel
-            alert('Kode berhasil disalin: ' + text);
-        }, function(err) {
-            console.error('Gagal menyalin: ', err);
-        });
+        if (navigator.clipboard && window.isSecureContext) {
+            // Cara modern
+            navigator.clipboard.writeText(text).then(function() {
+                alert('Kode berhasil disalin: ' + text);
+            }, function(err) {
+                console.error('Gagal menyalin: ', err);
+                alert('Gagal menyalin kode. Silakan salin manual.');
+            });
+        } else {
+            // Fallback cara lama (untuk browser lama/http biasa)
+            let textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-9999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                alert('Kode berhasil disalin: ' + text);
+            } catch (err) {
+                console.error('Fallback: Oops, unable to copy', err);
+                alert('Gagal menyalin kode. Silakan salin manual.');
+            }
+            document.body.removeChild(textArea);
+        }
     }
 </script>
 @endsection
