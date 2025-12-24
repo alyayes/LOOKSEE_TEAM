@@ -93,8 +93,4 @@ class AuthController extends Controller
             'user' => $request->user()
         ]);
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> naya

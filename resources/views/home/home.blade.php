@@ -1,13 +1,12 @@
 @extends('layouts.main')
 @section('title', 'LOOKSEE')
 
-{{-- Asumsi Anda memuat CSS di layout atau di sini --}}
 @section('head_scripts')
     <link rel="stylesheet" href="{{ asset('assets/css/home.css') }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 
 @section('content')
-
     <section class="main-home">
         <div class="main-text">
             <div class="slider">
@@ -54,12 +53,16 @@
         <div class="product-grid">
             @forelse($productsWoman as $row)
                 <div class="product-card">
-                    <div class="product-image">
-                        <img src="{{ asset('assets/images/produk-looksee/' . $row['gambar_produk']) }}"
-                            alt="{{ $row['nama_produk'] }}">
-                    </div>
+                    <a href="{{ route('products.detail', $row['id_produk']) }}">
+                        <div class="product-image">
+                            <img src="{{ asset('assets/images/produk-looksee/' . $row['gambar_produk']) }}"
+                                alt="{{ $row['nama_produk'] }}">
+                        </div>
+                    </a>
                     <div class="product-details">
-                        <h4>{{ $row['nama_produk'] }}</h4>
+                        <a href="{{ route('products.detail', $row['id_produk']) }}" style="text-decoration: none; color: inherit;">
+                            <h4>{{ $row['nama_produk'] }}</h4>
+                        </a>
                         <p>Rp. {{ number_format($row['harga'], 0, ',', '.') }}</p>
                         <div class="actions">
                             <button class="btn favorite-btn" onclick="addToFavorites({{ $row['id_produk'] }})">Add to
@@ -92,12 +95,16 @@
         <div class="product-grid">
             @forelse($productsMan as $row)
                 <div class="product-card">
-                    <div class="product-image">
-                        <img src="{{ asset('assets/images/produk-looksee/' . $row['gambar_produk']) }}"
-                            alt="{{ $row['nama_produk'] }}">
-                    </div>
+                    <a href="{{ route('products.detail', $row['id_produk']) }}">
+                        <div class="product-image">
+                            <img src="{{ asset('assets/images/produk-looksee/' . $row['gambar_produk']) }}"
+                                alt="{{ $row['nama_produk'] }}">
+                        </div>
+                    </a>
                     <div class="product-details">
-                        <h4>{{ $row['nama_produk'] }}</h4>
+                        <a href="{{ route('products.detail', $row['id_produk']) }}" style="text-decoration: none; color: inherit;">
+                            <h4>{{ $row['nama_produk'] }}</h4>
+                        </a>
                         <p>Rp. {{ number_format($row['harga'], 0, ',', '.') }}</p>
                         <div class="actions">
                             <button class="btn favorite-btn" onclick="addToFavorites({{ $row['id_produk'] }})">Add to
@@ -126,8 +133,6 @@
     @include('home.mood')
 
     <div class="partner-platform-wrapper">
-
-        {{-- GROUP 1: PARTNER --}}
         <div class="partner-group">
             <h3 class="partner-title">Our Partner</h3>
             <div class="partner-logos">
@@ -137,7 +142,6 @@
             </div>
         </div>
 
-        {{-- GROUP 2: PLATFORM --}}
         <div class="platform-group">
             <h3 class="platform-title">Our Platform</h3>
             <div class="platform-logos">
@@ -153,58 +157,50 @@
 
     @section('footer_scripts')
         <script>
-            // Fungsi untuk navigasi pagination Home
             function goToPage(param, value) {
                 const url = new URL(window.location.href);
                 url.searchParams.set(param, value);
-
-                // Hapus parameter pagination kategori lain jika ada
                 if (param === 'page_woman') {
                     url.searchParams.delete('page_man');
                 } else if (param === 'page_man') {
                     url.searchParams.delete('page_woman');
                 }
-
                 url.hash = '';
                 window.location.href = url.toString();
             }
 
             function addToFavorites(idProduk) {
                 fetch("{{ route('products.addToFavorite') }}", {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                            'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                        },
-                        body: 'id_produk=' + idProduk
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        alert(data.message);
-                    })
-                    .catch(err => {
-                        console.error('Error:', err);
-                        alert('Terjadi kesalahan.');
-                    });
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    body: JSON.stringify({ id_produk: idProduk })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                });
             }
 
             function addToCart(productId) {
-                // Ambil CSRF Token (Wajib di Laravel buat POST)
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-                fetch("{{ route('cart.add') }}", { // Pastikan route ini benar mengarah ke /cart/add
+                fetch("{{ route('cart.add') }}", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                         "X-CSRF-TOKEN": csrfToken
                     },
                     body: JSON.stringify({
-                        id_produk: productId, // Harus sesuai dengan controller: $request->input('id_produk')
+                        id_produk: productId,
                         quantity: 1
                     })
                 })
                 .then(response => {
-                    // Cek jika user belum login (Error 401)
                     if (response.status === 401) {
                         alert("Silakan login terlebih dahulu!");
                         window.location.href = "{{ route('login') }}";
@@ -214,22 +210,17 @@
                 })
                 .then(data => {
                     if (data.status === 'success') {
-                        alert(data.message); // "Berhasil masuk keranjang!"
-                        // Opsional: Reload halaman atau update angka di icon cart
-                        // location.reload(); 
+                        alert(data.message);
                     } else {
                         alert("Gagal: " + data.message);
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
-                    // Jangan tampilkan alert jika errornya karena redirect login tadi
                     if (error.message !== "Unauthorized") {
-                        alert("Terjadi kesalahan sistem. Cek Console (F12) untuk detail.");
+                        console.error('Error:', error);
                     }
                 });
             }
         </script>
-
     @endsection
 @endsection
