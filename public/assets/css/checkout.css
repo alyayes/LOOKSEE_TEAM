@@ -757,3 +757,88 @@
             font-size: 10px;
             margin-left: 5px;
         }
+
+
+                /* Menggunakan Variabel CSS agar Konsisten dengan Tema Kamu */
+        :root {
+            --primary-pink: rgb(250, 156, 211);
+            --primary-pink-hover: rgb(248, 99, 186);
+            --text-dark: #333;
+            --text-medium: #555;
+            --border-light: #eee;
+        }
+
+        /* Badge Default (Hijau Mint) */
+        .badge-default {
+            background-color: #20c997; 
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-left: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        /* Card Alamat (Wrapper) */
+        .address-card-item {
+            border: 1px solid var(--border-light);
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: white;
+            position: relative;
+        }
+
+        .address-card-item:hover {
+            border-color: var(--primary-pink);
+            background-color: #fffafc;
+        }
+
+        .address-card-item.selected {
+            border: 2px solid var(--primary-pink);
+            background-color: #fffafc;
+        }
+
+        /* Area Tombol Aksi (Edit/Delete) */
+        .address-actions {
+            margin-top: 10px;
+            border-top: 1px dashed var(--border-light);
+            padding-top: 10px;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        /* Style Tombol Kecil */
+        .btn-action-sm {
+            padding: 6px 12px;
+            font-size: 0.85em;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: opacity 0.2s;
+            z-index: 10; /* Pastikan tombol di atas layer card */
+            position: relative;
+        }
+
+        .btn-edit { background: #ffeeba; color: #856404; }
+        .btn-delete { background: #f8d7da; color: #721c24; }
+        .btn-action-sm:hover { opacity: 0.8; }
+
+        /* Sub-opsi Pembayaran */
+        .payment-sub-options {
+            margin-left: 28px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-left: 3px solid var(--primary-pink);
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 15px;
+            margin-top: -5px;
+        }
