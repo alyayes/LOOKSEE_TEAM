@@ -202,7 +202,7 @@ class AnalyticsAdminController extends Controller
         $chartTrendingProductsWomanValues = array_values($fullTrendingProductsWomanData);
 
 
-        return view('analyticsAdmin.analyticsAdmin', compact(
+        return view('admin.analyticsAdmin.analyticsAdmin', compact(
             'chartDoughnutDataValues',
             'chartDoughnutColorsFromBadges',
             'pendingCount',
