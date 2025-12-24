@@ -11,17 +11,29 @@
 
     <div class="profile-header">
         @php
-            $profilePic = asset('assets/images/profile'); 
+            // Logika Penentuan Foto Profil Utama
+            $defaultProfile = asset('assets/images/profile/placeholder.jpg'); // Pastikan file ini ada
+            
             if (!empty($userData['profile_picture'])) {
+                // Jika user punya foto, ambil dari storage
                 $profilePic = asset('storage/uploads/profile/' . $userData['profile_picture']);
+            } else {
+                // Jika tidak, pakai default
+                $profilePic = $defaultProfile;
             }
         @endphp
-        <img src="{{ asset('assets/images/profile/' . ($userData['profile_picture'] ?? 'placeholder.jpg')) }}" 
-            alt="Profile Picture" class="profile-pic">
+
+        {{-- Tampilkan Foto Profil dengan Error Handling --}}
+        <img src="{{ $profilePic }}" 
+             onerror="this.onerror=null;this.src='{{ $defaultProfile }}';" 
+             alt="Profile Picture" class="profile-pic">
+
         <h1>{{ $userData['name'] ?? 'N/A' }}</h1>
         <p>@<span>{{ $userData['username'] ?? 'N/A' }}</span></p>
         <p>{{ $userData['bio'] ?? 'No bio available.' }}</p>
-        <button class="edit-profile"><a href="settings/profile">Edit Profile</a></button>
+        
+        {{-- Tombol Edit (Sesuaikan route jika perlu) --}}
+        <button class="edit-profile"><a href="{{ url('settings/profile') }}">Edit Profile</a></button>
     </div>
 
     {{-- Navigasi Tab --}}
@@ -33,10 +45,9 @@
 
     {{-- Konten TAB: My Style --}}
     <div id="myStyle" class="content">
-        {{-- PENGURUTAN POSTINGAN UNTUK TAB MY STYLE --}}
+        {{-- PENGURUTAN POSTINGAN --}}
         @php
             if (isset($posts) && (is_array($posts) || $posts instanceof \Illuminate\Support\Collection)) {
-                // Mengurutkan postingan berdasarkan 'created_at' secara descending (terbaru di atas)
                 $sortedPosts = collect($posts)->sortByDesc('created_at');
             } else {
                 $sortedPosts = [];
@@ -47,22 +58,24 @@
             <div class="posting">
                 <div class="post-header">
                     <a href="#">
-                        <img src="{{ asset('assets/images/profile/' . ($userData['profile_picture'] ?? 'placeholder.jpg')) }}"
-                        alt="Profile Picture" class="profile-pic">
+                        {{-- PERBAIKAN: Foto Profil Kecil di Postingan --}}
+                        <img src="{{ !empty($userData['profile_picture']) ? asset('storage/uploads/profile/' . $userData['profile_picture']) : asset('assets/images/profile/placeholder.jpg') }}"
+                             onerror="this.onerror=null;this.src='{{ asset('assets/images/profile/placeholder.jpg') }}';"
+                             alt="Profile Picture" class="profile-pic">
+                             
                         <div class="username">@<span>{{ $userData['username'] ?? 'N/A' }}</span></div>
                     </a>
                     
-                    {{-- Tombol Aksi (Edit & Delete) dan Timestamp --}}
+                    {{-- Menu Aksi & Timestamp --}}
                     <div class="post-actions-menu">
                         <div class="timestamp">{{ \Carbon\Carbon::parse($post['created_at'])->format('d M Y') }}</div>
                         
                         <div class="dropdown">
                             <button class="dropbtn"><i class='bx bx-dots-vertical-rounded'></i></button>
                             <div class="dropdown-content">
-                                {{-- Tombol edit --}}
+                                {{-- Pastikan route ini ada di web.php --}}
                                 <a href="{{ route('profile.post.edit', ['id' => $post->id_post]) }}">Edit Post</a>
 
-                                {{-- Tombol hapus --}}
                                 <form action="{{ route('profile.post.destroy', ['id' => $post->id_post]) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus postingan ini?');">
                                     @csrf
                                     @method('DELETE')
@@ -76,7 +89,7 @@
                 <div class="capt">
                     <p class="post-caption">{!! nl2br(e($post['caption'] ?? '')) !!}</p>
                     
-                    {{-- Logika untuk Mood Tag --}}
+                    {{-- Mood Tag --}}
                     @if(!empty($post['mood']))
                         @php
                             $mood_text = $post['mood'];
@@ -97,11 +110,15 @@
                         @endforeach
                     </div>
                 </div>
+                
+                {{-- Gambar Postingan --}}
                 <div class="poster">
+                    {{-- Asumsi gambar post ada di folder assets/todays outfit, sesuaikan jika pakai storage --}}
                     <img src="{{ asset('assets/images/todays outfit/' . ($post['image_post'] ?? 'placeholder.jpg')) }}" 
                         onerror="this.onerror=null;this.src='https://placehold.co/600x600/EFEFEF/AAAAAA?text=No+Image';"
                         alt="Post Image">
                 </div>
+                
                 <div class="post-actions">
                     <div class="likes-comments">
                         <span><i class='bx bxs-heart'></i> {{ $post['like_count'] ?? 0 }}</span>
@@ -117,10 +134,8 @@
 
     {{-- Konten TAB: My Gallery --}}
     <div id="myGallery" class="content" style="display: none;">
-        {{-- PENGURUTAN POSTINGAN UNTUK TAB MY GALLERY --}}
         @php
             if (isset($gallery_posts) && (is_array($gallery_posts) || $gallery_posts instanceof \Illuminate\Support\Collection)) {
-                // Mengurutkan postingan galeri berdasarkan 'created_at' secara descending (terbaru di atas)
                 $sortedGalleryPosts = collect($gallery_posts)->sortByDesc('created_at');
             } else {
                 $sortedGalleryPosts = [];
@@ -129,6 +144,7 @@
         <div class="gallery">
             @forelse($sortedGalleryPosts as $post)
                 <div class="image-placeholder">
+                    {{-- Pastikan route detail post ada --}}
                     <a href="{{ route('community.post.detail', ['id' => $post['id_post']]) }}">
                         <img src="{{ asset('assets/images/todays outfit/' . ($post['image_post'] ?? 'placeholder.jpg')) }}"
                             onerror="this.onerror=null;this.src='https://placehold.co/600x600/EFEFEF/AAAAAA?text=No+Image';"

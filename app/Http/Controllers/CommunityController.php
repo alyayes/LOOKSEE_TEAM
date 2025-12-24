@@ -25,7 +25,7 @@ class CommunityController extends Controller
 
     public function showPostDetail($id)
     {
-        $post = Post::with(['user', 'items.produk', 'comments.user', 'likes'])->findOrFail($id);
+        $post = Post::with(['user', 'items', 'comments.user', 'likes'])->findOrFail($id);
         $userId = Auth::id();
 
         $isLikedByUser = $userId ? $post->likes()->where('user_id', $userId)->exists() : false;

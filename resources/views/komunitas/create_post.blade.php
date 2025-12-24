@@ -22,7 +22,7 @@
         <input type="hidden" name="imageFilename" value="{{ $imageFilename ?? '' }}">
         
         <div class="post-layout-columns">
-            <div class="image-section">
+            <div class="image-section"> 
                 <img src="{{ $imagePath ?? asset('assets/images/placeholder.jpg') }}" alt="Uploaded Outfit" class="main-image">
             </div>
 
