@@ -22,7 +22,6 @@ use App\Http\Controllers\DashboardAdminController;
 use App\Http\Controllers\AnalyticsAdminController;
 use App\Http\Controllers\UsersAdminController;
 use App\Http\Controllers\TodaysOutfitAdminController;
-use App\Http\Controllers\PersonalizationController;
 
 
 /*
@@ -246,6 +245,9 @@ Route::prefix('admin')->group(function () {
     Route::get('/products/{id}/edit', [ProductsAdminController::class, 'edit'])->name('products.edit');
     Route::put('/products/{id}', [ProductsAdminController::class, 'update'])->name('products.update');
     Route::delete('/products/{id}', [ProductsAdminController::class, 'destroy'])->name('products.destroy');
+
+    Route::get('/analytics', [AnalyticsAdminController::class, 'index'])
+    ->name('analyticsAdmin.analyticsAdmin');
 });
 
 // Other admin pages
@@ -254,14 +256,3 @@ Route::get('/toAdmin', [TodaysOutfitAdminController::class, 'index'])->name('toA
 
 Route::resource('stylejournalAdmin', StyleJournalAdminController::class);
 
-
-/*
-|--------------------------------------------------------------------------
-| PERSONALIZATION / ONBOARDING
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/onboarding/personalize', [PersonalizationController::class, 'showOnboarding'])->name('onboarding.show');
-Route::post('/onboarding/process', [PersonalizationController::class, 'processOnboarding'])->name('onboarding.process');
-
-Route::get('/homepage', [HomeController::class, 'index'])->name('persona');
