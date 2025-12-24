@@ -23,7 +23,6 @@ class OrderController extends Controller
             'prepared'  => Order::where('user_id', $userId)->where('status', 'prepared')->count(),
             'shipped'   => Order::where('user_id', $userId)->where('status', 'shipped')->count(),
             'completed' => Order::where('user_id', $userId)->where('status', 'completed')->count(),
-            'cancelled' => Order::where('user_id', $userId)->where('status', 'cancelled')->count(),
         ];
 
         $orders_query = Order::where('user_id', $userId)->orderBy('order_date', 'desc');

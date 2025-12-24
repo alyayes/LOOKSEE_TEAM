@@ -18,7 +18,7 @@
         </header>
 
         <nav class="order-status-nav">
-            @php $statuses = ['all', 'pending', 'prepared', 'shipped', 'completed', 'cancelled']; @endphp
+            @php $statuses = ['all', 'pending', 'prepared', 'shipped', 'completed']; @endphp
             @foreach($statuses as $status)
                 <a href="{{ route('orders.list', ['status' => $status]) }}"
                    class="{{ $status_filter === $status ? 'active' : '' }}">
