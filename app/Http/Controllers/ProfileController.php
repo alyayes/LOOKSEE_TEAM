@@ -17,10 +17,12 @@ class ProfileController extends Controller
         $user = Auth::user();
         if (!$user) abort(404, 'User tidak ditemukan');
 
-        $addresses = UserAddress::where('user_id', $user->id)->get();
+        // PERBAIKAN: Gunakan user_id
+        $addresses = UserAddress::where('user_id', $user->user_id)->get();
         $products = Produk::all();
 
-        $posts = Post::where('user_id', $user->id)
+        // PERBAIKAN: Gunakan user_id
+        $posts = Post::where('user_id', $user->user_id)
                      ->orderBy('created_at', 'desc')
                      ->get();
         $gallery_posts = $posts;
@@ -141,13 +143,12 @@ class ProfileController extends Controller
              return redirect()->route('login')->with('error', 'Authentication required.');
         }
 
-        // 1. Tambahkan validasi untuk selected_product_ids
         $validated = $request->validate([
             'caption' => 'required|string|max:255',
             'hashtags' => 'nullable|string',
             'mood' => 'required|string',
-            'selected_product_ids' => 'nullable|array', // Terima array ID produk
-            'selected_product_ids.*' => 'exists:produk_looksee,id_produk', // Pastikan ID produk valid di DB
+            'selected_product_ids' => 'nullable|array', 
+            'selected_product_ids.*' => 'exists:produk_looksee,id_produk',
         ]);
 
         $finalFilename = $request->input('imageFilename');
@@ -156,19 +157,16 @@ class ProfileController extends Controller
             return redirect()->route('profile.post.create')->with('error', 'Tidak ada gambar untuk diposting.');
         }
 
-        // 2. Simpan Postingan Utama
+        // PERBAIKAN UTAMA: Gunakan $user->user_id
         $post = Post::create([
-            'user_id' => $user->id,
+            'user_id' => $user->user_id, // <--- SUDAH DIPERBAIKI
             'caption' => $validated['caption'],
             'hashtags' => $validated['hashtags'],
             'mood' => $validated['mood'],
             'image_post' => $finalFilename,
         ]);
 
-        // 3. Simpan Relasi Produk (Outfit Details)
-        // Mengecek apakah ada produk yang dipilih dari form JS
         if ($request->has('selected_product_ids')) {
-            // attach() akan mengisi tabel pivot post_items
             $post->items()->attach($request->input('selected_product_ids'));
         }
 
@@ -179,19 +177,18 @@ class ProfileController extends Controller
     public function showEditPostForm($id)
     {
         $user = Auth::user();
-        // Load relasi items agar saat edit produk lama muncul (jika kamu buat fitur edit produk nanti)
         $post = Post::with('items')->where('id_post', $id)->first();
 
-        if (!$post || $post->user_id !== $user->id) {
+        // PERBAIKAN: Gunakan $user->user_id
+        if (!$post || $post->user_id !== $user->user_id) { 
             abort(403, 'Anda tidak memiliki izin untuk mengedit postingan ini.');
         }
 
-        // Jika kamu butuh list semua produk di halaman edit untuk menambah produk baru
         $all_products = Produk::all(); 
 
         return view('komunitas.edit_post', [
             'post' => $post,
-            'all_products' => $all_products // Kirim data produk ke view edit
+            'all_products' => $all_products 
         ]);
     }
 
@@ -201,7 +198,8 @@ class ProfileController extends Controller
         $user = Auth::user();
         $post = Post::where('id_post', $id)->first();
 
-        if (!$post || $post->user_id !== $user->id) {
+        // PERBAIKAN: Gunakan $user->user_id
+        if (!$post || $post->user_id !== $user->user_id) {
             abort(403, 'Anda tidak memiliki izin.');
         }
 
@@ -218,12 +216,9 @@ class ProfileController extends Controller
         $post->mood = $validated['mood'];
         $post->save();
 
-        // Update Relasi Produk
-        // sync() akan menghapus yang lama dan memasukkan yang baru
         if ($request->has('selected_product_ids')) {
             $post->items()->sync($request->input('selected_product_ids'));
         } else {
-            // Jika user menghapus semua produk saat edit, kita kosongkan relasinya
             $post->items()->detach();
         }
 
@@ -236,7 +231,8 @@ class ProfileController extends Controller
         $user = Auth::user();
         $post = Post::where('id_post', $id)->first();
 
-        if (!$post || $post->user_id !== $user->id) {
+        // PERBAIKAN: Gunakan $user->user_id
+        if (!$post || $post->user_id !== $user->user_id) {
             return redirect()->route('profile.index')->with('error', 'Anda tidak memiliki izin untuk menghapus postingan ini.');
         }
 
@@ -246,9 +242,7 @@ class ProfileController extends Controller
             File::delete($imagePath);
         }
 
-        // Hapus relasi di pivot table (optional, biasanya otomatis jika ada foreign key constraint cascade)
         $post->items()->detach();
-
         $post->delete();
 
         return redirect()->route('profile.index')
