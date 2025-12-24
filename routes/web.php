@@ -22,8 +22,6 @@ use App\Http\Controllers\DashboardAdminController;
 use App\Http\Controllers\AnalyticsAdminController;
 use App\Http\Controllers\UsersAdminController;
 use App\Http\Controllers\TodaysOutfitAdminController;
-use App\Http\Controllers\PersonalizationController;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -88,7 +86,7 @@ Route::prefix('community')->name('community.')->group(function () {
     Route::get('/todays-outfit', [CommunityController::class, 'todaysOutfit'])->name('todays-outfit');
 
     Route::get('/post/{id}', [CommunityController::class, 'showPostDetail'])->name('post.detail');
-    Route::post('/post/{id}/like', [CommunityController::class, 'likePost'])->name('post.like');
+    Route::post('/post/{id}/like', [CommunityController::class, 'toggleLike'])->name('post.like');
     Route::post('/post/{id}/comment', [CommunityController::class, 'addComment'])->name('post.comment');
     Route::post('/post/{id}/share', [CommunityController::class, 'sharePost'])->name('post.share');
 });
@@ -260,8 +258,5 @@ Route::resource('stylejournalAdmin', StyleJournalAdminController::class);
 | PERSONALIZATION / ONBOARDING
 |--------------------------------------------------------------------------
 */
-
-Route::get('/onboarding/personalize', [PersonalizationController::class, 'showOnboarding'])->name('onboarding.show');
-Route::post('/onboarding/process', [PersonalizationController::class, 'processOnboarding'])->name('onboarding.process');
 
 Route::get('/homepage', [HomeController::class, 'index'])->name('persona');

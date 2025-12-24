@@ -18,7 +18,7 @@
                 <div class="card">
                     <a href="{{ route('community.post.detail', ['id' => $post['id_post']]) }}" class="card-link-wrapper">
                         <div class="image-placeholder">
-                            <img src="{{ asset('assets/images/' . ($post['image_post'] ?? 'placeholder.jpg')) }}" 
+                            <img src="{{ asset('assets/images/todays outfit/' . ($post['image_post'] ?? 'placeholder.jpg')) }}" 
                                  alt="Post by {{ $user['username'] ?? '' }}" 
                                  class='product-card-img'
                                  onerror="this.onerror=null;this.src='https://placehold.co/400x400/EFEFEF/AAAAAA?text=No+Image';">
@@ -36,9 +36,16 @@
                             </div>
                             @if($user)
                                 <div class="user-info">
-                                    <img src="{{ asset('assets/images/' . ($user['profile_picture'] ?? 'default_profile.png')) }}" 
+                                    @php
+                                        if (!empty($user['profile_picture'])) {
+                                            $userPic = asset('storage/uploads/profile/' . $user['profile_picture']);
+                                        } else {
+                                            $userPic = asset('assets/images/profile/placeholder.jpg');
+                                        }
+                                    @endphp
+                                    <img src="{{ $userPic }}" 
                                          alt="Profile picture of {{ $user['username'] ?? '' }}" 
-                                         onerror="this.onerror=null;this.src='{{ asset('assets/images/default_profile.png') }}';"/>
+                                         onerror="this.onerror=null;this.src='{{ asset('assets/images/profile/placeholder.jpg') }}';"/>
                                     <p class="username-text">{{ $user['username'] ?? 'Unknown' }}</p>
                                 </div>
                             @endif
@@ -51,4 +58,3 @@
         </div>
     </main>
 @endsection
-
