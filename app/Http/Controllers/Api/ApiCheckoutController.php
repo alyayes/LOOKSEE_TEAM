@@ -18,38 +18,23 @@ use Illuminate\Support\Str;
 
 class ApiCheckoutController extends Controller
 {
-    // ... (Fungsi getCheckoutData biarkan saja seperti sebelumnya) ...
     public function getCheckoutData(Request $request)
     {
-        // (Copy paste isi function getCheckoutData dari jawaban sebelumnya atau biarkan yg sudah ada)
-        // Intinya logic ini menampilkan data keranjang & opsi pembayaran
-        // ...
-        
-        // Supaya cepat, saya fokus ke function processCheckout di bawah ini:
+      
         $userId = Auth::id();
         $selected = $request->query('selected_products'); 
 
-        // ... Logic getCheckoutData kamu yg lama ...
-        // Kalau mau saya tulis ulang full function ini bilang ya, tapi intinya yg krusial di bawah:
-        
-        // SEMENTARA RETURN DUMMY BIAR GA ERROR SAAT COPY PASTE (Hapus jika sudah ada)
         return response()->json(['message' => 'Gunakan function yang lama untuk getCheckoutData']);
     }
 
-    /**
-     * PROCESS CHECKOUT (API VERSION)
-     * Logic Generate VA disamakan dengan Web
-     */
     public function processCheckout(Request $request)
     {
         $userId = Auth::id();
         
-        // 1. Validasi Input
         $request->validate([
-            'selected_products' => 'required', // "1,2,3"
+            'selected_products' => 'required',
             'address_id'        => 'required|exists:user_address,id',
-            'payment_method'    => 'required', // String: "Bank Transfer", "E-Wallet", "COD"
-            // Validasi tambahan
+            'payment_method'    => 'required', 
             'bank_id'           => 'required_if:payment_method,Bank Transfer',
             'ewallet_id'        => 'required_if:payment_method,E-Wallet',
         ]);

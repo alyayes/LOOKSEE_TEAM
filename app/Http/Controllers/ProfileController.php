@@ -17,11 +17,9 @@ class ProfileController extends Controller
         $user = Auth::user();
         if (!$user) abort(404, 'User tidak ditemukan');
 
-        // PERBAIKAN: Gunakan user_id
         $addresses = UserAddress::where('user_id', $user->user_id)->get();
         $products = Produk::all();
 
-        // PERBAIKAN: Gunakan user_id
         $posts = Post::where('user_id', $user->user_id)
                      ->orderBy('created_at', 'desc')
                      ->get();
@@ -64,14 +62,12 @@ class ProfileController extends Controller
             'instagram' => 'nullable|string|max:100',
         ]);
 
-        // Foto profil
         if ($request->hasFile('profile_picture')) {
             $file = $request->file('profile_picture');
             $filename = time() . '_' . $file->getClientOriginalName();
             $destinationPath = public_path('assets/images/profile');
             $file->move($destinationPath, $filename);
 
-            // Hapus foto lama
             if ($user->profile_picture && file_exists($destinationPath . '/' . $user->profile_picture)) {
                 unlink($destinationPath . '/' . $user->profile_picture);
             }
@@ -79,7 +75,6 @@ class ProfileController extends Controller
             $user->profile_picture = $filename;
         }
 
-        // Update data lain
         $user->username = $request->username;
         $user->name = $request->name;
         $user->bio = $request->bio;
@@ -124,7 +119,6 @@ class ProfileController extends Controller
         }
 
         $all_products = Produk::all();
-
         $imagePath = asset('assets/images/todays outfit/' . $filename);
         
         return view('komunitas.create_post', [
@@ -134,7 +128,6 @@ class ProfileController extends Controller
         ]);
     }
 
-    // --- BAGIAN INI YANG DIPERBAIKI (STORE POST) ---
     public function storePost(Request $request)
     {
         $user = Auth::user();
@@ -157,9 +150,8 @@ class ProfileController extends Controller
             return redirect()->route('profile.post.create')->with('error', 'Tidak ada gambar untuk diposting.');
         }
 
-        // PERBAIKAN UTAMA: Gunakan $user->user_id
         $post = Post::create([
-            'user_id' => $user->user_id, // <--- SUDAH DIPERBAIKI
+            'user_id' => $user->user_id,
             'caption' => $validated['caption'],
             'hashtags' => $validated['hashtags'],
             'mood' => $validated['mood'],
@@ -179,7 +171,6 @@ class ProfileController extends Controller
         $user = Auth::user();
         $post = Post::with('items')->where('id_post', $id)->first();
 
-        // PERBAIKAN: Gunakan $user->user_id
         if (!$post || $post->user_id !== $user->user_id) { 
             abort(403, 'Anda tidak memiliki izin untuk mengedit postingan ini.');
         }
@@ -192,13 +183,11 @@ class ProfileController extends Controller
         ]);
     }
 
-    // --- BAGIAN INI JUGA DIPERBAIKI (UPDATE POST) ---
     public function updatePost(Request $request, $id)
     {
         $user = Auth::user();
         $post = Post::where('id_post', $id)->first();
 
-        // PERBAIKAN: Gunakan $user->user_id
         if (!$post || $post->user_id !== $user->user_id) {
             abort(403, 'Anda tidak memiliki izin.');
         }
@@ -231,7 +220,6 @@ class ProfileController extends Controller
         $user = Auth::user();
         $post = Post::where('id_post', $id)->first();
 
-        // PERBAIKAN: Gunakan $user->user_id
         if (!$post || $post->user_id !== $user->user_id) {
             return redirect()->route('profile.index')->with('error', 'Anda tidak memiliki izin untuk menghapus postingan ini.');
         }

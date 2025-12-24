@@ -10,16 +10,12 @@ use App\Models\Produk;
 
 class ApiCartController extends Controller
 {
-    /**
-     * 1. GET CART (Lihat Keranjang)
-     */
+
     public function index(Request $request)
     {
-        // --- PERBAIKAN DISINI ---
-        // Karena route public, kita set manual ke 33 jika tidak ada yang login
+      
         $userId = Auth::id(); 
 
-        // Ambil cart user beserta data produknya
         $cartItems = CartsItems::where('user_id', $userId)->with('produk')->get();
 
         $formattedItems = [];
@@ -59,14 +55,10 @@ class ApiCartController extends Controller
     public function addToCart(Request $request)
     {
         // --- PERBAIKAN DISINI ---
-        $userId = Auth::id() ?? 33; 
+        $userId = Auth::id(); 
 
         $id_produk = $request->input('product_id'); // Pastikan key di Postman 'product_id'
         $quantity = $request->input('quantity', 1);
-
-        if (!$id_produk) {
-            return response()->json(['status' => 'error', 'message' => 'Product ID wajib diisi'], 400);
-        }
 
         $produk = Produk::where('id_produk', $id_produk)->first();
         if (!$produk) {
@@ -112,7 +104,7 @@ class ApiCartController extends Controller
     public function updateQuantity(Request $request)
     {
         // --- PERBAIKAN DISINI ---
-        $userId = Auth::id() ?? 33;
+        $userId = Auth::id();
 
         $id_produk = $request->input('product_id');
         $new_quantity = $request->input('quantity');
@@ -147,7 +139,7 @@ class ApiCartController extends Controller
     public function deleteItem(Request $request)
     {
         // --- PERBAIKAN DISINI ---
-        $userId = Auth::id() ?? 33;
+        $userId = Auth::id();
 
         $deleted = CartsItems::where('user_id', $userId)
                              ->where('product_id', $request->product_id)

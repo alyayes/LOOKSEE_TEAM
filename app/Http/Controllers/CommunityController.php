@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -47,6 +48,7 @@ class CommunityController extends Controller
         }
 
         $like = Like::where('user_id', $userId)->where('id_post', $id)->first();
+        
         if ($like) {
             $like->delete();
             $isLiked = false;
