@@ -17,7 +17,7 @@ class ApiCartController extends Controller
     {
         // --- PERBAIKAN DISINI ---
         // Karena route public, kita set manual ke 33 jika tidak ada yang login
-        $userId = Auth::id() ?? 33; 
+        $userId = Auth::id(); 
 
         // Ambil cart user beserta data produknya
         $cartItems = CartsItems::where('user_id', $userId)->with('produk')->get();

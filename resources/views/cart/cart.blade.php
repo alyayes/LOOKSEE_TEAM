@@ -44,10 +44,10 @@
                         </div>
 
                         <div class="item-details">
-                            <img src="{{ asset('storage/uploads/' . ($item['gambar_produk'] ?? 'default.jpg')) }}" 
-                                 alt="{{ $item['nama_produk'] }}"
-                                 class="product-thumb"
-                                 onerror="this.src='{{ asset('assets/images/placeholder.jpg') }}'"> 
+                            <img src="{{ asset('assets/images/produk-looksee/' . ($item['gambar_produk'] ?? 'default.jpg')) }}" 
+                                alt="{{ $item['nama_produk'] }}"
+                                class="product-thumb"
+                                onerror="this.onerror=null;this.src='{{ asset('assets/images/placeholder.jpg') }}'">
                             
                             <div class="item-info">
                                 <span class="product-name">{{ $item['nama_produk'] ?? 'Produk Tidak Dikenal' }}</span>

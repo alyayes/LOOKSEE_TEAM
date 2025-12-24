@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; // Tambahan penting buat ambil ID user login
+use Illuminate\Support\Facades\Auth; 
 use App\Models\CartsItems;
 use App\Models\Produk;
 
@@ -40,7 +40,6 @@ class CartController extends Controller
     }
 
     // FUNGSI UTAMA ADD TO CART
-    // Diubah menerima Request, bukan langsung $id_produk karena route-nya POST tanpa parameter URL
     public function addToCart(Request $request)
     {
         // Cek input, bisa 'id_produk' atau 'product_id' tergantung kiriman AJAX/Form kamu
@@ -51,9 +50,9 @@ class CartController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Product ID is required'], 400);
         }
 
-        $produkExists = Produk::where('id_produk', $id_produk)->exists();
+        $produk = Produk::where('id_produk', $id_produk)->first();
         
-        if (!$produkExists) {
+        if (!$produk) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Produk tidak ditemukan!'
@@ -64,29 +63,45 @@ class CartController extends Controller
 
         // Cek apakah user ini sudah punya produk ini di cart
         $cek = CartsItems::where('user_id', $userId)
-                         ->where('product_id', $id_produk)
-                         ->first();
+                          ->where('product_id', $id_produk)
+                          ->first();
+
+        // Variabel untuk menyimpan pesan respon
+        $message = '';
 
         if ($cek) {
+            // Logic Cek Stok sebelum update
+            if (($cek->quantity + $quantity) > $produk->stock) {
+                return response()->json(['status' => 'error', 'message' => 'Stok tidak mencukupi'], 400);
+            }
+
             $cek->increment('quantity', $quantity);
+            // --- PERUBAHAN DI SINI: Pesan khusus jika update kuantitas ---
+            $message = 'Kuantitas produk bertambah!';
         } else {
+            // Logic Cek Stok sebelum create
+            if ($quantity > $produk->stock) {
+                return response()->json(['status' => 'error', 'message' => 'Stok tidak mencukupi'], 400);
+            }
+
             CartsItems::create([
                 'user_id'    => $userId, 
                 'product_id' => $id_produk,
                 'quantity'   => $quantity
             ]);
+            // --- Pesan standar jika produk baru masuk keranjang ---
+            $message = 'Berhasil masuk keranjang!';
         }
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Berhasil masuk keranjang!'
+            'message' => $message // Mengirim pesan yang dinamis
         ]);
     }
 
-    // TAMBAHAN: Karena di web.php baris 195 ada route yang manggil function 'store'
+    // Route 'store' diarahkan ke addToCart
     public function store(Request $request)
     {
-        // Kita oper saja ke fungsi addToCart biar logic-nya satu pintu
         return $this->addToCart($request);
     }
 
@@ -123,6 +138,6 @@ class CartController extends Controller
                   ->where('product_id', $req->id_produk)
                   ->delete();
 
-        return redirect()->route('cart'); // Redirect pakai route name lebih aman
+        return redirect()->route('cart'); 
     }
 }
