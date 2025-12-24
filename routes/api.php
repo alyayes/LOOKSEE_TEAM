@@ -11,7 +11,10 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/user', [AuthController::class, 'user']);
+   
+});
+
+ Route::get('/user', [AuthController::class, 'user']);
 
     // User profile management
     Route::get('/profile', [UsersController::class, 'profile']);
@@ -19,5 +22,3 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Products CRUD
     Route::apiResource('produk', ProductController::class);
-
-});
