@@ -62,14 +62,12 @@ class ProfileController extends Controller
             'instagram' => 'nullable|string|max:100',
         ]);
 
-        // Foto profil
         if ($request->hasFile('profile_picture')) {
             $file = $request->file('profile_picture');
             $filename = time() . '_' . $file->getClientOriginalName();
             $destinationPath = public_path('assets/images/profile');
             $file->move($destinationPath, $filename);
 
-            // Hapus foto lama
             if ($user->profile_picture && file_exists($destinationPath . '/' . $user->profile_picture)) {
                 unlink($destinationPath . '/' . $user->profile_picture);
             }
@@ -77,7 +75,6 @@ class ProfileController extends Controller
             $user->profile_picture = $filename;
         }
 
-        // Update data lain
         $user->username = $request->username;
         $user->name = $request->name;
         $user->bio = $request->bio;
@@ -122,7 +119,6 @@ class ProfileController extends Controller
         }
 
         $all_products = Produk::all();
-
         $imagePath = asset('assets/images/todays outfit/' . $filename);
         
         return view('komunitas.create_post', [
@@ -132,7 +128,6 @@ class ProfileController extends Controller
         ]);
     }
 
-    // --- BAGIAN INI YANG DIPERBAIKI (STORE POST) ---
     public function storePost(Request $request)
     {
         $user = Auth::user();
@@ -141,13 +136,12 @@ class ProfileController extends Controller
              return redirect()->route('login')->with('error', 'Authentication required.');
         }
 
-        // 1. Tambahkan validasi untuk selected_product_ids
         $validated = $request->validate([
             'caption' => 'required|string|max:255',
             'hashtags' => 'nullable|string',
             'mood' => 'required|string',
-            'selected_product_ids' => 'nullable|array', // Terima array ID produk
-            'selected_product_ids.*' => 'exists:produk_looksee,id_produk', // Pastikan ID produk valid di DB
+            'selected_product_ids' => 'nullable|array', 
+            'selected_product_ids.*' => 'exists:produk_looksee,id_produk', 
         ]);
 
         $finalFilename = $request->input('imageFilename');
@@ -156,7 +150,6 @@ class ProfileController extends Controller
             return redirect()->route('profile.post.create')->with('error', 'Tidak ada gambar untuk diposting.');
         }
 
-        // 2. Simpan Postingan Utama
         $post = Post::create([
             'user_id' => $user->id,
             'caption' => $validated['caption'],
@@ -165,10 +158,7 @@ class ProfileController extends Controller
             'image_post' => $finalFilename,
         ]);
 
-        // 3. Simpan Relasi Produk (Outfit Details)
-        // Mengecek apakah ada produk yang dipilih dari form JS
         if ($request->has('selected_product_ids')) {
-            // attach() akan mengisi tabel pivot post_items
             $post->items()->attach($request->input('selected_product_ids'));
         }
 
@@ -179,23 +169,20 @@ class ProfileController extends Controller
     public function showEditPostForm($id)
     {
         $user = Auth::user();
-        // Load relasi items agar saat edit produk lama muncul (jika kamu buat fitur edit produk nanti)
         $post = Post::with('items')->where('id_post', $id)->first();
 
         if (!$post || $post->user_id !== $user->id) {
             abort(403, 'Anda tidak memiliki izin untuk mengedit postingan ini.');
         }
 
-        // Jika kamu butuh list semua produk di halaman edit untuk menambah produk baru
         $all_products = Produk::all(); 
 
         return view('komunitas.edit_post', [
             'post' => $post,
-            'all_products' => $all_products // Kirim data produk ke view edit
+            'all_products' => $all_products 
         ]);
     }
 
-    // --- BAGIAN INI JUGA DIPERBAIKI (UPDATE POST) ---
     public function updatePost(Request $request, $id)
     {
         $user = Auth::user();
@@ -218,12 +205,9 @@ class ProfileController extends Controller
         $post->mood = $validated['mood'];
         $post->save();
 
-        // Update Relasi Produk
-        // sync() akan menghapus yang lama dan memasukkan yang baru
         if ($request->has('selected_product_ids')) {
             $post->items()->sync($request->input('selected_product_ids'));
         } else {
-            // Jika user menghapus semua produk saat edit, kita kosongkan relasinya
             $post->items()->detach();
         }
 
@@ -246,9 +230,7 @@ class ProfileController extends Controller
             File::delete($imagePath);
         }
 
-        // Hapus relasi di pivot table (optional, biasanya otomatis jika ada foreign key constraint cascade)
         $post->items()->detach();
-
         $post->delete();
 
         return redirect()->route('profile.index')
