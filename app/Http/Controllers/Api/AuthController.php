@@ -14,39 +14,36 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'success' => false,
-                'message' => 'Validation error',
-                'errors' => $validator->errors()
+                'success' => false, 'message' => 'Validation error', 'errors' => $validator->errors()
             ], 422);
         }
 
         $user = User::create([
-            'name' => $request->name,
+            'username' => $request->username,
+            'name' => $request->username, 
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'konsumen',
         ]);
 
         $token = $user->createToken('API Token')->plainTextToken;
 
         return response()->json([
-            'success' => true,
-            'message' => 'User registered successfully',
-            'user' => $user,
-            'token' => $token,
+            'success' => true, 'message' => 'User registered successfully', 'user' => $user, 'token' => $token,
         ], 201);
     }
 
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email',
+            'username' => 'required|string',
             'password' => 'required|string',
         ]);
 
@@ -58,10 +55,12 @@ class AuthController extends Controller
             ], 422);
         }
 
-        if (!Auth::attempt($request->only('email', 'password'))) {
+        $credentials = $request->only('username', 'password');
+
+        if (!Auth::attempt($credentials)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid credentials'
+                'message' => 'Username atau Password salah!' 
             ], 401);
         }
 
