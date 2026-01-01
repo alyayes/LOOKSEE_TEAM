@@ -18,22 +18,82 @@ use Illuminate\Support\Str;
 
 class ApiCheckoutController extends Controller
 {
+    /**
+     * 1. AMBIL DATA PENDUKUNG CHECKOUT
+     * Mengambil daftar alamat, item keranjang yang dipilih, dan opsi pembayaran.
+     */
     public function getCheckoutData(Request $request)
     {
-      
         $userId = Auth::id();
-        $selected = $request->query('selected_products'); 
+        $selectedIdsString = $request->query('selected_products');
 
-        return response()->json(['message' => 'Gunakan function yang lama untuk getCheckoutData']);
+        if (!$selectedIdsString) {
+            return response()->json(['status' => 'error', 'message' => 'Pilih produk terlebih dahulu.'], 400);
+        }
+
+        $selectedIds = explode(',', $selectedIdsString);
+
+        // Ambil Data Item Keranjang
+        $cartItems = CartsItems::where('user_id', $userId)
+                    ->whereIn('product_id', $selectedIds)
+                    ->with('produk')
+                    ->get();
+
+        // Format data produk dan hitung total
+        $totalPrice = 0;
+        $itemsFormatted = $cartItems->map(function($item) use (&$totalPrice) {
+            $subtotal = $item->produk->harga * $item->quantity;
+            $totalPrice += $subtotal;
+            return [
+                'product_id' => $item->product_id,
+                'nama_produk' => $item->produk->nama_produk,
+                'gambar_produk' => asset('assets/images/produk-looksee/' . $item->produk->gambar_produk),
+                'harga' => $item->produk->harga,
+                'quantity' => $item->quantity,
+                'subtotal' => $subtotal
+            ];
+        });
+
+        $shippingCost = 20000;
+        
+        // Data Alamat
+        $addresses = UserAddress::where('user_id', $userId)->get();
+
+        // Opsi Pembayaran (Bank & E-Wallet)
+        $paymentMethods = PaymentMethod::all(); 
+        $banks = BankTransferDetail::all();
+        $ewallets = EwalletTransferDetail::all();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'items' => $itemsFormatted,
+                'summary' => [
+                    'total_price' => $totalPrice,
+                    'shipping_cost' => $shippingCost,
+                    'grand_total' => $totalPrice + $shippingCost,
+                ],
+                'addresses' => $addresses,
+                'payment_options' => [
+                    'methods' => $paymentMethods, // "Bank Transfer", "E-Wallet", "COD"
+                    'banks' => $banks,
+                    'ewallets' => $ewallets
+                ]
+            ]
+        ]);
     }
 
+    /**
+     * 2. PROSES CHECKOUT
+     * Membuat order, mengurangi stok, dan generate kode pembayaran.
+     */
     public function processCheckout(Request $request)
     {
         $userId = Auth::id();
         
         $request->validate([
-            'selected_products' => 'required',
-            'address_id'        => 'required|exists:user_address,id',
+            'selected_products' => 'required', // String ID dipisah koma
+            'address_id'        => 'required|exists:user_addresses,id',
             'payment_method'    => 'required', 
             'bank_id'           => 'required_if:payment_method,Bank Transfer',
             'ewallet_id'        => 'required_if:payment_method,E-Wallet',
@@ -43,38 +103,45 @@ class ApiCheckoutController extends Controller
 
         DB::beginTransaction();
         try {
-            // 2. Hitung Ulang Total
-            $cartData = CartsItems::with('produk')
-                        ->where('user_id', $userId)
+            // Hitung Ulang Total & Validasi Keranjang
+            $cartItems = CartsItems::where('user_id', $userId)
                         ->whereIn('product_id', $selectedIds)
+                        ->with('produk')
                         ->get();
             
-            if ($cartData->isEmpty()) throw new \Exception("Produk cart tidak valid");
+            if ($cartItems->isEmpty()) throw new \Exception("Produk keranjang tidak ditemukan");
 
             $totalPrice = 0;
-            foreach ($cartData as $item) {
-                if ($item->produk) {
-                    $totalPrice += $item->produk->harga * $item->quantity;
-                }
+            foreach ($cartItems as $item) {
+                if ($item->produk) $totalPrice += $item->produk->harga * $item->quantity;
             }
+            
             $shippingCost = 20000;
             $grandTotal = $totalPrice + $shippingCost;
 
-            // 3. Buat Order
-            $order = new Order();
-            $order->user_id = $userId;
-            $order->address_id = $request->address_id;
-            $order->total_price = $totalPrice;
-            $order->shipping_cost = $shippingCost;
-            $order->grand_total = $grandTotal;
-            $order->status = 'pending';
-            $order->order_date = now();
-            $order->shipping_method = 'Regular Shipping';
-            $order->save();
+            // 1. Buat Order
+            $order = Order::create([
+                'user_id' => $userId,
+                'address_id' => $request->address_id,
+                'total_price' => $totalPrice,
+                'shipping_cost' => $shippingCost,
+                'grand_total' => $grandTotal,
+                'status' => 'pending',
+                'order_date' => now(),
+                'shipping_method' => 'Regular Shipping'
+            ]);
 
-            // 4. Masukkan Items
-            foreach ($cartData as $item) {
+            // 2. Masukkan Item & Kurangi Stok (Decrement)
+            foreach ($cartItems as $item) {
                 if ($item->produk) {
+                    // Cek stok cukup atau tidak
+                    if ($item->produk->stock < $item->quantity) {
+                        throw new \Exception("Stok produk {$item->produk->nama_produk} tidak cukup.");
+                    }
+
+                    // Kurangi stok produk
+                    $item->produk->decrement('stock', $item->quantity);
+
                     OrderItem::create([
                         'order_id' => $order->order_id,
                         'id_produk' => $item->product_id,
@@ -84,49 +151,54 @@ class ApiCheckoutController extends Controller
                 }
             }
 
-            // 5. DATA PEMBAYARAN & GENERATE KODE VA (PERBAIKAN DISINI)
-            $methodName = $request->payment_method; // "Bank Transfer" / "E-Wallet"
+            // 3. Logika Generate Kode VA / Rekening (Sesuai Logic Web)
+            $methodName = $request->payment_method;
             $payMethodModel = PaymentMethod::where('method_name', $methodName)->first();
             $methodId = $payMethodModel ? $payMethodModel->method_id : 1;
 
-            // --- LOGIC GENERATE KODE (SAMA DENGAN WEB) ---
             $transactionCode = 'TRX-' . strtoupper(Str::random(10)); // Default COD
             $bankIdFk = null;
             $ewalletIdFk = null;
 
             if ($methodName === 'Bank Transfer') {
-                $bankIdFk = $request->bank_id; // Dari input body Postman 'bank_id'
-                // Format: 8000 + OrderID
-                $transactionCode = '8000' . str_pad($order->order_id, 6, '0', STR_PAD_LEFT);
+                $bankIdFk = $request->bank_id;
+                $bankDetail = BankTransferDetail::find($bankIdFk);
+                if ($bankDetail) {
+                    $namaBank = strtoupper($bankDetail->bank_name);
+                    // Tembak langsung nomor rekening sesuai pilihan
+                    if (str_contains($namaBank, 'MANDIRI')) $transactionCode = '1320028954056';
+                    elseif (str_contains($namaBank, 'SEABANK')) $transactionCode = '901566333248';
+                    else $transactionCode = '8000' . str_pad($order->order_id, 6, '0', STR_PAD_LEFT);
+                }
             } 
             elseif ($methodName === 'E-Wallet') {
-                $ewalletIdFk = $request->ewallet_id; // Dari input body Postman 'ewallet_id'
-                // Format: 0812 + OrderID
-                $transactionCode = '0812' . str_pad($order->order_id, 8, '0', STR_PAD_LEFT);
+                $ewalletIdFk = $request->ewallet_id;
+                $transactionCode = '082127222144'; // Nomor HP Admin
             }
 
+            // 4. Simpan Record Pembayaran
             OrderPayment::create([
                 'order_id' => $order->order_id,
                 'method_id' => $methodId,
                 'amount' => $grandTotal,
                 'payment_date' => now(),
                 'transaction_status' => 'pending',
-                'transaction_code' => $transactionCode, // <--- Kode Angka
+                'transaction_code' => $transactionCode,
                 'bank_payment_id_fk' => $bankIdFk,
                 'e_wallet_payment_id_fk' => $ewalletIdFk
             ]);
 
-            // 6. Hapus Cart
+            // 5. Bersihkan Item dari Keranjang
             CartsItems::where('user_id', $userId)->whereIn('product_id', $selectedIds)->delete();
 
             DB::commit();
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Order berhasil dibuat!',
+                'message' => 'Checkout berhasil diproses!',
                 'data' => [
                     'order_id' => $order->order_id,
-                    'payment_code' => $transactionCode, // Kirim balik kodenya biar bisa langsung dites
+                    'payment_code' => $transactionCode,
                     'grand_total' => $grandTotal
                 ]
             ], 201);
@@ -135,5 +207,30 @@ class ApiCheckoutController extends Controller
             DB::rollBack();
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
+    }
+
+    /**
+     * 3. MANAJEMEN ALAMAT (API)
+     */
+    public function addAddress(Request $request) {
+        $userId = Auth::id();
+        $request->validate([
+            'receiver_name' => 'required',
+            'phone_number'  => 'required',
+            'full_address'  => 'required',
+            'city'          => 'required',
+            'province'      => 'required',
+            'postal_code'   => 'required',
+        ]);
+
+        $count = UserAddress::where('user_id', $userId)->count();
+        $isDefault = ($count == 0) ? 1 : 0;
+
+        $address = UserAddress::create(array_merge($request->all(), [
+            'user_id' => $userId,
+            'is_default' => $isDefault
+        ]));
+
+        return response()->json(['status' => 'success', 'data' => $address]);
     }
 }

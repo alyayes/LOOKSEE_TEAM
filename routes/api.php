@@ -43,21 +43,22 @@ Route::post('/profile/post', [ProfileController::class, 'storePost']);       // 
 Route::post('/profile/post/{id}', [ProfileController::class, 'updatePost']); // Edit Post
 Route::delete('/profile/post/{id}', [ProfileController::class, 'destroyPost']); // Hapus Post
 
-    Route::get('/cart', [ApiCartController::class, 'index']);           // Lihat isi keranjang
-    Route::post('/cart/add', [ApiCartController::class, 'addToCart']);  // Tambah barang
-    Route::post('/cart/update', [ApiCartController::class, 'updateQuantity']); // Update jumlah
-    Route::post('/cart/delete', [ApiCartController::class, 'deleteItem']);     // Hapus barang
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/user', [AuthController::class, 'user']);
 
-    // --- 2. CHECKOUT ---
+    //  CART (KERANJANG)
+    Route::get('/cart', [ApiCartController::class, 'index']);
+    Route::post('/cart/add', [ApiCartController::class, 'addToCart']);
+    Route::post('/cart/update', [ApiCartController::class, 'updateQuantity']);
+    Route::post('/cart/delete', [ApiCartController::class, 'deleteItem']);
+
+    // CHECKOUT & ORDERS
     Route::get('/checkout/summary', [ApiCheckoutController::class, 'getCheckoutData']);
     Route::post('/checkout/process', [ApiCheckoutController::class, 'processCheckout']);
-
-    // --- 3. ORDERS (RIWAYAT PESANAN) ---
     Route::get('/orders', [ApiOrderController::class, 'listOrders']);
     Route::get('/orders/{id}', [ApiOrderController::class, 'getOrderDetails']);
-
-    // --- 4. PAYMENT (PEMBAYARAN) ---
     Route::get('/payment/details', [ApiPaymentController::class, 'showPaymentDetails']);
-   
+});
 
 Route::delete('/profile/post/{id}', [ProfileController::class, 'destroyPost']); // Hapus Post
