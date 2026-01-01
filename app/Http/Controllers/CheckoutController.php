@@ -22,12 +22,12 @@ class CheckoutController extends Controller
         $userId = Auth::id();
         $selectedIdsString = $request->query('selected_products');
 
+        
         if (!$selectedIdsString) {
             return redirect()->route('cart')->with('error', 'Pilih produk dulu.');
         }
 
         $selectedIds = explode(',', $selectedIdsString);
-
         // Ambil Item Cart
         $cartItems = CartsItems::where('user_id', $userId)
                     ->whereIn('product_id', $selectedIds)
@@ -128,9 +128,15 @@ class CheckoutController extends Controller
                 'shipping_method' => $request->shipping_method ?? 'Regular Shipping'
             ]);
 
-            // 2. Masukkan Item
+            // 2. Masukkan Item & KURANGI STOK
             foreach ($cartItems as $item) {
                 if ($item->produk) {
+                    
+                    // --- TAMBAHAN BARU: KURANGI STOK ---
+                    // Ini artinya: kolom 'stock' dikurangi sebanyak 'quantity' yang dibeli
+                    $item->produk->decrement('stock', $item->quantity); 
+                    // ------------------------------------
+
                     OrderItem::create([
                         'order_id' => $order->order_id,
                         'id_produk' => $item->product_id,
