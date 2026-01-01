@@ -17,10 +17,12 @@ class ProfileController extends Controller
         $user = Auth::user();
         if (!$user) abort(404, 'User tidak ditemukan');
 
-        $addresses = UserAddress::where('user_id', $user->id)->get();
+        // PERBAIKAN: Gunakan user_id
+        $addresses = UserAddress::where('user_id', $user->user_id)->get();
         $products = Produk::all();
 
-        $posts = Post::where('user_id', $user->id)
+        // PERBAIKAN: Gunakan user_id
+        $posts = Post::where('user_id', $user->user_id)
                      ->orderBy('created_at', 'desc')
                      ->get();
         $gallery_posts = $posts;
@@ -141,7 +143,11 @@ class ProfileController extends Controller
             'hashtags' => 'nullable|string',
             'mood' => 'required|string',
             'selected_product_ids' => 'nullable|array', 
+<<<<<<< HEAD
             'selected_product_ids.*' => 'exists:produk_looksee,id_produk', 
+=======
+            'selected_product_ids.*' => 'exists:produk_looksee,id_produk',
+>>>>>>> 6b58a509a76a67ed5939bd8466e4b2ec43aa46d9
         ]);
 
         $finalFilename = $request->input('imageFilename');
@@ -150,8 +156,12 @@ class ProfileController extends Controller
             return redirect()->route('profile.post.create')->with('error', 'Tidak ada gambar untuk diposting.');
         }
 
+<<<<<<< HEAD
+=======
+        // PERBAIKAN UTAMA: Gunakan $user->user_id
+>>>>>>> 6b58a509a76a67ed5939bd8466e4b2ec43aa46d9
         $post = Post::create([
-            'user_id' => $user->id,
+            'user_id' => $user->user_id, // <--- SUDAH DIPERBAIKI
             'caption' => $validated['caption'],
             'hashtags' => $validated['hashtags'],
             'mood' => $validated['mood'],
@@ -171,7 +181,8 @@ class ProfileController extends Controller
         $user = Auth::user();
         $post = Post::with('items')->where('id_post', $id)->first();
 
-        if (!$post || $post->user_id !== $user->id) {
+        // PERBAIKAN: Gunakan $user->user_id
+        if (!$post || $post->user_id !== $user->user_id) { 
             abort(403, 'Anda tidak memiliki izin untuk mengedit postingan ini.');
         }
 
@@ -188,7 +199,8 @@ class ProfileController extends Controller
         $user = Auth::user();
         $post = Post::where('id_post', $id)->first();
 
-        if (!$post || $post->user_id !== $user->id) {
+        // PERBAIKAN: Gunakan $user->user_id
+        if (!$post || $post->user_id !== $user->user_id) {
             abort(403, 'Anda tidak memiliki izin.');
         }
 
@@ -220,7 +232,8 @@ class ProfileController extends Controller
         $user = Auth::user();
         $post = Post::where('id_post', $id)->first();
 
-        if (!$post || $post->user_id !== $user->id) {
+        // PERBAIKAN: Gunakan $user->user_id
+        if (!$post || $post->user_id !== $user->user_id) {
             return redirect()->route('profile.index')->with('error', 'Anda tidak memiliki izin untuk menghapus postingan ini.');
         }
 

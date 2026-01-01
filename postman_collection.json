@@ -1,0 +1,104 @@
+{
+  "info": {
+    "name": "LOOKSEE API - Collection",
+    "_postman_id": "looksee-api-collection",
+    "description": "Koleksi Postman untuk endpoints Cart / Checkout / Orders / Payment",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Cart - List",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": { "raw": "{{base_url}}/api/cart", "host": ["{{base_url}}"], "path": ["api","cart"] }
+      }
+    },
+    {
+      "name": "Cart - Add",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": { "mode": "raw", "raw": "{\n  \"id_produk\": 1,\n  \"quantity\": 2\n}" },
+        "url": { "raw": "{{base_url}}/api/cart/add", "host": ["{{base_url}}"], "path": ["api","cart","add"] }
+      }
+    },
+    {
+      "name": "Cart - Update Quantity",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": { "mode": "raw", "raw": "{\n  \"cart_item_id\": 10,\n  \"quantity\": 3\n}" },
+        "url": { "raw": "{{base_url}}/api/cart/update", "host": ["{{base_url}}"], "path": ["api","cart","update"] }
+      }
+    },
+    {
+      "name": "Cart - Delete Item",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": { "mode": "raw", "raw": "{\n  \"cart_item_id\": 10\n}" },
+        "url": { "raw": "{{base_url}}/api/cart/delete", "host": ["{{base_url}}"], "path": ["api","cart","delete"] }
+      }
+    },
+    {
+      "name": "Checkout - Summary",
+      "request": {
+        "method": "GET",
+        "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+        "url": { "raw": "{{base_url}}/api/checkout/summary", "host": ["{{base_url}}"], "path": ["api","checkout","summary"] }
+      }
+    },
+    {
+      "name": "Checkout - Process",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": { "mode": "raw", "raw": "{\n  \"selected_products\": \"1,2\",\n  \"address_id\": 1,\n  \"payment_method_id\": 1\n}" },
+        "url": { "raw": "{{base_url}}/api/checkout/process", "host": ["{{base_url}}"], "path": ["api","checkout","process"] }
+      }
+    },
+    {
+      "name": "Orders - List",
+      "request": {
+        "method": "GET",
+        "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+        "url": { "raw": "{{base_url}}/api/orders", "host": ["{{base_url}}"], "path": ["api","orders"] }
+      }
+    },
+    {
+      "name": "Orders - Details",
+      "request": {
+        "method": "GET",
+        "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+        "url": { "raw": "{{base_url}}/api/orders/:id", "host": ["{{base_url}}"], "path": ["api","orders",":id"] }
+      }
+    },
+    {
+      "name": "Payment - Details",
+      "request": {
+        "method": "GET",
+        "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+        "url": { "raw": "{{base_url}}/api/payment/details?order_id=1", "host": ["{{base_url}}"], "path": ["api","payment","details"], "query": [ { "key": "order_id", "value": "1" } ] }
+      }
+    }
+  ],
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8000" },
+    { "key": "token", "value": "" }
+  ]
+}

@@ -70,10 +70,7 @@
                         <h4>{{ $fav->product->nama_produk }}</h4>
                         <p>Rp {{ number_format($fav->product->harga, 0, ',', '.') }}</p>
                         
-                        <div class="actions">
-                            <button class="btn favorite-btn" data-fav-id="{{ $fav->id_fav }}">Delete</button>
-                            <button class="btn buy-now-btn" data-product-id="{{ $fav->id_produk }}">Add to Cart</button>
-                        </div>
+                       
                     </div>
 
                 </div>

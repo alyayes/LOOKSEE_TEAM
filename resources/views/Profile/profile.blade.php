@@ -16,7 +16,7 @@
             
             if (!empty($userData['profile_picture'])) {
                 // Jika user punya foto, ambil dari storage
-                $profilePic = asset('storage/uploads/profile/' . $userData['profile_picture']);
+                $profilePic = asset('assets/images/profile/' . $userData['profile_picture']);
             } else {
                 // Jika tidak, pakai default
                 $profilePic = $defaultProfile;
@@ -58,8 +58,8 @@
             <div class="posting">
                 <div class="post-header">
                     <a href="#">
-                        {{-- PERBAIKAN: Foto Profil Kecil di Postingan --}}
-                        <img src="{{ !empty($userData['profile_picture']) ? asset('storage/uploads/profile/' . $userData['profile_picture']) : asset('assets/images/profile/placeholder.jpg') }}"
+                        {{-- PERBAIKAN: Ubah storage/uploads/profile menjadi assets/images/profile --}}
+                        <img src="{{ !empty($userData['profile_picture']) ? asset('assets/images/profile/' . $userData['profile_picture']) : asset('assets/images/profile/placeholder.jpg') }}"
                              onerror="this.onerror=null;this.src='{{ asset('assets/images/profile/placeholder.jpg') }}';"
                              alt="Profile Picture" class="profile-pic">
                              
