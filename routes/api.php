@@ -56,6 +56,11 @@ Route::middleware('auth:sanctum')->group(function () {
     // CHECKOUT & ORDERS
     Route::get('/checkout/summary', [ApiCheckoutController::class, 'getCheckoutData']);
     Route::post('/checkout/process', [ApiCheckoutController::class, 'processCheckout']);
+
+    Route::post('/checkout/add-address', [ApiCheckoutController::class, 'addAddress']);
+    Route::post('/checkout/update-address/{id}', [ApiCheckoutController::class, 'updateAddress']);
+    Route::delete('/checkout/delete-address/{id}', [ApiCheckoutController::class, 'deleteAddress']);
+    
     Route::get('/orders', [ApiOrderController::class, 'listOrders']);
     Route::get('/orders/{id}', [ApiOrderController::class, 'getOrderDetails']);
     Route::get('/payment/details', [ApiPaymentController::class, 'showPaymentDetails']);
